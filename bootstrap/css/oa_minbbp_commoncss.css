@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+/** 自定义的一套常用的css 样式的显示设置*/
+/* 对常见的表单进行样式定义，分三种表单 input.max( 大的),common（常见的）,min（小的表单输入）*/
+input.max{width:300px;height:30px;}
+input.common{width:200px;height:30px;}
+input.min{width:150px;height:30px;}
