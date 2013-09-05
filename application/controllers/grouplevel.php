@@ -55,6 +55,7 @@ class Grouplevel extends CI_Controller
 		if($this->gle->save($data,$gle_id))
 		{
 			
+			
 			redirect('grouplevel/alllist');
 		}
 		else
