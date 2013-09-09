@@ -61,10 +61,16 @@
       <ul class="nav nav-list nav-pills text-center">
  		<?php if($admin):?>
  			<li><?php echo anchor("/gitgroups"," 用户组添加","target=index_center");?></li>
- 			<li><?php echo anchor("/gitgroups/alllist"," 用户组人员添加","target=index_center");?></li>
+ 			<li><?php echo anchor("/gitgroups/alllist"," 用户组人员管理","target=index_center");?></li>
+ 			<li><?php echo anchor("/grouplevel/alllist","主管审批","target=index_center");?></li>
+ 			<li><?php echo anchor("/groupcreator/alllist","我的git组审批","target=index_center");?></li>
+ 			<li><?php echo anchor("/groupops/alllist","git组操作","target=index_center");?></li>
  		<?php else:?>
- 		<li><?php echo anchor("/gitgroups"," 用户组添加","target=index_center");?></li>
- 		<li><?php echo anchor("/gitgroups/alllist"," 用户组人员添加","target=index_center");?></li>
+ 		<li><?php  if(in_array("'/gitgroups/'",$url)){echo anchor("/gitgroups"," 用户组添加","target=index_center");}?></li>
+ 		<li><?php  if(in_array("'/gitgroups/alllist/'",$url)){echo anchor("/gitgroups/alllist"," 用户组人员管理","target=index_center");}?></li>
+ 		<li><?php  if(in_array("'/grouplevel/alllist/'",$url)){echo anchor("/grouplevel/alllist","审批申请","target=index_center");}?></li>
+ 		<li><?php  if(in_array("'/groupcreator/alllist/'",$url)){echo anchor("/groupcreator/alllist","我的git 组审批","target=index_center");}?></li>
+ 		<li><?php  if(in_array("'/groupops/alllist/'",$url)){ echo anchor("/groupops/alllist","git组操作","target=index_center");}?></li>
  		<?php endif;?>
  </ul>
   </div>

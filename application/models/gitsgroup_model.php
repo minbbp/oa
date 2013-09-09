@@ -47,4 +47,11 @@ class Gitsgroup_model extends CI_Model
 	{
 		return $this->db->count_all($this->table);
 	}
+	/**
+	 * 获取所有的用户组以及用户组主键，前提是该用户组已经开通可以使用
+	 */
+	public function get_all()
+	{
+		return $this->db->query("select group_id,group_name from $this->table where group_state=1")->result_array();
+	}
 }

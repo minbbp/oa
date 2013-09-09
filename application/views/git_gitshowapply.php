@@ -32,12 +32,20 @@
 					</div>
 				</div>
 				<div class="control-group">
-					<label class="control-label" for="add_datagroups">是否加入data组:</label>
-					<div class="controls">
-						 <input type="radio" name="add_datagroups" value="0" checked/>&nbsp;否&nbsp;&nbsp;
-						 <input type="radio" name="add_datagroups" value="1" checked/>&nbsp;是
+					<label class="control-label" for="add_datagroups">git组:</label>
+					<div class="controls ">
+					<?php foreach($git_groups as $group):?>
+						 <label class="inline checkbox"><input type="checkbox" name="add_datagroups[]" value="<?php echo $group['group_id'];?>" /><?php echo $group['group_name'];?></label>
+					<?php endforeach; ?>
 					</div>
 				</div>
+					<div class="control-group">
+					<label class="control-label" for="git-type">git账号类型:</label>
+					<div class="controls ">
+					<label class="radio inline"><input  name="git-type"  type="radio" value="1"/>申请一个新账号</label>
+					<label class="radio inline"><input  name="git-type"  type="radio" value="2"/>增加另外一个账号</label>
+					</div>
+					</div>
 				<div class="control-group">
 					<div class="controls">
 						<button class="btn" type="submit">申请</button>

@@ -15,7 +15,8 @@ class Gits_model extends CI_Model
 	 */
 	public function save_apply($gitdata)
 	{
-		return $this->db->insert('gits',$gitdata);
+		 $this->db->insert('gits',$gitdata);
+		return $this->db->insert_id();
 	}
 	/**
 	 * 查看自己已经申请的所有的

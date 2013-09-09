@@ -17,9 +17,11 @@ class Git extends CI_Controller
 		$this->load->library('dx_auth');
 		$this->load->library('email');
 		$this->load->model('dx_auth/Users','users',TRUE);//加载授权用户的模型
+		$this->load->model('Users_model','myusers',TRUE);//加载授权用户的模型
 		$this->load->model('Gits_model','git',TRUE);//加载git账号库的模型
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->dx_auth->get_user_id();
+		$this->load->model('Gitsgroup_model',group,TRUE);
 	}
 
 	/**
@@ -30,6 +32,9 @@ class Git extends CI_Controller
 		
 		$data['msg']="请输入您成的的sshkey";
 		$data['state']=0;
+		//使用git组显示信息，获取所有的用户组
+		$data['git_groups']=$this->group->get_all();
+		//print_r($data);
 		$this->load->view("git_gitshowapply",$data);
 	}
 	
@@ -49,6 +54,7 @@ class Git extends CI_Controller
 		 $data=$this->_filter_line($data);
 		
 		$addgroups=$this->input->post('add_datagroups');
+		$addgroups=implode(',', $addgroups);//把用户组的对应关系以CSV字符串进行保存到数据库中
 		//把用户信息的ssh-key存入文件，并把文件名存入数据库
 		if(FALSE!==file_put_contents('./uploads/pub/'.$filename, $data))
 		{
@@ -58,6 +64,7 @@ class Git extends CI_Controller
 					'add_user'=>$userarray['id'],
 					'addtime'=>time(),
 					'add_datagroups'=>$addgroups,
+					'git_type'=>$this->input->post('git_type'),
 					'git_state'=>0
 			);
 			//如果为主管，直接放行，把自己的id号加入进去
@@ -70,7 +77,9 @@ class Git extends CI_Controller
 			{//拥有主管的员工
 				$mygitdata['h_level']=$userarray['pid'];
 			}
-			if(FALSE!= $this->git->save_apply($mygitdata))
+			$Mygit_save=$this->git->save_apply($mygitdata);
+			
+			if(FALSE!=$Mygit_save)
 			{
 				
 				// 发信通知申请者，的申请，并告知申请的进度,主管和员工的工作申请流程单
@@ -86,6 +95,7 @@ class Git extends CI_Controller
 					 $mail_data['level']=$userarray['realname'];
 					 $sendmail_to_level=$this->load->view('mail/mail_git_apply',$mail_data,TRUE);
 					 $this->_sendmail($userarray['email'], $mail_data['title'],$sendmail_to_level,$hlevel_email['email']);
+					 $this->_sendmsg_group($Mygit_save);
 				}
 				else
 				{//如果申请者本身为主管，或者其他人员，则直接发邮件给操作者op人员
@@ -515,6 +525,33 @@ class Git extends CI_Controller
 	 	$this->email->subject($subject);
 	 	$this->email->message($message);
 	   return $this->email->send();
+	}
+	/**
+	 * 提交用户组申请，对应的用户组交给对应的用户进行审批
+	 */
+	public function _sendmsg_group($git_id)
+	{
+		$this->load->model('Group_creators_model','gcre',TRUE);
+		$gitinfo=$this->git->get_one($git_id);
+		 $userinfo=$this->myusers->get_useremail_by_id($this->user_id);
+		$groups=explode(',', $gitinfo['add_datagroups']);
+		if(!empty($groups))
+		{
+			foreach($groups as $key=>$group)
+			{
+				$groupinfo=$this->group->get_one($group);
+				$data['git_id']=$git_id;
+				$data['group_id']=$group;
+				$data['change_id']=$this->user_id;
+				$data['gcre_state']=0;
+				$data['gcre_creator']=$groupinfo['group_creator'];
+				$this->gcre->save($data);
+				$creator_info=$this->myusers->get_useremail_by_id($data['gcre_creator']);
+				$subject="{$userinfo['realname']}要求加入您的git组";
+				$message="{$userinfo['realname']}要求加入您的git组,请您尽快进行审核！<br/><br/>此邮件系自动发送，请不要回复，谢谢！";
+				$this->_sendmail($creator_info['email'], $subject, $message);
+			}
+		}
 	}
 }
 ?>

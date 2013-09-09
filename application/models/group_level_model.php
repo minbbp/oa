@@ -10,6 +10,13 @@ class Group_level_model extends CI_Model
 		parent::__construct();
 	}
 	/**
+	 * 产找一条数据，根据主键信息
+	 */
+	public function find_one($gle_id)
+	{
+		return $this->db->query("select * from $this->table where gle_id=$gle_id")->row_array();
+	}
+	/**
 	 * 对主管的操作进行保存
 	 * @param array $data
 	 * @param int $gle_id
@@ -22,7 +29,8 @@ class Group_level_model extends CI_Model
 		}
 		else
 		{
-			return $this->db->insert($this->table,$data);
+			 $this->db->insert($this->table,$data);
+			 return $this->db->insert_id();
 		}
 	}
 	/**

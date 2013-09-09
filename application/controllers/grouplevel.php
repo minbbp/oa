@@ -12,6 +12,8 @@ class Grouplevel extends CI_Controller
 		$this->load->model('Group_ops_model','gop',TRUE);// op操作模型
 		$this->load->model('Group_level_model','gle',TRUE);//主管操作模型
 		$this->load->model('Users_model','users',TRUE);
+		$this->load->model('Gitsgroup_model','group',TRUE);
+		$this->load->model('Group_creators_model','cre',TRUE);
 	}
 	/**
 	 * 我的审核列表
@@ -54,8 +56,7 @@ class Grouplevel extends CI_Controller
 		$data['addtime']=time();
 		if($this->gle->save($data,$gle_id))
 		{
-			
-			
+			$this->check_commit($gle_id);
 			redirect('grouplevel/alllist');
 		}
 		else
@@ -64,10 +65,43 @@ class Grouplevel extends CI_Controller
 		}
 	}
 	/**
-	 *  检查其他人是否提交了，如果说我是最后一个提交，则提交信息给op
+	 * 检查其他人是否提交了，如果说我是最后一个提交，则提交信息给
+	 * 确认了一点，就是如果一个人需要他的直接领导审批，那么他也需要项目创建者进行审批。
+	 * 或者说，一旦有人修改某个git账号组，该账号组就应该被锁定。
 	 */
-	public function check_commit()
+	public function check_commit($gle_id)
 	{
-		
+		$gle_rs=$this->gle->find_one($gle_id);
+		$group_rs=$this->group->find_one($gle_rs['group_id']);
+		//print_r($gle_rs);print_r($group_rs);
+		//只有主管审核通过的时候才过去检查,否则不予推送到op端
+		if($gle_rs['gle_state']==1)
+		{
+			//检查创建用户和修改用户是否是同一个，如果是同一个的话，怎不去查询创建者审批表。直接把工作流推送到op
+			/* echo $group_rs['group_creator'];
+			echo "<br/>";
+			echo $gle_rs['change_id']; */
+			if($group_rs['group_creator']==$gle_rs['change_id'])
+			{
+				  echo "现在应该给op直接提交工作流程";
+				  $data['group_id']=$gle_rs['group_id'];
+				  $data['change_id']=$gle_rs['change_id'];
+				  $data['gop_state']=0;
+				  $this->gop->save($data);
+			}
+			else
+			{
+				echo "检查创建信息创建者审核通过则直接op推送信息";
+				if($this->cre->check_state($gle_id))
+				{//如果说创建者审核通过就给op发送审核通过信息
+					$data['group_id']=$gle_rs['group_id'];
+					$data['change_id']=$gle_rs['change_id'];
+					$data['gop_state']=0;
+					$this->gop->save($data);
+					echo "  <br/>看看这里";
+				}
+				
+			}
+		}
 	}
 }
