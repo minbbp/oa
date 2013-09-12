@@ -72,7 +72,7 @@
 			}
 			else 
 			{
-				echo "<span class='icon-remove'>不可用</span>";
+				echo "<span class='icon-remove'></span>";
 			}
 			
 		

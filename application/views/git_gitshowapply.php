@@ -21,7 +21,7 @@
 			<div class="alert alert-info">
 				 <button type="button" class="close" data-dismiss="alert">×</button>
 				<h4>温馨提示!</h4> 
-				 <?=$msg?>
+				 <?php echo $msg;?>
 			</div>
 			<?php if($state==0):?>
 				<?php echo form_open("git/apply_add",array('class'=>'form-horizontal'))?>
@@ -42,8 +42,8 @@
 					<div class="control-group">
 					<label class="control-label" for="git-type">git账号类型:</label>
 					<div class="controls ">
-					<label class="radio inline"><input  name="git-type"  type="radio" value="1"/>申请一个新账号</label>
-					<label class="radio inline"><input  name="git-type"  type="radio" value="2"/>增加另外一个账号</label>
+					<label class="radio inline"><input  name="git_type"  type="radio" value="1"/>申请一个新账号</label>
+					<label class="radio inline"><input  name="git_type"  type="radio" value="2"/>增加另外一个账号</label>
 					</div>
 					</div>
 				<div class="control-group">

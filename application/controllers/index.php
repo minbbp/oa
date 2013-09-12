@@ -21,7 +21,7 @@ class Index extends  CI_Controller
 	 	$data['admin']=$this->dx_auth->is_admin();
 	 	$data['url']=$roles_allowed_uris[0];
 	 	$data['userinfo']=$user->row_array();
-	  	$this->load->view("Index_index");
+	  	$this->load->view("Index_index",$data);
 	  	$this->load->view("Index_menu",$data);
 	  	$this->load->view("Index_center");
 	  	

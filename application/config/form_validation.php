@@ -22,7 +22,7 @@ $config=array(
 							array(
 								'field'=>'group_description',
 								'label'=>'组描述',
-								'rules'=>'required|min_length[20]|max_length[255]'
+								'rules'=>'required|min_length[6]|max_length[255]'
 									
 									)
 			),

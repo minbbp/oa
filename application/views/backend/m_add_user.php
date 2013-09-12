@@ -3,13 +3,13 @@ $username = array(
 	'name'	=> 'username',
 	'id'	=> 'username',
 	'size'	=> 30,
-	'value' =>  set_value('username')
+	'value' =>  set_value('username',$userinfo['username'])
 );
 $realname = array(
 	'name'	=> 'realname',
 	'id'	=> 'realname',
 	'size'	=> 30,
-	'value' =>  set_value('realname')
+	'value' =>  set_value('realname',$userinfo['realname'])
 );
 
 
@@ -18,13 +18,9 @@ $email = array(
 	'id'	=> 'email',
 	'maxlength'	=> 80,
 	'size'	=> 30,
-	'value'	=> set_value('email')
+	'value'	=> set_value('email',$userinfo['email'])
 );
 
-$captcha = array(
-	'name'	=> 'captcha',
-	'id'	=> 'captcha'
-);
 ?>
 
 <!DOCTYPE html>
@@ -43,8 +39,7 @@ $captcha = array(
  <div class="span8">
 <fieldset>
 <legend>添加用户 </legend>
-<p  class="text-left ">用户默认密码：optest</p>
-<?php echo form_open($this->uri->uri_string())?>
+<?php echo form_open('backend/m_saveuser/'.$userinfo['id'])?>
 
 <dl class="dl-horizontal">
 	<dt><?php echo form_label('用户名：', $username['id']);?></dt>
@@ -70,23 +65,22 @@ $captcha = array(
 	<dd>
 	<select name="role_id">
 	<?php foreach($roles as $role):?>
-	<option value="<?php echo $role['id'];?>"><?php echo $role['name']?></option>
+	<option value="<?php echo $role['id'];?>" <?php if($role['id']==$userinfo['role_id']){echo 'selected';}?>><?php echo $role['name']?></option>
 	<?php endforeach;?>
 	</select>
 	</dd>
-	
 	<dt><?php echo form_label('上级主管：','pid')?></dt>
 	<dd>
 	<select name="pid">
 	<option value="0">无</option>
 	<?php foreach ($users as $user):?>
-	<option value="<?php echo $user->id;?>"><?php echo $user->realname;?></option>
+	<option value="<?php echo $user->id;?>" <?php if($user->id=$userinfo['pid']){echo 'selected';}?>><?php echo $user->realname;?></option>
 	<?php endforeach;?>
 	</select>
 	</dd>	
 	
 	<dt></dt>
-	<dd class="text-center"><?php echo form_submit('register','添加用户',"class='btn btn-primary'");?></dd>
+	<dd><a href="javascript:history.back(-1)"  class="btn ">不理返回</a>&nbsp;&nbsp;<?php echo form_submit('register','提交修改',"class='btn btn-primary'");?></dd>
 </dl>
 
 <?php echo form_close()?>

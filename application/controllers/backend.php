@@ -8,7 +8,7 @@ class Backend extends CI_Controller
 		$this->load->library('Table');
 		$this->load->library('Pagination');
 		$this->load->library('DX_Auth');
-		
+		$this->load->library('Form_validation');
 		$this->load->helper('form');
 		$this->load->helper('url');
 		
@@ -27,6 +27,7 @@ class Backend extends CI_Controller
 		$this->load->model('dx_auth/users', 'users');			
 		
 		// Search checkbox in post array
+		$tmp_array=array();
 		foreach ($_POST as $key => $value)
 		{
 			// If checkbox found
@@ -44,10 +45,11 @@ class Backend extends CI_Controller
 					// Unban user
 					$this->users->unban_user($value);
 				}
+				
 				else if (isset($_POST['reset_pass']))
 				{
 					// Set default message
-					$data['reset_message'] = 'Reset password failed';
+					$data['reset_message'] = '重置密码失败！';
 				
 					// Get user and check if User ID exist
 					if ($query = $this->users->get_user_by_id($value) AND $query->num_rows() == 1)
@@ -62,11 +64,10 @@ class Backend extends CI_Controller
 							$query = $this->users->get_user_by_id($value);
 							// Get user record
 							$user = $query->row();
-														
 							// Reset the password
 							if ($this->dx_auth->reset_password($user->username, $user->newpass_key))
 							{							
-								$data['reset_message'] = 'Reset password success';
+								$data['reset_message'] = '重设密码成功！';
 							}
 						}
 					}
@@ -85,7 +86,7 @@ class Backend extends CI_Controller
 		$data['users'] = $this->users->get_all($offset, $row_count)->result();
 		
 		// Pagination config
-		$p_config['base_url'] = '/backend/users/';
+		$p_config['base_url'] = base_url('index.php/backend/users/');
 		$p_config['uri_segment'] = 3;
 		$p_config['num_links'] = 2;
 		$p_config['total_rows'] = $this->users->get_all()->num_rows();
@@ -99,7 +100,75 @@ class Backend extends CI_Controller
 		// Load view
 		$this->load->view('backend/users', $data);
 	}
-	
+	function m_update($id)
+	{
+		    $this->load->model('dx_auth/users', 'users');
+		    $this->load->model('dx_auth/Roles','roles',TRUE);
+			$userinfo=$this->users->get_user_by_id($id);
+		//copy auth add_user code
+			
+			$user=$this->users->get_level();
+			$userdata['users']=$user->result();
+			$userdata['roles']=$this->roles->get_all()->result_array();
+			$userdata['userinfo']=$userinfo->row_array();
+			// Load registration page
+			$this->load->view('backend/m_add_user',$userdata);
+		//copy end
+	}
+	function m_saveuser($id)
+	{
+		$val = $this->form_validation;
+		$val->set_rules('username', 'Username', 'trim|required|xss_clean|min_length[6]|max_length[18]|callback_username_check|alpha_dash');
+		$val->set_rules('realname', 'Realname', 'trim|required|xss_clean|min_length[2]|max_length[5]');
+		$val->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email|callback_email_check');
+		// Run form validation and register user if it's pass the validation
+		if ($val->run())
+		{
+			$datauser=array(
+					'username'=>$val->set_value('username'),
+					'realname'=>$val->set_value('realname'),
+					'email'=>$val->set_value('email'),
+					'pid'=>$this->input->post('pid'),
+					'level'=>$this->input->post('level'),
+					'role_id'=>$this->input->post('role_id')
+			);
+			if($this->input->post('pid')!=0)
+			{
+				$datauser['level']=0;
+			}
+			else
+			{
+				$datauser['level']=1;
+			}
+			
+			$this->load->model('dx_auth/users', 'users',TRUE);
+			// Set success message accordingly
+			if($this->users->set_user($id,$datauser))
+			{
+				echo "<script>alert('修改成功！');self.location.href='".base_url('index.php/backend')."'</script>";
+			}
+			else
+			{
+				echo "<script>alert('修改失败！');self.location.href=history.back(-1);</script>";
+			}
+		
+		
+			// Load registration success page
+		
+		}
+		else
+		{
+			$this->m_update($id);
+		}
+	}
+	function m_showinfo($id)
+	{
+		$this->load->model('users_model','user',TRUE);
+		$userinfo=$this->user->getuserinfo($id);
+		//print_r($userinfo);
+		$this->load->view('backend/show_userinfo',$userinfo);
+		//echo json_encode($userinfo,TRUE);
+	}
 	function unactivated_users()
 	{
 		$this->load->model('dx_auth/user_temp', 'user_temp');

@@ -1020,8 +1020,9 @@ class CI_Dx_auth
 	}
 	function minbbp_add_user($userdata)
 	{
-		$userdata['password']=crypt($this->_encode($userdata['password']));
-		return $insert = $this->ci->users->create_user($userdata);
+		 $userdata['password']=crypt($this->_encode($userdata['password']));
+		 return $insert = $this->ci->users->create_user($userdata);
+		
 	}
 	function forgot_password($login)
 	{

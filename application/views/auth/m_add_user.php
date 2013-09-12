@@ -21,10 +21,7 @@ $email = array(
 	'value'	=> set_value('email')
 );
 
-$captcha = array(
-	'name'	=> 'captcha',
-	'id'	=> 'captcha'
-);
+
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +63,7 @@ $captcha = array(
 		<?php echo form_input($email);?>
 		<?php echo form_error($email['name']); ?>
 	</dd>
+	
 	<dt><label for="role_id">用户角色：</label></dt>
 	<dd>
 	<select name="role_id">
@@ -74,7 +72,6 @@ $captcha = array(
 	<?php endforeach;?>
 	</select>
 	</dd>
-	
 	<dt><?php echo form_label('上级主管：','pid')?></dt>
 	<dd>
 	<select name="pid">
@@ -84,7 +81,6 @@ $captcha = array(
 	<?php endforeach;?>
 	</select>
 	</dd>	
-	
 	<dt></dt>
 	<dd class="text-center"><?php echo form_submit('register','添加用户',"class='btn btn-primary'");?></dd>
 </dl>

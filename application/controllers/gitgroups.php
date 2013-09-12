@@ -55,7 +55,6 @@ class Gitgroups extends CI_Controller
 	 */
 	public function save($group_id)
 	{
-		$this->output->enable_profiler(TRUE);
 		$account=$this->input->post('git_account');
 		if($this->form_validation->run('gitgroups')!=false)
 		{
@@ -109,7 +108,6 @@ class Gitgroups extends CI_Controller
 			if($group_id)
 			{
 				$this->create_check_andsendmail($group_id);
-				exit;
 			}
 			else
 			{

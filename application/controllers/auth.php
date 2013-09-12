@@ -413,6 +413,11 @@ class Auth extends CI_Controller
 			}
 		}
 	}
+	public function banned()
+	{
+		echo "您的账号已经被禁用";
+		exit;
+	}
 	public function deny()
 	{
 		echo "对不起，您没有权限！系统将在5~秒钟返回";
@@ -423,12 +428,11 @@ class Auth extends CI_Controller
 	public function add_user()
 	{
 			$this->load->model('dx_auth/users','users',TRUE);
+			$this->load->model('dx_auth/Roles','roles',TRUE);
 			$val = $this->form_validation;
 			// Set form validation rules
 			$val->set_rules('username', 'Username', 'trim|required|xss_clean|min_length['.$this->min_username.']|max_length['.$this->max_username.']|callback_username_check|alpha_dash');
 			$val->set_rules('realname', 'Realname', 'trim|required|xss_clean|min_length[2]|max_length[5]');
-			$val->set_rules('password', 'Password', 'trim|required|xss_clean|min_length['.$this->min_password.']|max_length['.$this->max_password.']|matches[confirm_password]');
-			$val->set_rules('confirm_password', 'Confirm Password', 'trim|required|xss_clean');
 			$val->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email|callback_email_check');
 			// Run form validation and register user if it's pass the validation
 			if ($val->run())
@@ -436,20 +440,26 @@ class Auth extends CI_Controller
 				$datauser=array(
 						'username'=>$val->set_value('username'),
 						'realname'=>$val->set_value('realname'),
-						'password'=>$val->set_value('password'),
+						'password'=>'optest',
 						'email'=>$val->set_value('email'),
 						'pid'=>$this->input->post('pid'),
-						'level'=>$this->input->post('level')
+						'role_id'=>$this->input->post('role_id')
 				);
-				
+				if($datauser['pid']==0)
+				{
+					$datauser['level']=1;
+				}else
+				{
+					$datauser['level']=0;
+				}
 				// Set success message accordingly
 				if($this->dx_auth->minbbp_add_user($datauser))
 				{
-					redirect('backend');
+					echo "<script>alert(' 添加成功！');self.location.href='".base_url('index.php/backend')."'</script>";
 				}
 				else
 				{
-					echo "添加失败！";
+					echo "<script>alert('添加失败！');self.location.href=history.back(-1);</script>";
 				}
 				
 		
@@ -461,6 +471,7 @@ class Auth extends CI_Controller
 				
 				$user=$this->users->get_level();
 				$userdata['users']=$user->result();
+				$userdata['roles']=$this->roles->get_all()->result_array();
 				// Load registration page
 				$this->load->view('/auth/register_add',$userdata);
 			}

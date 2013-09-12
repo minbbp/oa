@@ -1,6 +1,7 @@
-<div class="span3 text-center">
+<div class="offset1 span3 text-center">
+<div data-spy="affix" data-offset-top="50">
 <!-- 新效果-->
-<div class="accordion " id="accordion2">
+<div class="accordion span3" id="accordion2">
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
@@ -39,7 +40,6 @@
       <ul class="nav nav-list nav-pills text-center">
  		<?php if($admin):?>
  			<li><?php echo anchor("/backend/","用户管理","target=index_center");?></li>
- 			<li><?php echo anchor("/auth/add_user","<i class='icon-plus'></i>用户添加","target=index_center");?></li>
  			<li><?php echo anchor("/backend/roles/","角色定义","target=index_center");?></li>
  			<li><?php echo anchor("/backend/uri_permissions/","角色权限","target=index_center");?></li>
  		<?php endif;?>
@@ -80,3 +80,4 @@
 </div>
 <!-- 新效果结束 -->
 </div>
+</div> 

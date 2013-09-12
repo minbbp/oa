@@ -54,4 +54,8 @@ class Gitsgroup_model extends CI_Model
 	{
 		return $this->db->query("select group_id,group_name from $this->table where group_state=1")->result_array();
 	}
+	public function get_rs_by_csv($str)
+	{
+		return $this->db->query("select group_name,realname from $this->table ,users where users.id=$this->table.group_creator and group_id in ({$str})")->result_array();
+	}
 }

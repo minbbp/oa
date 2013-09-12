@@ -17,6 +17,8 @@
 					我的审批git 账号列表 
 				</h3>
 			</div>
+			<div id="showgroupinfo">
+			</div>
 			<table class="table table-bordered table-hover">
 			<thead><tr><th>#</th><th>申请人<th style="width:20%">git账号</th><th>所属组</th> <th>审批</th><th>op操作</th><th>账号状态</th><th>申请时间</th><th style="width:80px;">操作</th></tr></thead>
 			<tbody>
@@ -24,7 +26,7 @@
 			<tr class="tr<?=$git->git_id?>"><td><?=$git->git_id?></td> 
 			<td><?=$git->username?></td>
 			<td><?php echo $git->git_account?></td>
-			 <td><?php echo $git->add_datagroups==0?'其他组':'data组'?></td>
+			 <td><?php echo anchor('#','查看',"class=showgroup data=$git->add_datagroups")?></td>
 			<td>
 			<?php 
 			if($git->h_state==-1)
@@ -88,5 +90,23 @@
 			</table>
 			<?php echo $page?>
 </div>
+<script type="text/javascript">
+$(function()
+		{
+	$(".showgroup").click(function(){
+			var href=$(this).attr('data');
+			$.get("gitgroups",{str:href},function(data){
+				data=JSON.parse(data);
+				var str='<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><table class="table table-bordered"><tr><th>组名</th><th>创建者</th></tr>';
+				$.each(data,function(group,value){
+					str+=('<tr><td>'+value.group_name+'</td><td>'+value.realname+'</td></tr>');
+					})
+				str+='</table></div>'
+					 $("#showgroupinfo").empty().append(str);
+				});
+			return false;
+		});
+	});
+</script>
 </body>
 </html>

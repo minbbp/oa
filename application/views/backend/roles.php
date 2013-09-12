@@ -1,6 +1,17 @@
+<!DOCTYPE html>
 <html>
-	<head><title>Manage roles</title></head>
-	<body>
+  <head>
+  <meta charset="utf-8">
+    <title>角色管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
+    <!-- bootstrap end -->
+  </head>
+  <body>
+ <div class="span8">
 	<?php  				
 		// Show error
 		echo validation_errors();
@@ -13,7 +24,7 @@
 		}
 	
 		// Build table
-		$this->table->set_heading('', 'ID', 'Name', 'Parent ID');
+		$this->table->set_heading('#', 'ID', 'Name', 'Parent ID');
 		
 		foreach ($roles as $role)
 		{			
@@ -23,22 +34,25 @@
 		// Build form
 		echo form_open($this->uri->uri_string());
 		
-		echo form_label('Role parent', 'role_parent_label');
+		echo form_label('父角色', 'role_parent_label');
 		echo form_dropdown('role_parent', $options); 
 				
-		echo form_label('Role name', 'role_name_label');
+		echo form_label('角色名', 'role_name_label');
 		echo form_input('role_name', ''); 
+		echo "<p>";
+		echo form_submit('add', '添加角色',"class='btn btn-primary'"); 
+		echo "&nbsp;&nbsp;";
 		
-		echo form_submit('add', 'Add role'); 
-		echo form_submit('delete', 'Delete selected role');
-				
+		echo "</p>";		
 		echo '<hr/>';
-		
+		$tmpl = array ( 'table_open'  => '<table   class="table table-bordered">' );
+		$this->table->set_template($tmpl);
 		// Show table
 		echo $this->table->generate(); 
-		
+		echo form_submit('delete', '删除选中',"class='btn btn-danger'");
 		echo form_close();
 			
 	?>
+	</div>
 	</body>
 </html>

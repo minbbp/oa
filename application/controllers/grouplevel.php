@@ -91,14 +91,14 @@ class Grouplevel extends CI_Controller
 			}
 			else
 			{
-				echo "检查创建信息创建者审核通过则直接op推送信息";
+				//echo "检查创建信息创建者审核通过则直接op推送信息";
 				if($this->cre->check_state($gle_id))
 				{//如果说创建者审核通过就给op发送审核通过信息
 					$data['group_id']=$gle_rs['group_id'];
 					$data['change_id']=$gle_rs['change_id'];
 					$data['gop_state']=0;
 					$this->gop->save($data);
-					echo "  <br/>看看这里";
+					//echo "  <br/>看看这里";
 				}
 				
 			}

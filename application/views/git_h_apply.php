@@ -23,7 +23,7 @@
 			<?php echo form_open('git/h_apply_change')?>
 			<table class="table   table-bordered">
 			<tr><td>申请人：<?php echo  $userinfo['realname'] ?></td></tr>
-			<tr><td>git账号所属组：<?php  echo $gits['add_datagroups']==0?'其他组':'data组'; ?></td></tr>
+			<tr><td>git账号所属组：<?php foreach($gits['add_datagroups'] as $groups){echo "<span><u>{$groups[group_name]}</u>&nbsp;&nbsp;&nbsp;</span>";} ?></td></tr>
 			<tr><td>申请时间：<?php echo  date("Y-m-d H:i:s",$gits['addtime'])?></td></tr>
 			<tr><td> 处理：<input type="radio" id="showrrs" name="h_state"  checked value="1"/>&nbsp;&nbsp;通过&nbsp;<input type="radio" name="h_state" value="-1" id="showrs" />&nbsp;&nbsp;不通过&nbsp;</td></tr>
 			<tr id="show"><td>失败原因：<textarea name="h_description" class="span5" rows="6"></textarea></td></tr>

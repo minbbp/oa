@@ -21,7 +21,7 @@ class Git extends CI_Controller
 		$this->load->model('Gits_model','git',TRUE);//加载git账号库的模型
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->dx_auth->get_user_id();
-		$this->load->model('Gitsgroup_model',group,TRUE);
+		$this->load->model('Gitsgroup_model','group',TRUE);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Git extends CI_Controller
 					'git_type'=>$this->input->post('git_type'),
 					'git_state'=>0
 			);
-			//如果为主管，直接放行，把自己的id号加入进去
+			//如果为主管，直接放行，把自己的id号加入进去.数据的过滤
 			if($userarray['pid']==0 )
 			{//主管以及没有主管的员工
 					$mygitdata['h_level']=0;
@@ -95,10 +95,11 @@ class Git extends CI_Controller
 					 $mail_data['level']=$userarray['realname'];
 					 $sendmail_to_level=$this->load->view('mail/mail_git_apply',$mail_data,TRUE);
 					 $this->_sendmail($userarray['email'], $mail_data['title'],$sendmail_to_level,$hlevel_email['email']);
-					 $this->_sendmsg_group($Mygit_save);
+					 $this->_sendmsg_group($Mygit_save);//这个方法操作出现问题
 				}
 				else
 				{//如果申请者本身为主管，或者其他人员，则直接发邮件给操作者op人员
+					$mydata['msg']= "我们已经通知op对您的账号进行处理！";
 					$mail_user_data['title']="您申请git账号的工作流程通知";
 					$mail_user_data['content']=$mygitdata;
 					$mail_user_data['username']=$userarray['username'];
@@ -106,7 +107,6 @@ class Git extends CI_Controller
 					$this->_sendmail($userarray['email'], $mail_user_data['title'],$sendmail_to_user);
 					$op_title="请审核{$userarray['realname']}git账号申请";
 					$this->_sendmail(array(ADRD_EMAIL_ONE,ADRD_EMAIL_TWO),$op_title, $sendmail_to_user);
-					
 				}
 			}
 			else
@@ -143,7 +143,7 @@ class Git extends CI_Controller
 		$this->load->library(array('table','pagination'));
 		$userinfo=$this->users->get_user_by_id($this->user_id);
 		
-		$config['base_url'] = base_url().'index.php/git/mygit/';
+		$config['base_url'] = base_url('index.php/git/mygit/');
 		$config['total_rows'] = $this->git->get_count();
 		$config['per_page'] = 4;
 	
@@ -182,23 +182,28 @@ class Git extends CI_Controller
 	public function git_change_state()
 	{
 	
-		$h_state=$this->input->get('h_state');
-		$git_id=$this->input->get('git_id');
+		 $h_state=$this->input->get('h_state');
+		 $git_id=$this->input->get('git_id');
 		$git_row=$this->_get_gitrow($git_id);
+		
 		unset($git_row['git_id']);
-		$this->load->model('Gits_model','git',TRUE);
+		//$this->load->model('Gits_model','git',TRUE);
 		$git_row['operator']=$this->dx_auth->get_user_id();
 		$git_row['operatime']=time();
 		//如果上级审核通过，这里的这个1并不是真实的状态而是一个可以上传服务器的标识符
 		if($h_state==1)
 		{
+			
 			if($this->git->save($git_row,$git_id))
 			{
-				$filename=$git_row['gitpub'];
+				
+				 $filename=$git_row['gitpub'];
 				if(FALSE==$this->check_filename($filename))
 				{
+					
 					if($this->_ftp_upload($filename))
 					{
+						
 						echo "文件已上传到服务器，请您处理！";
 					}
 					else
@@ -208,6 +213,7 @@ class Git extends CI_Controller
 				}
 				else
 				{
+					
 					echo "文件 {$filename}已经上传过了！";
 				}
 			}
@@ -298,6 +304,7 @@ class Git extends CI_Controller
 		$this->load->library('ftp');
 		$this->ftp->connect();
 		return $this->ftp->upload('./uploads/pub/'.$filename, '/pub/'.$filename,'auto');
+		
 	}
 	/**
 	 * 删除一条记录
@@ -456,6 +463,9 @@ class Git extends CI_Controller
 		$this->load->model('Gits_model','git',TRUE);
 		$this->load->model('dx_auth/Users','user',TRUE);
 		$gits=$this->git->get_one($git_id);
+		
+		$this->load->model('Gitsgroup_model','group',TRUE);
+		$gits['add_datagroups']=$this->group->get_rs_by_csv($gits['add_datagroups']);
 		$userinfo=$this->user->get_user_by_id($gits['add_user']);
 		$data=array(
 			'gits'=>$gits,
@@ -532,14 +542,19 @@ class Git extends CI_Controller
 	public function _sendmsg_group($git_id)
 	{
 		$this->load->model('Group_creators_model','gcre',TRUE);
+		
 		$gitinfo=$this->git->get_one($git_id);
+		
 		 $userinfo=$this->myusers->get_useremail_by_id($this->user_id);
+		 
 		$groups=explode(',', $gitinfo['add_datagroups']);
+		
 		if(!empty($groups))
 		{
+			
 			foreach($groups as $key=>$group)
 			{
-				$groupinfo=$this->group->get_one($group);
+				 $groupinfo=$this->group->find_one($group);
 				$data['git_id']=$git_id;
 				$data['group_id']=$group;
 				$data['change_id']=$this->user_id;
@@ -552,6 +567,15 @@ class Git extends CI_Controller
 				$this->_sendmail($creator_info['email'], $subject, $message);
 			}
 		}
+	}
+	/**
+	 * 主管审核的时候，查看的data组相关信息
+	 */
+	public function gitgroups()
+	{
+		 $group_str=$this->input->get('str');
+		 $this->load->model('Gitsgroup_model','group',TRUE);
+		 echo json_encode($this->group->get_rs_by_csv($group_str),true);
 	}
 }
 ?>

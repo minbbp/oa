@@ -31,11 +31,12 @@ class groupops extends  CI_Controller
 	{
 		$config['per_page']=5;
 		$config['total_rows']=$this->gop->alllist_count();
-		$conig['base_url']=base_url('index.php/groupops/allllist');
+		$config['base_url']=base_url('index.php/groupops/alllist');
 		$offset=intval($this->uri->segment(3));
 		$this->pagination->initialize($config);
+		
+		$rs=$this->gop->alllist($offset,$config['per_page']);
 		$page=$this->pagination->create_links();
-		$rs=$this->gop->alllist(0,10);
 		$data['page']=$page;
 		$data['gops']=$rs;
 		$data['title']='要处理的git组请求';
