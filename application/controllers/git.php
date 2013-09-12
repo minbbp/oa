@@ -136,7 +136,7 @@ class Git extends CI_Controller
 		return $descclear;
 	}
 	/**
-	 * 我的git账号信息列表
+	 * 我的git账号信息列表,显示所有的git账号信息
 	 */
 	public function mygit()
 	{
