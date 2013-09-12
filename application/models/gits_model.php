@@ -33,6 +33,10 @@ class Gits_model extends CI_Model
 	 	$query=$this->db->get_where('gits',array('add_user'=>$user_id),$num,$offset);
 	 	return $query;
 	 }
+	 public function mygit_count($user_id)
+	 {
+	 	return $this->db->query('select git_id from gits where add_user='.$user_id)->num_rows();
+	 }
 	 /**
 	  *  统计出来当前数据表的总的行数
 	  */

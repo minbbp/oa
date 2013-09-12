@@ -144,7 +144,7 @@ class Git extends CI_Controller
 		$userinfo=$this->users->get_user_by_id($this->user_id);
 		
 		$config['base_url'] = base_url('index.php/git/mygit/');
-		$config['total_rows'] = $this->git->get_count();
+		$config['total_rows'] = $this->git->mygit_count($this->user_id);
 		$config['per_page'] = 4;
 	
 		//$rs=$this->git->show_mygit($user_id,10,0);
