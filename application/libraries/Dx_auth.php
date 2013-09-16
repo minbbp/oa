@@ -425,13 +425,14 @@ class CI_Dx_auth
 			set_cookie($this->ci->config->item('DX_autologin_cookie_name'),	'',	-1);
 		}
 	}
-
+//修改了此处，增加获取主管信息，如果当前员工为主管，则把当前员工的信息加入进来。否则加入主管员工信息为false。
 	function _set_session($data)
 	{
 		// Get role data
 		$role_data = $this->_get_role_data($data->role_id);
-	
+		//Get level data,也就是获取主管信息
 		// Set session data array
+		
 		$user = array(						
 			'DX_user_id'						=> $data->id,
 			'DX_username'						=> $data->username,
@@ -443,7 +444,15 @@ class CI_Dx_auth
 			'DX_parent_permissions'	=> $role_data['parent_permissions'],			
 			'DX_logged_in'					=> TRUE
 		);
-
+		$this->ci->load->model('dx_auth/users', 'users');
+		if($data->pid!=0)
+		{
+			$user['level_info']=$this->ci->users->get_user_by_id($data->pid)->row_array();
+		}
+		else
+		{
+			$user['level_info']=FALSE;
+		}
 		$this->ci->session->set_userdata($user);
 	}
 
