@@ -5,7 +5,7 @@ class Grouplevel extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper(array('form','url'));
+		$this->load->helper(array('form','url','message'));
 		$this->load->library(array('email','form_validation','pagination','dx_auth'));
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->dx_auth->get_user_id();
@@ -13,7 +13,6 @@ class Grouplevel extends CI_Controller
 		$this->load->model('Group_level_model','gle',TRUE);//主管操作模型
 		$this->load->model('Users_model','users',TRUE);
 		$this->load->model('Gitsgroup_model','group',TRUE);
-		$this->load->model('Group_creators_model','cre',TRUE);
 	}
 	/**
 	 * 我的审核列表
@@ -47,61 +46,78 @@ class Grouplevel extends CI_Controller
 		$this->load->view('gitp/level_edit',$data);
 	}
 	/**
-	 * 保存审核内容
+	 * 主管审批通过
 	 */
-	public function save($gle_id)
+	public function pass($gle_id)
 	{
-		$data['gle_state']=$this->input->post('gle_state');
-		$data['gle_description']=$this->input->post('gle_description');
-		$data['addtime']=time();
+		$data['gle_state']=1;
+		$data['apply_time']=time();
 		if($this->gle->save($data,$gle_id))
 		{
+			//这个方法包含，通知op的邮件
 			$this->check_commit($gle_id);
-			redirect('grouplevel/alllist');
+			echo "审批通过!_1";
 		}
 		else
 		{
-			show_404();
+			echo "审批失败，请联系管理员！_0";
 		}
 	}
 	/**
-	 * 检查其他人是否提交了，如果说我是最后一个提交，则提交信息给
-	 * 确认了一点，就是如果一个人需要他的直接领导审批，那么他也需要项目创建者进行审批。
-	 * 或者说，一旦有人修改某个git账号组，该账号组就应该被锁定。
+	 * 驳回用户的申请请求,发送邮件通知用户
+	 */
+	public function bohui($gle_id)
+	{
+		$data['gle_description']=$this->input->post('msg');
+		$data['apply_time']=time();
+		$data['gle_state']=-1;
+		if($this->gle->save($data,$gle_id))
+		{
+			//发送邮件通知给申请者，并告知驳回原因
+		$gle_rs=$this->gle->find_one($gle_id);
+		$userinfo=$this->users->get_useremail_by_id($gle_rs['change_id']);
+		$emaildata['name']=$userinfo['realname'];
+		$emaildata['msg']="您的主管，驳回了您的git组申请。驳回原因:".$data['gle_description'];
+		$message=$this->load->view('mail/mail_common',$emaildata,TRUE);
+		sendcloud($userinfo['email'], 'git组申请驳回通知', $message);
+		 echo "驳回成功！_1";
+		 
+		}
+		else
+		{
+			echo "你暂时无法驳回用户信息！_0";
+		}
+	}
+	/**
+	 * 查看用户组的详细信息
+	 */
+	public function show($gle_id)
+	{
+		$data['info']=$this->gle->get_allinfo($gle_id);
+		$change_id=$data['info']['change_id'];
+		$change_user=$this->users->get_useremail_by_id($change_id);
+		$data['change']=$change_user;
+		//echo "<pre>";
+		//print_r($data);
+		$this->load->view('gitp/level_show_info',$data);
+	}
+	/**
+	 * 主管审核同意之后，给op发送处理请求，既然都需要主管审核了，肯定不用再判断这个用户是否是主管之类的信息
+	 * 暂时没有发送邮件通知op，等待以后进行添加。
 	 */
 	public function check_commit($gle_id)
 	{
 		$gle_rs=$this->gle->find_one($gle_id);
-		$group_rs=$this->group->find_one($gle_rs['group_id']);
-		//print_r($gle_rs);print_r($group_rs);
+		//$group_rs=$this->group->find_one($gle_rs['group_id']);
 		//只有主管审核通过的时候才过去检查,否则不予推送到op端
 		if($gle_rs['gle_state']==1)
 		{
-			//检查创建用户和修改用户是否是同一个，如果是同一个的话，怎不去查询创建者审批表。直接把工作流推送到op
-			/* echo $group_rs['group_creator'];
-			echo "<br/>";
-			echo $gle_rs['change_id']; */
-			if($group_rs['group_creator']==$gle_rs['change_id'])
-			{
-				  echo "现在应该给op直接提交工作流程";
 				  $data['group_id']=$gle_rs['group_id'];
 				  $data['change_id']=$gle_rs['change_id'];
 				  $data['gop_state']=0;
+				  $data['addtime']=time();
 				  $this->gop->save($data);
-			}
-			else
-			{
-				//echo "检查创建信息创建者审核通过则直接op推送信息";
-				if($this->cre->check_state($gle_id))
-				{//如果说创建者审核通过就给op发送审核通过信息
-					$data['group_id']=$gle_rs['group_id'];
-					$data['change_id']=$gle_rs['change_id'];
-					$data['gop_state']=0;
-					$this->gop->save($data);
-					//echo "  <br/>看看这里";
-				}
-				
-			}
+				  sendcloud(array(ADRD_EMAIL_ONE), '您有有一个git组申请未处理', '您有一个git组申请为处理，请尽快处理！');
 		}
 	}
 }

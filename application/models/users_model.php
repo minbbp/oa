@@ -33,4 +33,18 @@ class Users_model extends CI_Model
 		}
 		return $userdata;
 	}
+	/**
+	 * 获取数据表中的全部用户信息
+	 * 在申请git组的时候使用到了这个方法。
+	 */
+	public function get_all_users()
+	{
+		$sql="select id,username,realname from $this->_table where banned='0' ";
+		return $this->db->query($sql)->result_array();
+	}
+	public function searchuser($username)
+	{
+		$sql="select id,username,realname,email from $this->_table where username='$username' ";
+		return $this->db->query($sql)->row_array();
+	}
 }

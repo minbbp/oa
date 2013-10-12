@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/OA/';
+$config['base_url']	= 'http://localhost/OA';
 
 /*
 |--------------------------------------------------------------------------
@@ -26,8 +26,17 @@ $config['base_url']	= 'http://localhost/OA/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
 
+
+$config['index_page'] = 'index.php';
+/*
+ |-------------------------------------------------------------------------
+| 邮件队列发送路径
+|-------------------------------------------------------------------------
+|当本地环境测试时，并不发送邮件到实际用户。而是把发送的邮件的收件人地址，邮件标题，以及邮件内容存储到
+|email_path文件夹下边
+*/
+$config['email_path']="http://localhost/OA/email_path/";
 /*
 |--------------------------------------------------------------------------
 | URI PROTOCOL
@@ -181,7 +190,7 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------

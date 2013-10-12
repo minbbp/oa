@@ -12,13 +12,26 @@
   </head>
   <body>
  <div class="span8">
+ <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">git组详细信息</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    
+  </div>
+</div>
  <div class="page-header">
 				<h3>
 					<?php echo $title?>
 				</h3>
 </div>
 <table class='table table-bordered table-hover'>
-<thead><tr><th>#</th><th>组名</th><th> 创建者</th> <th>账号状态</th> <th>相关操作</th></tr></thead>
+<thead><tr><th>#</th><th>组名</th><th> 创建者</th> <th>账号状态</th> <th>用户组成员</th></tr></thead>
 <?php foreach ($groups as $group):?>
 <tr>
 <td><?php echo $group['group_id']?></td>
@@ -28,16 +41,24 @@
 			else{echo "<span class='icon-remove'></span>";}
 	?>
 	</td>
-<td><?php if($group['group_state']==1)
-		{
-	$add_url=base_url('index.php/gitgroups/edit/'.$group['group_id']);
-	echo "<a class='btn btn-primary' href='$add_url'>加入</a>";
-	 }?>
+<td>
+<?php echo anchor('gitgroups/showuser/'.$group['group_id'],$group['num'].'人',"title='点击查看' class='showuser' ")?>
 </td>
 </tr>
 <?php endforeach;?>
 </table>
 <?php echo $page?>
 </div>
+<script type="text/javascript">
+	$(function(){
+		$(".showuser").click(function(){
+			var href=$(this).attr("href");
+			var time=new Date().getTime();
+			$("#myModal .modal-body").empty().load(href,{time:time});
+			$("#myModal").modal();
+			return false;
+			});
+		});
+	</script>
 </body>
 </html>

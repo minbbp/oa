@@ -6,14 +6,14 @@
  * @author minbbp
  * @time 2013/9/5 10:37 
  */
-class groupops extends  CI_Controller
+class Groupops extends  CI_Controller
 {
 	private $user_id;
 	public function  __construct()
 	{
 		parent::__construct();
 		//初始化相关使用到的类，form，auth，model ，email 等相关的类
-		$this->load->helper(array('form','url'));
+		$this->load->helper(array('form','url','message'));
 		$this->load->library(array('email','form_validation','dx_auth','pagination'));
 		$this->load->model('dx_auth/Users','users',TRUE);//加载授权用户的模型
 		$this->load->model('Users_model','myusers',TRUE);//加载授权用户的模型
@@ -34,13 +34,76 @@ class groupops extends  CI_Controller
 		$config['base_url']=base_url('index.php/groupops/alllist');
 		$offset=intval($this->uri->segment(3));
 		$this->pagination->initialize($config);
-		
 		$rs=$this->gop->alllist($offset,$config['per_page']);
 		$page=$this->pagination->create_links();
 		$data['page']=$page;
 		$data['gops']=$rs;
 		$data['title']='要处理的git组请求';
 		$this->load->view('gitp/ops_alllist',$data);
+	}
+	/**
+	 * 操作说明，给运维人员进行操作说明，包括应该加入哪些组进来，加入哪些指定的人人员进来
+	 */
+	public function showinfo($gop_id)
+	{
+		echo $this->load->view('gitp/opshowinfo',$this->gop->get_op_info($gop_id),true);
+	}
+	/**
+	 * 审核通过的记录
+	 */
+	public function pass($gop_id)
+	{
+		$data['gop_state']=1;
+		$data['gop_oper']=$this->user_id;
+		$data['endtime']=time();
+		if($this->gop->save($data,$gop_id))
+		{
+			
+			
+			//发邮件告知申请者
+			$gop_rs=$this->gop->get_one($gop_id);
+			 //给所有用户正常使用的git 添加修改字符串
+			$all_users=$this->gpuser->new_get_users_by_group_id($gop_rs['group_id']);
+			foreach ($all_users as $user)
+			{
+				$this->git->change_str_by_user($user['user_id'],$gop_rs['group_id']);
+			}
+			//更新字符串结束 
+			$group_rs=$this->groups->find_one($gop_rs['group_id']);
+			$group_data['group_state']=1;
+			$group_data['last_changetime']=time();
+			$userinfo=$this->myusers->get_useremail_by_id($gop_rs['change_id']);
+			//更新状态，发送邮件
+			$this->groups->save($group_data,$gop_rs['group_id']);
+			sendcloud($userinfo['email'], "您的git用户组已经开通啦", '您好！ <p> 你的git用户组'.$group_rs['group_name'].'已经可以使用啦！</p>');
+			//审核通过发送邮件通知相关人员，同时修改用户组信息状态为可用
+			echo 1;
+		}
+		else
+		{
+			echo 0;
+		}
+	}
+	public function bohui($gop_id)
+	{
+		$data['endtime']=time();
+		$data['gop_oper']=$this->user_id;
+		$data['gop_state']=-1;
+		$data['gop_description']=$this->input->get('gop_description');
+	   if($this->gop->save($data,$gop_id))
+		{
+			$gop_rs=$this->gop->get_one($gop_id);
+			$group_rs=$this->groups->find_one($gop_rs['group_id']);
+			$userinfo=$this->myusers->get_useremail_by_id($gop_rs['change_id']);
+			//更新状态，发送邮件
+			sendcloud($userinfo['email'], '您的git用户组被驳回','您好！ <p> 你的git用户组'.$group_rs['group_name'].'被运维驳回！驳回原因：'.$gop_rs['gop_description'].'</p>');
+			//发邮件告知申请者
+			echo 1;
+		}
+		else
+		{
+			echo 0;
+		}
 	}
 	/**
 	 *  相关的操作说明。

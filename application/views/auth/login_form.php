@@ -70,6 +70,11 @@ $confirmation_code = array(
     </style>
   	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
     <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    <!--
+    if (parent.frames.length > 0) { parent.location.href=location.href;}
+    -->
+    </script>
     <!-- bootstrap end -->
   </head>
   <body>
@@ -95,7 +100,6 @@ $confirmation_code = array(
 	</dd>
 
 <?php if ($show_captcha): ?>
-
 	<dt>Enter the code exactly as it appears. There is no zero.</dt>
 	<dd><?php echo $this->dx_auth->get_captcha_image(); ?></dd>
 

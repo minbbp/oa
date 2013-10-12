@@ -442,7 +442,11 @@ class CI_Dx_auth
 			'DX_parent_roles_name'	=> $role_data['parent_roles_name'], // Array of parent role_name
 			'DX_permission'					=> $role_data['permission'],
 			'DX_parent_permissions'	=> $role_data['parent_permissions'],			
-			'DX_logged_in'					=> TRUE
+			'DX_logged_in'					=> TRUE,
+				'DX_realname'=>$data->realname,
+				'DX_pid'=>$data->pid,
+				'DX_level'=>$data->level,
+				'DX_email'=>$data->email
 		);
 		$this->ci->load->model('dx_auth/users', 'users');
 		if($data->pid!=0)

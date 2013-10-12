@@ -37,8 +37,9 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 //定义几个常用的邮箱号码
-define('ADRD_EMAIL_ONE','wb-zhibinliu@sohu-inc.com');
-define('ADRD_EMAIL_TWO','wb-wennanma@sohu-inc.com');
+define('ADRD_EMAIL_ONE','wb-zhibinliu@sohu-inc.com');//git账号部分
+define('ADRD_EMAIL_TWO','wb-zhibinliu@sohu-inc.com');
+define('ADRD_EMAIL_OTHER','wb-zhibinliu@souhu-inc.com');
 define('SYS_EMAIL','postmaster@adrdop-sendmore.sendcloud.org');
 define('SYS_EMAILNAME','postmaster@adrdop');
 //配置几个模块的文件夹显示目录

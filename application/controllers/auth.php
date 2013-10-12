@@ -153,6 +153,7 @@ class Auth extends CI_Controller
 	{
 		$this->dx_auth->logout();
 		redirect('auth/login');
+		
 	}
 	/**
 	 * 用户注册方法
@@ -341,7 +342,7 @@ class Auth extends CI_Controller
 			// Validate rules and change password
 			if ($val->run() AND $this->dx_auth->change_password($val->set_value('old_password'), $val->set_value('new_password')))
 			{
-				$data['auth_message'] = 'Your password has successfully been changed.';
+				$data['auth_message'] = '您的密码已经成功修改！';
 				$this->load->view($this->dx_auth->change_password_success_view, $data);
 			}
 			else

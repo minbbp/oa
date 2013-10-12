@@ -26,6 +26,7 @@ $group_description=array(
     <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
     <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
     <!-- bootstrap end -->
   </head>
   <body>
@@ -43,18 +44,10 @@ $group_description=array(
  <?php echo form_label('组描述：',$group_description['id'])?>
   <?php echo form_textarea($group_description)?>
   <div class="row">
-
-   
    <div class="span3">
-    <?php echo form_label('加入该组的账号：')?>
-    <select name="git_account[]" id="git_account" multiple="multiple" size="6">
-   <?php 
-   foreach($in as $git):
-   ?>
-   <option value="<?php echo $git['git_id']?>"><?php echo $git['git_account']?></option>
-   <?php
-    endforeach;
-    ?>
+    <?php echo form_label('加入该组人员：')?>
+    <select name="user_id[]" id="git_account" multiple="multiple" size="6">
+ 
     </select>
    </div>
    <div class="span2 text-center"> 
@@ -63,28 +56,34 @@ $group_description=array(
     <p style="margin-top:10px;"><span class="btn btn-danger" id="remove">去除&gt;&gt;</span></p>
     </div>
      <div class="span3">
-   <?php echo form_label('可选的git账号：')?>
+   <?php echo form_label('可选加入人员：')?>
    <select name="allgit" id="allgit" multiple="multiple" size="6">
    
    <?php 
    
-   foreach($gits as $git):
+   foreach($all_users as $user):
    ?>
-   <option value="<?php echo $git['git_id']?>"><?php echo $git['git_account']?></option>
+   <option value="<?php echo $user['id'];?>"><?php echo $user['realname'];?></option>
    <?php
     endforeach;
     ?>
    </select>
    </div>
    </div>
+   <label></label>
   <label>
-  <!-- <input type="reset" value="重新填写 " class="btn btn-danger"/> &nbsp;&nbsp; --> <input type="submit"  id="mysubmit" value=" 提交 " class="btn btn-primary"/> 
+  <!-- <input type="reset" value="重新填写 " class="btn btn-danger"/> &nbsp;&nbsp; --> 
+  <input type="submit"  id="mysubmit" value=" 提交 " class="btn btn-primary"/> 
   </label>
  
 <?php echo form_close();?>
  </div>
  <script  type="text/javascript">
 	$(function(){
+		if(<?php echo $show_msg?>==1)
+		{
+			layer.alert('成功添加git组！',9);
+		}
 	  $("#add").click(function(){
 			var $options=$('#allgit  option:selected');
 			$options.appendTo('#git_account');

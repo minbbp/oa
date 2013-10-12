@@ -1,18 +1,18 @@
 <?php
-class Groupcreator extends CI_Controller
+class Git_creator extends CI_Controller
 {
-private $user_id;
+	private $user_id;
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper(array('form','url'));
-		$this->load->library(array('email','form_validation','pagination','dx_auth'));
+		$this->load->helper(array('form','url','message'));
+		$this->load->library(array('email','form_validation','pagination','dx_auth','session'));
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->dx_auth->get_user_id();
-		$this->load->model('Group_ops_model','gop',TRUE);// op操作模型
-		$this->load->model('Group_level_model','gle',TRUE);//主管操作模型
+		$this->load->model('Git_op_level_model','gol',TRUE);// op操作模型
 		$this->load->model('Group_creators_model','creator',TRUE);//创建者操作模型
 		$this->load->model('Users_model','users',TRUE);
+		$this->load->model('Gits_model','git',TRUE);
 	}
 	/**
 	 * 我的审核列表
@@ -28,9 +28,52 @@ private $user_id;
 		$page=$this->pagination->create_links();
 		$data['groups']=$rs;
 		$data['page']=$page;
-		$data['title']='审核信息管理';
+		$data['title']='我的git组审批';
 		$this->load->view('gitp/group_creator_list',$data);
-		
+
+	}
+	/**
+	 * 同意审批通过
+	 */
+	public function pass($gcre_id)
+	{
+		$data['gcre_state']=1;
+		//1,修改当前状态
+		if($this->creator->save($data,$gcre_id))
+		{
+			//2,检查当前表中的审批是否都审批结束了，如果都审批结束了，则推送消息给op，同时发送邮件给指定的op
+			$this->check_commit($gcre_id);
+		}
+	}
+	/**
+	 * 保存用户的驳回信息,审批者当中有一个人驳回了审批信息，当前用户的审批不能通过。所以用户审核不通过的时候，
+	 * 直接发送邮件告诉用户，有人驳回了git用户申请信息。同时把驳回原因告诉用户。视图就在当前页面
+	 * 这个方法保存工单失效，同时驳回所有的工单信息
+	 */
+	public function reject($gcre_id)
+	{
+		$data['gcre_state']=-1;
+		$data['gcre_description']=$this->input->post('gcre_description');
+		if($this->creator->save($data,$gcre_id))
+		{
+			$gcre_rs=$this->creator->find_one($gcre_id);
+			$app_userinfo=$this->git->get_userinfo_by_git_id($gcre_rs['git_id']);
+			$subject=$this->session->userdata('DX_realname')."驳回了您的git组申请";
+			$message=$subject."驳回原因：".$gcre_rs['gcre_description'];
+			//  发送邮件告诉用户驳回原因
+			if(sendcloud($app_userinfo['email'], $subject, $message))
+			{
+				echo "成功驳回用户请求！";
+			}
+			else
+			{
+				echo "发送邮件通知用户失败！";
+			}
+		}
+		else		 
+		{
+			echo  "您暂时不能驳回用户申请！";
+		}
 	}
 	/**
 	 *  审核内容添加
@@ -79,29 +122,35 @@ private $user_id;
 	public function check_commit($gcre_id)
 	{
 		$gcre_rs=$this->creator->find_one($gcre_id);
-		//print_r($gcre_rs);
 		if($gcre_rs['gcre_state']==1)
 		{
-			//echo "<br/>";
-			//var_dump($this->creator->check_state($gcre_rs['gle_id']));
-			//echo " 到这里吗？";
-			//echo $gcre_rs['gle_id'];
 			if($this->creator->check_state($gcre_rs['gle_id']))
 			{
-				$gle_rs=$this->gle->find_one($gcre_rs['gle_id']);
-				//print_r($gle_rs);
-				if($gle_rs['gle_state']==1)
+				$gle_rs=$this->gol->find_one($gcre_rs['gle_id']);
+				if($gle_rs['state']==1)
 				{//推送消息给op
-					$data['change_id']=$gcre_rs['change_id'];
-					$data['gop_state']=0;
-					$data['group_id']=$gcre_rs['group_id'];
-					$this->gop->save($data);
-					//echo "都没有问题了，给op推送消息了啊！";
-					
+					$gle_rs['level_id']=$gcre_rs['gle_id'];
+					$gle_rs['btime']=time();
+					$gle_rs['state']=0;
+					$gle_rs['type_id']=1;
+					unset($gle_rs['gits_opid'],$gle_rs['user_id']);
+					if($this->gol->save($gle_rs))
+					{
+						echo " 请等待运维人员进行审批！";
+					}
+					else
+					{
+						echo "系统暂时无法向运维人员推送消息";
+					}
+						
 				}
 			}
+			else
+			{
+				echo "请等待相关人员进行审批！";
+			}
 		}
-		
+
 	}
 	public function check_git_commit($git_id)
 	{

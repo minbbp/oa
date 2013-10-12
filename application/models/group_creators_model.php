@@ -28,6 +28,13 @@ class Group_creators_model extends CI_Model
 		}
 	}
 	/**
+	 * 批量保存数据信息
+	 */
+	public function save_batch($data)
+	{
+		return $this->db->insert_batch($this->table,$data);
+	}
+	/**
 	 * 列表显示信息
 	 */
 	public function alllist($user_id,$num,$offset)
@@ -52,20 +59,32 @@ class Group_creators_model extends CI_Model
 		$rsone['git_accounts']=$users_git;
 		return $rsone;
 	}
+	/**
+	 * 检查用户的所有者是否审批通过
+	 * @param number $gle_id
+	 * @return boolean True is pass ，FALSE is don't pass
+	 */
 	public function check_state($gle_id)
 	{
 		$creator_rs=$this->db->query("select * from $this->table where gle_id=$gle_id")->result_array();
-		
+		if(empty($creator_rs))
+		{
+			return TRUE;
+		}
+		else
+		{
 		 $tmp=TRUE;
 		//print_r($creator_rs);exit;
-		foreach ($creator_rs as $creator)
-		{
-			if($creator['gcre_state']!=1)
+			foreach ($creator_rs as $creator)
 			{
-				$tmp=FALSE;
+				if($creator['gcre_state']!=1)
+				{
+					$tmp=FALSE;
+					break;
+				}
 			}
+			return $tmp; 
 		}
-		return $tmp; 
 	}
 	/**
 	 * 检查用户的git账号是否已经审批通过
@@ -81,6 +100,7 @@ class Group_creators_model extends CI_Model
 			if($creator['gcre_state']!=1)
 			{
 				$tmp=FALSE;
+				break;
 			}
 		}
 		return $tmp;
@@ -93,4 +113,5 @@ class Group_creators_model extends CI_Model
 	{
 		return $this->db->query("select * from $this->table where gcre_id=$gcre_id")->row_array();
 	}
+  
 }
