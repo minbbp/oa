@@ -11,3 +11,5 @@ application/logs/*
 .settings/
 captcha/
 uploads/pub/*
+uploads/*.pub
+email_path/
