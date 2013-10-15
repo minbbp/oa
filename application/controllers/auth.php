@@ -17,7 +17,7 @@ class Auth extends CI_Controller
 		parent::__construct();
 		//载入系统类库		 
 		$this->load->library('Form_validation');
-		$this->load->library('DX_Auth');			
+		$this->load->library('dX_auth');			
 		//  载入辅助类
 		$this->load->helper('url');
 		$this->load->helper('form');

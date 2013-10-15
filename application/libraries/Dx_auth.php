@@ -38,7 +38,7 @@ class CI_Dx_auth
 		$this->ci->lang->load('dx_auth');
 		
 		// Load DX Auth event
-		$this->ci->load->library('DX_Auth_Event');
+		$this->ci->load->library('dx_auth_event');
 		
 		// Initialize
 		$this->_init();

@@ -8,7 +8,7 @@ class Index extends  CI_Controller
 	{
 		parent::__construct();
 		$this->load->helper("url");
-		$this->load->library(array("dx_auth",'session'));
+		$this->load->library(array('dx_auth','session'));
 		$this->load->model('dx_auth/users','user',TRUE);
 		$this->dx_auth->check_uri_permissions();
 		
