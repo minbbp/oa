@@ -63,7 +63,7 @@ class Git extends CI_Controller
 	    $insert_id=$this->git->save_apply($data);
 	    if($insert_id!=0)
 	    {//保存文件，进行批量保存
-	    	$gitpubs=$this->input->post('gitpub');
+	    	$gitpubs=$this->input->post('gitpub',TRUE);
 	    	$savedata=array();
 	    	foreach($gitpubs as $sdata)
 	    	{
@@ -196,11 +196,7 @@ class Git extends CI_Controller
 	 */
 	private function _filter_line($descclear)
 	{
-		$descclear = str_replace("\r","",$descclear);//过滤换行
 		$descclear = str_replace("\n","",$descclear);//过滤换行
-		$descclear = str_replace("\t","",$descclear);//过滤换行
-		$descclear = str_replace("\r\n","",$descclear);//过滤换行
-		$descclear=preg_replace("/\s+/", "", $descclear);//过滤多余回车
 		return $descclear;
 	}
 	/**
