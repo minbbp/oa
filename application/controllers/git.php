@@ -63,7 +63,7 @@ class Git extends CI_Controller
 	    $insert_id=$this->git->save_apply($data);
 	    if($insert_id!=0)
 	    {//保存文件，进行批量保存
-	    	$gitpubs=$this->input->post('gitpub',TRUE);
+	    	$gitpubs=$this->input->post('gitpub');
 	    	$savedata=array();
 	    	foreach($gitpubs as $sdata)
 	    	{
