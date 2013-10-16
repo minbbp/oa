@@ -196,8 +196,10 @@ class Git extends CI_Controller
 	 */
 	private function _filter_line($descclear)
 	{
-		$descclear = str_replace("\n","",$descclear);//过滤换行
-		return $descclear;
+		//不过滤换行符，只过滤回车符
+		$descclear = str_replace(chr(10),'',$descclear);//过滤ctrl+m
+		$descclear = str_replace(chr(13),'',$descclear);//过滤ctrl+m
+		return $descclear. chr(10);
 	}
 	/**
 	 * 我的git认证,向用户展示所有的git认证
