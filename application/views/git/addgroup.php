@@ -16,8 +16,10 @@
 	<div class="page-header">
 		<h4>加入新的git组</h4>
 	</div>
+	<?php if(!empty($nogroups)):?>
 	<form action="<?php echo base_url('index.php/git/savegroup')?>" method="post"  class="form-horizontal">
 	<input type="hidden" name="git_id" value="<?php echo $git_id;?>"/>
+	
 	<div class="control-group ">
 	<label for="group" class="control-label">git组:&nbsp;</label>
 	<?php foreach($nogroups as $group):?>
@@ -26,6 +28,7 @@
 	</label>
 	<?php endforeach;?>
 	</div>
+	
 	<label></label>
 	<div class="control-group ">
 	<label class="control-label">
@@ -35,6 +38,10 @@
 	<input type="submit" value="提交" class="btn btn-primary" id="submit"/> 
 	</div>
 	</form>
+	<?php else:?>
+	   <p class="text-center">系统暂时没有git组！<a href="javascript::" id="reset" >关闭</a></p>
+	   
+	<?php endif;?>
 	</div>
 	<script type="text/javascript">
 	var index = parent.layer.getFrameIndex(window.name);

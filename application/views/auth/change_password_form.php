@@ -11,7 +11,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
+ <div class="span8 offset1">
 <?php
 $old_password = array(
 	'name'	=> 'old_password',

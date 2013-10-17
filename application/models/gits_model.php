@@ -30,7 +30,7 @@ class Gits_model extends CI_Model
 	 {
 	 	//$this->db->select('git_id, git_account,cfilename,git_state,add_datagroups,addtime');
 	 	//$this->db->order_by('git_id desc');
-	 	$sql="select git_id,cfilename,git_state,add_datagroups,addtime from gits where add_user=$user_id  order by git_id desc limit $offset,$num";
+	 	$sql="select git_id,cfilename,git_state,add_datagroups,addtime from gits where add_user=$user_id  and git_state!=-1 order by git_id desc limit $offset,$num";
 	 	//$query=$this->db->get_where('gits',array('add_user'=>$user_id),$num,$offset);
 	 	return $this->db->query($sql);
 	 }

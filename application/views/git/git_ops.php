@@ -12,7 +12,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
+ <div class="span8 offset1">
 			<div class="page-header">
 				<h1>
 					git 认证审批

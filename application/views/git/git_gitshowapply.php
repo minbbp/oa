@@ -12,20 +12,16 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
+ 
+ <div class="span8 offset1">
 			<div class="page-header">
 				<h1>
 					git 认证申请 
 				</h1>
 				
 			</div>
-			<!--  <div class="alert alert-info">
-				 <button type="button" class="close" data-dismiss="alert">×</button>
-				<h4>温馨提示!</h4> 
-				 <?php echo $msg;?>
-			</div>-->
 				<?php echo form_open("git/apply_add",array('class'=>'form-horizontal','id'=>'gitform'))?>
-				
+				<?php if(!empty($git_groups)):?>
 				<div class="control-group show1">
 				<label class="control-label" for='is_group'>是否加入git组</label>
 				<div class="controls">
@@ -41,6 +37,7 @@
 					<?php endforeach; ?>
 					</div>
 				</div>
+				<?php endif;?>
 				<div class="control-group">
 				<label class="control-label">添加多个key</label>
 				<div class="controls">
@@ -64,13 +61,13 @@
 				 <button type="button" class="close" data-dismiss="alert">×</button>
 				 <h4>申请流程说明</h4>
 				 <div>
-				 <p class="muted">如果您已经有git账号了，想在另外一台机器上使用您的git账号，则选择账号类型为“增加另外一个机器”</p>
-				 <p class="muted">如果您没有git账号，则选择一个新建git账号</p>
+				 <p class="muted">把你要申请的机器上的ssk-key拷贝下来，注意要用cat命令！</p>
 				 <small>如果要加入指定的git组，请勾选要加入的git组</small>
 				 </div>
 			</div>
 			
 		</div>
+		
 		<script type="text/javascript">
 			$(function(){
 				if($("input[name='is_group']").val()==1)

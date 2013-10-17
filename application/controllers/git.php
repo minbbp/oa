@@ -3,16 +3,14 @@
  * 与git账号管理的控制器，
  * 包括申请，处理，查询，以及用户信息统计。
  * @author minbbp
- * @version 1.0.0
+ * @version 1.0.1
  */
 class Git extends CI_Controller
 {
-
 	private $user_id;//当前操作的用户的id
 	public function __construct()
 	{
 		parent::__construct();
-		
 		$this->load->helper(array('form','url','message'));
 		$this->load->library(array('dx_auth','session','pagination'));
 		//用户以及用户主管信息已经存储到了session中了
@@ -25,29 +23,19 @@ class Git extends CI_Controller
 		$this->load->model('Git_key_model','key',TRUE);
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->session->userdata('DX_user_id');
-		//echo "<pre>";
-		//print_r($this->session->all_userdata());
-		//echo $this->session->userdata('DX_realname');
-		//echo '</pre>';
 	}
 
 	/**
-	 * git 账号申请
+	 * git 账号申请,视图展示
 	 */
 	function gitshowapply()
 	{
-		$data['msg']="请输入您生成的sshkey";
 		//使用git组显示信息，获取所有的用户组
 		$data['git_groups']=$this->group->get_all();
 	   $this->load->view("git/git_gitshowapply",$data);
 	}
-	//一个测试方法
-	public function apply_addnew()
-	{
-		
-	}
 	/**
-	 * 获取申请者提交的表单内容
+	 * 获取申请者提交的表单内容,根据不同的申请内容展示提交不同的审批流程
 	 */
 	public function apply_add()
 	{
@@ -69,11 +57,12 @@ class Git extends CI_Controller
 	    	{
 	    		 // 写文件，保存文件内容
 	    		$time=time().'_'.rand(0, 10);
-	    		$git_pub=$this->_filter_line($sdata);
+	    		$git_pub=$this->_filter_line($sdata);//过滤字符串
 	    		$tmp['gitpub']=$this->session->userdata('DX_username')."".$time.".pub";
 	    		if(FALSE===file_put_contents('./uploads/pub/'.$tmp['gitpub'], $git_pub))
 				{
 					echo "不能保存文件！";
+					log_message('error','->pub 目录没有写入权限');
 					exit;
 				}
 				$tmp['git_id']=$insert_id;
@@ -84,27 +73,31 @@ class Git extends CI_Controller
 	    	// 使用批量保存文件，如果保存失败
 	    	if($this->key->save_batch($savedata))
 	    	{
-	    		
 	    		//发送邮件
 	    		$this->apply_add_sendemail($insert_id);
 	    	}
 	    	else
 	    	{
-	    		echo "保存ssh-key 失败！";exit;
+	    		echo "保存ssh-key 失败！";
+	    		$msg=$this->session->userdata('DX_realname')."->ssh-key保存导数据库时出现错误！";
+	    		log_message('error',$msg);
+	    		exit;
 	    	}
 	    	
 	    }
 	    else
 	    {
 	    	// 保存失败之后，提示用户保存失败
-	    	   echo "添加git授权失败！";exit;
+	    	   echo "添加git授权失败！";
+	    	   $msg=$this->session->userdata('DX_realname')."->保存git认证信息失败！";
+	    	   log_message('error',$msg);
+	    	   exit;
 	    }
-		
-	
 	}
 	
 	/**
 	 * 用户添加git认证成功后，发送邮件请求，以及请相关的人员进行审批
+	 * @param int $insert_id 新添加的git认证id
 	 */
 	private function  apply_add_sendemail($insert_id)
 	{
@@ -128,6 +121,8 @@ class Git extends CI_Controller
 			else
 			{
 				echo "无法通知运维工程师！请联系管理员！";
+				log_message('error','git认证无法保存_数据给运维工程师');
+				exit;
 			}
 		}
 		else
@@ -149,7 +144,7 @@ class Git extends CI_Controller
 				$subject="请审批{$this->session->userdata('DX_realname')}git认证申请 ";
 				sendcloud($level_info['email'], $subject, $msg);
 				$gits=$this->git->get_one($insert_id);
-				if(!empty($gits['add_datagroups']) && $gits['git_type']!=3)
+				if(!empty($gits['add_datagroups']))
 				{//通知相关用户组人员进行审批
 						$gits_array=explode(',', $gits['add_datagroups']);
 						$creator_data['gle_id']=$level_op_id;
@@ -160,12 +155,17 @@ class Git extends CI_Controller
 						{
 							$creator_data['group_id']=$group_id;
 							$creator_data['gcre_creator']=$this->group->get_creator_by_group_id($group_id);
-							$this->creator->save($creator_data);
+							// 如果主管，怎不需要主管再进行审批。直接略过即可
+							if($creator_data['gcre_creator']!=$level_info['id'])
+							{
+								$this->creator->save($creator_data);
+							}
 						}
 			//通过联合查询，给用户组用户发送邮件
 						if(FALSE==$this->sendmail_togroupcreator($gits['add_datagroups']))
 							{
 									echo "不能发送邮件通知git组创建者！";
+									log_message('error','->不同通知git组的创建者 git.php 168 line.');
 									exit;
 							}
 				}
@@ -173,7 +173,9 @@ class Git extends CI_Controller
 			}
 			else
 			{
-				echo "向主管提交审批失败！";exit;
+				echo "向主管提交审批失败！";
+				log_message('error','git认证提交主管审批，提交数据失败！');
+				exit;
 			}
 		}
 	}
@@ -181,13 +183,19 @@ class Git extends CI_Controller
 	public function sendmail_togroupcreator($group_id)
 	{
 		$emails=$this->group->get_email_by_group_id($group_id);
+		$level_info=$this->session->userdata('levelinfo');
 		$tmp=array();
 		foreach ($emails as $email)
 		{
-			array_push($tmp, $email['email']);
+			if($email['email']!=$level_info['email'])
+			{
+				array_push($tmp, $email['email']);
+			}
 		}
-		$subject="请审批{$this->session->userdata('DX_realname')}加入您的git组申请";
-		$msg="<p>您好！</p><p>$subject</p><p>祝:工作顺利！</p>";
+		// 去除主管的邮件信息
+		
+		$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
+		$msg="<p>您好！</p><p>{$subject},请您审批</p><p>祝:工作顺利！</p>";
 		return sendcloud($tmp,$subject,$msg);
 	}
 	/**
@@ -210,7 +218,7 @@ class Git extends CI_Controller
 		$userinfo=$this->users->get_user_by_id($this->user_id);
 		$config['base_url'] = base_url('index.php/git/mygit/');
 		$config['total_rows'] = $this->git->mygit_count($this->user_id);
-		$config['per_page'] = 5;
+		$config['per_page'] = 9;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->git->show_mygit($this->user_id,$config['per_page'],$offset);
 		$this->pagination->initialize($config);
@@ -276,7 +284,7 @@ class Git extends CI_Controller
 			if($this->gol->save($data))
 			{
 				//发送邮件通知指定的运维人员
-				$this->help_savekey_sendmail(ADRD_EMAIL_ONE, 2);
+				$this->help_savekey_sendmail(ADRD_EMAIL_ONE,2);
 			}
 			else
 			{
@@ -416,6 +424,9 @@ class Git extends CI_Controller
 			echo '发送邮件失败！';
 		}
 	}
+	/**
+	 * git 认证管理
+	 */
 	public function alllist()
 	{
 		//echo "haha";
@@ -424,7 +435,7 @@ class Git extends CI_Controller
 		 $git_state=$this->uri->segment(3)==""?1:$this->uri->segment(3);
 		$config['base_url'] = base_url('index.php/git/alllist/'.$git_state.'/');
 		$config['total_rows'] = $this->git->count_alllist($git_state);
-		$config['per_page'] = 5;
+		$config['per_page'] = 9;
 		$config['uri_segment'] =4;
 		$offset=intval($this->uri->segment(4));
 		$rs=$this->git->alllist($config['per_page'],$offset,$git_state);

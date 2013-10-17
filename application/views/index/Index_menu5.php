@@ -1,7 +1,7 @@
 <?php
 //运维操作人员的导航菜单
 ?>
-<div class="offset1 span3 ">
+<div class=" span3 ">
 <div data-spy="affix" data-offset-top="50">
 <!-- 新效果-->
 <div class="accordion span3" id="accordion2">
@@ -34,6 +34,7 @@
  			
 			<li class="active"><?php echo anchor("/git/gitshowapply/","git认证申请","target=index_center");?></li>
  			<li><?php echo anchor("/git/mygit/","我的git认证","target=index_center");?></li>
+ 			<li><?php echo anchor("/git_ops/index/","git认证审批" ,'target=index_center')?></li>
  			<li><?php echo anchor("/git/alllist/","git认证管理","target=index_center");?></li>
  			<li class="divider"></li>
  			 <li><?php echo anchor("/gitgroups"," git组添加","target=index_center");?></li>

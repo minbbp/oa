@@ -11,7 +11,12 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
+ <div class="span8 offset1">
+  <div class="page-header">
+				<h3>
+					 用户角色管理
+				</h3>
+</div>
 	<?php  				
 		// Show error
 		echo validation_errors();

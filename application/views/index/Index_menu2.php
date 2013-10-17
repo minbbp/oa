@@ -1,4 +1,4 @@
-<div class="offset1 span3 ">
+<div class=" span3 ">
 <div data-spy="affix" data-offset-top="50">
 <!-- 新效果-->
 <div class="accordion span3" id="accordion2">

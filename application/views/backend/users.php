@@ -11,7 +11,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span9">
+ <div class="span8 offset1">
 <div class="showmsg">
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">

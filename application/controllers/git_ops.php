@@ -28,7 +28,7 @@ class Git_ops extends CI_Controller
 	{
 		$config['base_url'] = base_url('index.php/git_ops/index/');
 		$config['total_rows'] = $this->gol->count_alllist(1);
-		$config['per_page'] = 5;
+		$config['per_page'] = 10;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->gol->alllist($offset,$config['per_page'],1);
 		$data['rs']=$rs;

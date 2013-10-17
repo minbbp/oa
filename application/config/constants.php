@@ -37,7 +37,7 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 //定义几个常用的邮箱号码
-define('ADRD_EMAIL_ONE','wb-zhibinliu@sohu-inc.com');//git账号部分
+define('ADRD_EMAIL_ONE','wb-shichaoliu@sohu-inc.com');//git账号部分处理人员
 define('ADRD_EMAIL_TWO','wb-zhibinliu@sohu-inc.com');
 define('ADRD_EMAIL_OTHER','wb-zhibinliu@souhu-inc.com');
 define('SYS_EMAIL','postmaster@adrdop-sendmore.sendcloud.org');

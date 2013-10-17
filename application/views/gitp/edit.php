@@ -30,7 +30,7 @@ $group_description=array(
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
+ <div class="span8 offset1">
  <div class="page-header">
 				<h3>
 					<?php echo $title?>

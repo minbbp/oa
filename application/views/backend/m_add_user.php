@@ -36,7 +36,7 @@ $email = array(
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
+ <div class="span8 offset1">
 <fieldset>
 <legend>添加用户 </legend>
 <?php echo form_open('backend/m_saveuser/'.$userinfo['id'])?>
