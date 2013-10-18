@@ -11,10 +11,10 @@
   	<div id="collapse0" class="accordion-body collapse">
   	<div class="accordion-inner">
   	<ul class="nav nav-list">
-  	<li class="active"> <a href="#">我的个人信息</a></li>
-  	<li> <a href="#">我的待办列表</a></li>
-  	<li> <a href="#">我的申请信息</a></li>
-  	<li> <a href="#">我的历史工单</a></li>
+  	<li class="active"> <a href="<?php echo base_url('index.php/index/center')?>">我的个人信息</a></li>
+  	<li> <a href="<?php echo base_url('index.php/index/center')?>">我的待办列表</a></li>
+  	<li> <a href="<?php echo base_url('index.php/index/center')?>">我的申请信息</a></li>
+  	<li> <a href="<?php echo base_url('index.php/index/center')?>">我的历史工单</a></li>
   	</ul>
   	</div>
   	</div>
