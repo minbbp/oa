@@ -44,5 +44,7 @@ define('SYS_EMAIL','postmaster@adrdop-sendmore.sendcloud.org');
 define('SYS_EMAILNAME','postmaster@adrdop');
 //配置几个模块的文件夹显示目录
 define('CODE_ONLINE','codeonline');
+// 分页常量显示
+define('PER_PAGE',10);
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
