@@ -5,10 +5,10 @@
     <title>运维OA_login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
-    <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
+    <link href="<?php echo base_url('/bootstrap/css/bootstrap.min.css')?>" rel="stylesheet" media="screen">
+	<script src="<?php echo base_url('/bootstrap/js/jquery-1.10.2.min.js')?>"></script>
+    <script src="<?php echo base_url('/bootstrap/js/bootstrap.min.js')?>"></script>
+    <script src="<?php echo base_url('/bootstrap/layer/layer.min.js')?>"></script>
     <!-- bootstrap end -->
   </head>
   <body>
@@ -41,7 +41,7 @@
 				<div class="control-group">
 				<label class="control-label">添加多个key</label>
 				<div class="controls">
-				<a href="javascript::"   id="add_key" class="btn btn-primary">添加新key</a>
+				<a href="javascript:void(0)"   id="add_key" class="btn btn-primary">添加新key</a>
 				</div>
 				</div>
 				<div class="control-group show3">

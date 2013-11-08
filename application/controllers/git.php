@@ -114,7 +114,8 @@ class Git extends CI_Controller
 			{
 				//数据存储之后，发送邮件给运维工程师
 				$subject="请处理".$this->session->userdata('DX_realname')."的git认证申请";
-				$msg="<p>您好！<p> <p>$subject</p><p>请不要 回复此邮件！</p>";
+				$data['msg']=$subject;
+				$msg=$this->load->view('mail/mail_common',$data,TRUE);
 				sendcloud(ADRD_EMAIL_ONE, $subject, $msg);
 				echo "我们已经发送邮件通知运维工程师处理您的申请啦！";
 			}
@@ -195,7 +196,8 @@ class Git extends CI_Controller
 		// 去除主管的邮件信息
 		
 		$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
-		$msg="<p>您好！</p><p>{$subject},请您审批</p><p>祝:工作顺利！</p>";
+		$data['msg']="{$subject},请您审批！";
+		$msg=$this->load->view('mail/mail_common',$data,TRUE);
 		return sendcloud($tmp,$subject,$msg);
 	}
 	/**
