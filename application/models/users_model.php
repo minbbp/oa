@@ -47,4 +47,20 @@ class Users_model extends CI_Model
 		$sql="select id,username,realname,email from $this->_table where username='$username' ";
 		return $this->db->query($sql)->row_array();
 	}
+	/**
+	 * 通过用户角色获取用户列表
+	 * @param number $role_id 用户角色id
+	 */
+	public function get_user_by_role_id($role_id)
+	{
+		return  $this->db->get_where($this->_table,array('role_id'=>$role_id))->result_array();
+	}
+	/**
+	 * 通过用户的pid获取用户的详细信息
+	 * @param number $pid 用户的级别信息
+	 */
+	public function get_user_by_pid($pid=0)
+	{
+		return  $this->db->get_where($this->_table,array('pid'=>$pid))->result_array();
+	}
 }

@@ -79,7 +79,4 @@ if(!function_exists('sendcloud'))
 			return file_put_contents($filename,$str,FILE_APPEND);
 		}
 	}
-	
-	
-	
 }
