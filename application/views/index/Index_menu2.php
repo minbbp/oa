@@ -58,6 +58,9 @@
         <ul class="nav nav-list">
 			<li class="active"><?php echo anchor("/codeonline/index/","上线申请","target=index_center");?></li>
  			<li><?php echo anchor("/codeonline/myapply/","我的上线申请 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_tester/myapply/","代码上线测试确认 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_header/myapply/","代码上线负责人审批 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_op/myapply/","代码上线处理 ","target=index_center");?></li>
  			<li><?php echo anchor("/requirements/index/","需求管理 ","target=index_center");?></li>
  			<li><?php echo anchor("/codeonline_models/index/","模块资源管理 ","target=index_center");?></li>
 		</ul>

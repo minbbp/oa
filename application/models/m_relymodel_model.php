@@ -30,4 +30,13 @@ class M_relymodel_model extends MY_Model
 		$this->db->delete($this->_table,array('m_id'=>$m_id));
 		$this->insert_more($str, $m_id);
 	}
+	/**
+	 *  通过一个模块的m_id 获取与之依赖的模块名称
+	 *  
+	 */
+	public function get_relymodel($m_id)
+	{
+		$sql="select rely_name,m_name from $this->_table,codeonline_model where $this->_table.rely_name=codeonline_model.m_id and $this->_table.m_id=$m_id";
+		return $this->db->query($sql)->result_array();
+	} 
 }

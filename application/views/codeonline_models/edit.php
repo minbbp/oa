@@ -231,9 +231,9 @@ $(function(){
 	$testtmp.="]";
 	?>
 	
-	var $myarr=<?php echo $tmp?>;
-	var $dtmp=<?php echo $dtmp;?>;
-	var $testtmp=<?php echo $testtmp;?>;
+	var $myarr=<?php echo $tmp=="]"?'[]':$tmp;?>;
+	var $dtmp=<?php echo $dtmp=="]"?'[]':$dtmp;?>;
+	var $testtmp=<?php echo $testtmp=="]"?'[]':$testtmp;?>;
 	$("#a_dev option").each(function(i,n){
 		var dd=$(n);
 		if($.inArray(dd.val(),$dtmp)!=-1)

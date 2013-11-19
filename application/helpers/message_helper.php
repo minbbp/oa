@@ -35,7 +35,7 @@ if(!function_exists('sendcloud'))
 	function sendcloud($to,$subject,$message,$cc=null)
 	{
 		//把收件人，邮件标题，以及邮件内容写入到一个文本文件。真正的环境中的时候在开启邮件发送
-		$state=FALSE;
+		$state=TRUE;
 		if($state===TRUE)
 		{
 			$_CI=&get_instance();

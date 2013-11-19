@@ -40,4 +40,20 @@ class MY_Model extends CI_Model
 	{
 		return $this->db->get_where($this->_table,array("$key"=>$value))->result_array();
 	}
+	/**
+	 * 批量保存
+	 *@param array $data 需要保存或者更新的数据
+	 *@param string $field 需要修改的字段。  
+	 */
+	public function save_batch($data,$field=null)
+	{
+		if($field)
+		{
+			return $this->db->update_batch($this->_table,$data,$field);
+		}
+		else
+		{
+			return $this->db->insert_batch($this->_table,$data);
+		}
+	}
 }

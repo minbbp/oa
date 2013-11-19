@@ -5,15 +5,14 @@
     <title><?php echo $title?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="<?=base_url('bootstrap/css/bootstrap.min.css')?>" rel="stylesheet" media="screen">
-     <link href="<?=base_url('bootstrap/css/bootstrap-datetimepicker.min.css')?>" rel="stylesheet" media="screen" />
-	<script src="<?=base_url('bootstrap/js/jquery-1.10.2.min.js')?>"></script>
-    <script src="<?=base_url('bootstrap/js/bootstrap.min.js')?>"></script>
-    <script src="<?=base_url('bootstrap/js/bootstrap-datetimepicker.min.js')?>"></script>
-    <script src="<?=base_url('bootstrap/js/bootstrap-datetimepicker.zh-CN.js')?>"></script>
-    <script src="<?=base_url('bootstrap/js/bootstrap-typeahead.js')?>"></script>
-    
-   <script src="<?=base_url('bootstrap/layer/layer.min.js')?>"></script>
+    <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+     <link href="<?=base_url()?>/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" />
+	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap-typeahead.js"></script>
+   <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
     <!-- bootstrap end -->
   </head>
   <body>
@@ -24,12 +23,12 @@
 				</h3>
 </div>
 <?php
-  echo form_open("codeonline/save/$m_id",array('class'=>'form-horizontal'));
+  echo form_open("codeonline/update_save/{$apply_row['apply_id']}/$m_id",array('class'=>'form-horizontal'));
 ?>
 <div class="control-group ">
     <label class="control-label" for="require_id"> 选择需求:</label>
     <div class="controls">
-      <input type="text" id="require_id" name="require_id"  placeholder="请输入需求关键字" autocomplete="off"/>
+      <input type="text" id="require_id" name="require_id"  value="<?php echo $require_row->required_title;?>" placeholder="请输入需求关键字" autocomplete="off"/>
  	 <span class="help-inline"></span>
  	</div>
  </div>
@@ -37,14 +36,14 @@
  <div class="control-group ">
     <label class="control-label" for="git_url">源码git地址:</label>
     <div class="controls">
-       <input type="text" id="git_url" name="git_url"  placeholder="源码git地址">
+       <input type="text" id="git_url" name="git_url" value="<?php echo $apply_row['git_url'];?>" placeholder="源码git地址">
     <span class="help-inline"></span>
     </div>
  </div>
  <div class="control-group ">
     <label class="control-label" for="git_tag">git标签:</label>
     <div class="controls">
-     <input type="text" id="git_tag" name="git_tag"  placeholder="git标签">
+     <input type="text" id="git_tag" name="git_tag" value="<?php echo $apply_row['git_tag'];?>"  placeholder="git标签">
     <span class="help-inline"></span>
     </div>
  </div>
@@ -52,7 +51,7 @@
     <label class="control-label" for="online_time"> 上线时间:</label>
     <div class="controls">
  		<div class="input-append date datetimepicker" id="online_time" data-date="<?php echo date("Y-m-d");?>" data-date-format="yyyy-mm-dd">
-    	<input class="span2" size="16" name="online_time" type="text" readonly="readonly" value="<?php echo date("Y-m-d",time());?>">
+    	<input class="span2" size="16" name="online_time" type="text" readonly="readonly" value="<?php echo  $apply_row['online_time'];?>">
     	<span class="add-on"><i class="icon-th"></i></span>
 		</div>  
 		</div>
@@ -62,12 +61,14 @@
 <table class="table table-bordered">
 <caption><b>涉及配置文件</b></caption>
 <tr><th> 文件名</th><th>修改项</th><th>原值</th><th>新值</th><th>操作</th></tr>
-<tr><td><input name="file_name[]"  class="span2" type="text"/></td>
-<td><input name="file_item[]"  class="span2" type="text"/></td>
-<td><input name="file_item_old_value[]" class="span1"  type="text"/></td>
-<td><input name="file_item_new_value[]" class="span1" type="text"/></td>
+<?php foreach($config_rs as $f):?>
+<tr><td><input name="file_name[]" value="<?php echo $f['file_name'];?>"  class="span2" type="text"/></td>
+<td><input name="file_item[]"  class="span2"  value="<?php echo $f['file_item'];?>"  type="text"/></td>
+<td><input name="file_item_old_value[]" class="span1"  value="<?php echo $f['file_item_old_value'];?>"  type="text"/></td>
+<td><input name="file_item_new_value[]" class="span1"   value="<?php echo $f['file_item_new_value'];?>"  type="text"/></td>
 <td><a href="javascript:void(0)" class="add_tr"><span class="icon-plus"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon-remove"></span></a></td>
 </tr>
+<?php endforeach;?>
 </table>
 <table></table>
 </div>
@@ -88,21 +89,24 @@
  <div class="span3"><select multiple="multiple" name="server_update[]" id="test_b" size="8"></select></div>
  </div>
 
- <div class="row " style="margin-top:20px">
-    <label class="control-label" for='tester_id' style="text-align: left;width:70px;">测试人员:</label>
+ <div class="control-group " style="margin-top:20px">
+    <label class="control-label" for='tester_id'>测试人员:</label>
+    <div class="controls">
       <select class="span2" id="tester_id" name="tester_id">
      <?php foreach ($tester_rs as $user):?>
- 	<option value="<?php echo $user['test_id'];?>"><?php echo $user['realname'];?></option>
+ 	<option value="<?php echo $user['test_id'];?>"  <?php if($user['test_id']==$apply_row['tester_id']){echo "selected='selected'";}?>><?php echo $user['realname'];?></option>
  	<?php endforeach;?>
       </select>
-    
+    </div>
  </div>
-  <div class="row" style="margin-top:20px;" >
-    <label class="control-label" for="online_description" style="text-align:left;width:70px;">备注:</label>
-      <textarea  id="online_description" class="span7" rows="10" name="online_description"></textarea>
+  <div class="control-group">
+    <label class="control-label" for="online_description">备注:</label>
+    <div class="controls">
+      <textarea  id="online_description" class="span5" rows="5" name="online_description"><?php echo $apply_row['online_description']?></textarea>
     <span class="help-inline"></span>
+    </div>
  </div>
-<div class="control-group" style="margin-top:20px;">
+<div class="control-group">
     <label class="control-label" for=re_status></label>
     <div class="controls">
        <input type="button" class="btn" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
@@ -122,7 +126,6 @@ $('.datetimepicker').datetimepicker({
 	minView: 2,
 	forceParse: 0
 });
-
  function validate(element,msg)
  {
 	 $(element).blur(function(){
@@ -155,6 +158,15 @@ $(function(){
         display: 'required_title',
         val: 'required_id' ,
 	});
+	var $dtmp=<?php echo '['.$apply_row['server_update'].']';?>;
+	$("#test_a option").each(function(i,n){
+		var dd=$(n);
+		if($.inArray(Number(dd.val()),$dtmp)!=-1)
+		{
+			dd.appendTo($('#test_b'));
+		}
+		});
+	
 	$("#require_id").blur(function(){
 		var val=$(this).val();
 	 	$.post('<?php echo base_url('index.php/codeonline/check_require_name');?>',{name:val,time:new Date().getTime()},function(data)
@@ -191,7 +203,6 @@ $(function(){
 	  });
   $(document).delegate('.remove_tr','click',function(){
 	  var $length=$(".table tr").length;
-	  console.log($length);
 	  if($length>2)
 		{
 		  $tr=$(this).parents('tr').remove();
@@ -231,8 +242,9 @@ $(function(){
 									 json_data=JSON.parse(json_data);
 									if(json_data.status==1)
 									{//页面进行条状
-										layer.alert(json_data.msg,8,'成功提示！',function(){
-											location.href='<?php echo base_url('index.php/codeonline/index');?>';
+										layer.alert(json_data.msg,8,'成功提示！',function()
+										{
+											location.href='<?php echo base_url('index.php/codeonline/myapply');?>';
 											});
 									}
 									else
@@ -249,7 +261,7 @@ $(function(){
 									if(json_data.status==1)
 									{//页面进行条状
 										layer.alert(json_data.msg,8,'成功提示！',function(){
-											location.href='<?php echo base_url('index.php/requirements/index');?>';
+											location.href='<?php echo base_url('index.php/codeonline/myapply');?>';
 											});
 									}
 									else

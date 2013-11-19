@@ -23,7 +23,7 @@
  <tbody>
  <?php foreach ($re_rs as $r):?>
  <tr>
- <td><?php echo anchor('codeonline_models/child/'.$r['m_id'],$r['m_name']);?></td>
+ <td><?php echo $r['m_name'];?></td>
  <td><?php if($r['m_type']==1):?><span class="label label-success">线上</span><?php else:?><span class="label label-important">线下</span><?php endif;?></td>
  <td><?php  echo $r['m_online']?>
  </td>

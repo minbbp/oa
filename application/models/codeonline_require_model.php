@@ -53,7 +53,29 @@ class Codeonline_require_model extends CI_Model
 	 */
 	public function get_one($required_id)
 	{
-		$sql="select * from $this->_table where $this->primary_key=$required_id";
+		$sql="select * from  $this->_table where $this->primary_key=$required_id";
 		return $this->db->query($sql)->row();
 	}
+	/**
+	 * 获取所有的用户需求信息，给用户申请上线的时候进行自动提示。
+	 */
+	public function get_all()
+	{
+		$sql="select $this->primary_key,required_title from $this->_table";
+		return $this->db->query($sql)->result_array();
+	}
+	public function get_by_title($required_title)
+	{
+		$sql="select * from $this->_table where required_title='$required_title'";
+		$rs=$this->db->query($sql)->row_array();
+		if(empty($rs))
+		{
+			return FALSE;
+		}
+		else
+		{
+			return $rs;
+		}
+	}
+	
 }
