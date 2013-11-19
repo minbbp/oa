@@ -40,8 +40,9 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('ADRD_EMAIL_ONE','wb-shichaoliu@sohu-inc.com');//git账号部分处理人员
 define('ADRD_EMAIL_TWO','wb-zhibinliu@sohu-inc.com');
 define('ADRD_EMAIL_OTHER','wb-zhibinliu@souhu-inc.com');
-define('SYS_EMAIL','postmaster@adrdop-sendmore.sendcloud.org');
-define('SYS_EMAILNAME','postmaster@adrdop');
+define('ADRD_OP_TWO','wb-wennanma@sohu-inc.com');//服务器模块运维人员
+define('SYS_EMAIL','postmaster@adrdop-sendmore.sendcloud.org');//发件mail
+define('SYS_EMAILNAME','postmaster@adrdop');//发件人
 //配置几个模块的文件夹显示目录
 define('CODE_ONLINE','codeonline');
 // 分页常量显示

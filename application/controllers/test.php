@@ -48,4 +48,8 @@ class  Test extends MY_Controller
 	{
 		
 	}
+	public function  test_new_mail()
+	{
+		$this->load->view('mail/mail_new_common');
+	}
 }

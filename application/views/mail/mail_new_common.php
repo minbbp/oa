@@ -108,14 +108,15 @@ body, td { font-family: HelveticaNeue, sans-serif; }
                 
             	<tr>
                 	<td class="w640" width="640">
-                        <table id="top-bar" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#899120">
-    <tbody><tr>
+                        <table id="top-bar" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#fdd000">
+    <tbody>
+    <tr style="background-color: #fdd000;">
         <td class="w15" width="15"></td>
         <td class="w325" width="350" valign="middle" align="left">
             <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                 <tbody><tr><td class="w325" width="350" height="8"></td></tr>
             </tbody></table>
-            <div class="header-content"><webversion>搜狐精准广告研发中心&reg;运维支撑平台</webversion></div>
+            <div class="header-content"><webversion style="color:#000;">搜狐精准广告研发中心&reg;运维支撑平台</webversion></div>
             <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                 <tbody><tr><td class="w325" width="350" height="8"></td></tr>
             </tbody></table>
@@ -126,7 +127,8 @@ body, td { font-family: HelveticaNeue, sans-serif; }
                 <tbody><tr><td class="w255" width="255" height="8"></td></tr>
             </tbody></table>
             <table cellpadding="0" cellspacing="0" border="0">
-    <tbody><tr>
+    <tbody>
+    <tr>
         
         <td valign="middle"><fblike></fblike></td>
         <td width="3"></td>
@@ -158,24 +160,7 @@ body, td { font-family: HelveticaNeue, sans-serif; }
                 </tr>
                 <tr>
                 <td id="header" class="w640" width="640" align="center" bgcolor="#FDD000" style="color:#000;">
-    
-    <table class="w640" width="640" cellpadding="0" cellspacing="0" border="0">
-        <tbody><tr><td class="w30" width="30"></td><td class="w580" width="580" height="30"></td><td class="w30" width="30"></td></tr>
-        <tr>
-            <td class="w30" width="30"></td>
-            <td class="w580" width="580">
-                <div align="center" id="headline">
-                    <p>
-                        <strong><singleline label="Title">来自运维支撑平台的邮件</singleline></strong>
-                    </p>
-                </div>
-            </td>
-            <td class="w30" width="30"></td>
-        </tr>
-    </tbody></table>
-    
-    
-</td>
+				</td>
                 </tr>
                 
                 <tr><td class="w640" width="640" height="30" bgcolor="#ffffff"></td></tr>
