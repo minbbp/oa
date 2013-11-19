@@ -46,6 +46,43 @@
       </div>
     </div>
   </div>
+  <!--  代码上线 -->
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecodeonline">
+        代码上线
+      </a>
+    </div>
+    <div id="collapsecodeonline" class="accordion-body collapse ">
+      <div class="accordion-inner">
+        <ul class="nav nav-list">
+ 			<li><?php echo anchor("/codeonline_op/myapply/","代码上线处理 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/requirements/index/","需求管理 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_models/index/","模块资源管理 ","target=index_center");?></li>
+		</ul>
+      </div>
+    </div>
+  </div>
+<!--  代码上线结束 -->
+  <!--新添加服务器模块-->
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+ 服务器管理
+      </a>
+    </div>
+    <div id="collapseThree" class="accordion-body collapse ">
+      <div class="accordion-inner">
+        <ul class="nav nav-list">
+			<li class="active"><?php echo anchor("/server_need/index/","服务器申请","target=index_center");?></li>
+ 			<li><?php echo anchor("/server_manage/index/","服务器管理","target=index_center");?></li>
+ 			<li><?php echo anchor("/server_approve/index/","服务器审批" ,'target=index_center')?></li>
+                        <li><?php echo anchor("/server_type/index/","服务器服务管理" ,'target=index_center')?></li>
+	</ul>
+      </div>
+    </div>
+  </div>
+<!--新添加服务器模块-->
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">

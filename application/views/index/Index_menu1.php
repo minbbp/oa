@@ -41,6 +41,41 @@
       </div>
     </div>
   </div>
+  <!--  代码上线 -->
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecodeonline">
+        代码上线
+      </a>
+    </div>
+    <div id="collapsecodeonline" class="accordion-body collapse ">
+      <div class="accordion-inner">
+        <ul class="nav nav-list">
+			<li class="active"><?php echo anchor("/codeonline/index/","上线申请","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline/myapply/","我的上线申请 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_tester/myapply/","代码上线测试确认 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_header/myapply/","代码上线负责人审批 ","target=index_center");?></li>
+		</ul>
+      </div>
+    </div>
+  </div>
+<!--  代码上线结束 -->
+      <!--新添加服务器模块-->
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+       服务器管理
+      </a>
+    </div>
+    <div id="collapseThree" class="accordion-body collapse ">
+      <div class="accordion-inner">
+        <ul class="nav nav-list">
+			<li class="active"><?php echo anchor("/server_need/index/","服务器申请","target=index_center");?></li>
+	</ul>
+      </div>
+    </div>
+  </div>
+<!--新添加服务器模块-->
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">

@@ -14,7 +14,7 @@
   <div class="span7">
   <p>运维中心欢迎您<b><?php echo $username['username'];?></b>项目处于正在开发中，个人中心模块暂时无法使用</p>
   <div class="progress progress-striped active">
-  <div class="bar" style="width: 12%;"></div>
+  <div class="bar" style="width: 32%;"></div>
 	</div>
   </div>
   </body>

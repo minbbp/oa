@@ -1,7 +1,7 @@
 <?php
 //测试文件跳转
 //以后获取主管信息，可以直接从session中获取，来查看是否拥有主管信息
-class  Test extends CI_Controller
+class  Test extends MY_Controller
 {
 	public function  __construct()
 	{
@@ -39,5 +39,17 @@ class  Test extends CI_Controller
 	public function sendmail()
 	{
 		sendcloud('wb-zhibinliu@sohu-inc.com', '使用扩展发送的邮件', '使用扩展发送的测试邮件');
+	}
+	public function server()
+	{
+		$this->load->view('server_apply');
+	}
+	public function add_apply()
+	{
+		
+	}
+	public function  test_new_mail()
+	{
+		$this->load->view('mail/mail_new_common');
 	}
 }
