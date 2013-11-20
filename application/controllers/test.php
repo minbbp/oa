@@ -50,6 +50,9 @@ class  Test extends MY_Controller
 	}
 	public function  test_new_mail()
 	{
-		$this->load->view('mail/mail_new_common');
+		$subject="邮件内容测试！";
+		$msg=$this->load->view('mail/mail_new_common',array('name'=>'韩旭','msg'=>'测试邮件问题,测试邮件问题,,,,,,,'),TRUE);
+		echo $msg;
+		sendcloud('wb-zhibinliu@sohu-inc.com', $subject,$msg);
 	}
 }
