@@ -25,10 +25,16 @@ class Server_approve_model extends CI_Model
             if($pid == 0){
                 //pid=0为主管 直接交给运维审批Type=2
                 $data['sa_type'] = 2;
+                $info['info'] = $this->sn->find_need($sn_id);
+                $to = ADRD_OP_TWO;
+                $subject = '新的服务器申请审批';
+                $m = $this->load->view('mail/mail_server_apply',$info,true);
+                $name = '运维人员';
+                $message = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
+                sendcloud($to, $subject, $message,$c);
             }else{
                 $data['sa_type'] = 1;
                 //写邮件 ok
-                
                 $info['info'] = $this->sn->find_need($sn_id);
                 $to = $level_info['email'];
                 $info['levelinfo'] = $level_info;
@@ -37,7 +43,6 @@ class Server_approve_model extends CI_Model
                 $name = $level_info['realname'];
                 $message = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
                 sendcloud($to, $subject, $message,$c);
-                
             }
             $this->db->insert('server_approve',$data);
             return $this->db->insert_id();

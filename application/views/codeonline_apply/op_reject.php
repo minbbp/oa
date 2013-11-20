@@ -17,7 +17,7 @@
 					代码上线负责人审批
 				</h4>
 			</div>
-			<form action="<?php echo base_url('index.php/codeonline_header/savereject/'.$a_id)?>" method="post">
+			<form action="<?php echo base_url('index.php/codeonline_op/savereject/'.$a_id)?>" method="post">
 			<label for="description">驳回原因：</label>
 			<textarea rows="4" class="span5" name="description" id="description"></textarea>
 			<label >

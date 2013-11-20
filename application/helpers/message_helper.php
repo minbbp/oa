@@ -48,7 +48,8 @@ if(!function_exists('sendcloud'))
 			}
 			$_CI->email->subject($subject);
 			$_CI->email->message($message);
-			return $_CI->email->send();
+			return  $_CI->email->send();
+			//echo $_CI->email->print_debugger();
 		}
 		else
 		{
