@@ -30,12 +30,14 @@
                         <td></td> 
 			<td><?php echo $val['sn_name']; ?></td>
 			<td><?php echo $val['sn_use']; ?></td>
-			<td><?php echo date('Y-m-d H:i:s',$val['sn_time']); ?></td>
-                        <td><?php if($val['sa_status'] == 0){ echo "未审核";}else if($val['sa_status'] == 1){ echo "已通过"; }else{ echo "已退回";} ; ?></td>
+			<td><?php echo date('Y-m-d H:i',$val['sn_time']); ?></td>
+                        <td><!--<?php if($val['sa_status'] == 0){ echo "未审核";}else if($val['sa_status'] == 1){ echo "已通过"; }else{ echo "已退回";} ; ?>-->
+                            <?php echo $val['nums'] ? "已分配".$val['nums']."台":"没分配"; ?>
+                        </td>
                         <td><?php echo anchor('server_approve/server_agree/'.$val['sa_id'], '同意', "class='agree'") ?> | 
                             <?php echo anchor('server_approve/server_disagree/'.$val['sa_id'], '退回', "class='disagree'") ?> | 
                             <?php echo anchor('server_approve/server_see/'.$val['sn_id'], '查看', "class='see'") ?>| 
-                            <?php if($role_id == 5){echo anchor('server_approve/server_agree_op/'.$val['sa_id'], '分配完成', "class='change'");} ?>
+                            <?php if($role_id == 5 && $val['nums']!=0){echo anchor('server_approve/server_agree_op/'.$val['sa_id'], '分配完成', "class='change'");} ?>
                         </td>
 			</tr>
                          <?php } ?>

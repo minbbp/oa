@@ -64,6 +64,16 @@ class Server_owner_model extends CI_Model
             }
            return $new;
         }
+        public function select_owners($data) {
+           
+            foreach($data as &$v){
+                $where['sn_id'] = $v['sn_id'];
+                $res = $this->db->where($where)->get('server_owner');
+                $v['nums'] = $res->result_array() ? count($res->result_array()) : 0;
+            }
+             
+            return $data;
+        }
 
              
 }

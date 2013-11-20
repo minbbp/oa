@@ -34,7 +34,8 @@ class Server_approve extends CI_Controller
             $configpage['uri_segment']=3;//分页的数据查询偏移量在哪一段上
             $offset=intval($this->uri->segment(3));
             $data['temp'] = $this->sa->select_approve($arr,$offset,$page_size);
-            $data['list'] = $this->sn->select_need($data['temp']);
+            $data['temp2'] = $this->sn->select_need($data['temp']);
+            $data['list'] = $this->so->select_owners($data['temp2']);
             $this->pagination->initialize($configpage);
             $data['link'] = $this->pagination->create_links();
             $data['role_id'] = $this->role_id;
@@ -185,10 +186,9 @@ class Server_approve extends CI_Controller
                 //发邮件
                 $res = $this->db->where($where)->get('server_approve');
                 $result = current($res->result_array());
-                $info = $this->sn->find_need($result['sn_id']);
-                $name = $info['sn_realname'];
+                $info = $this->sn->find_need($result['sn_id']);//得到审批id关联需求id的信息
+                $name = $info['sn_realname'];//收件人的真实姓名
                 $to = $this->sn->get_email_by_uid($info['u_id']);
-                //
                 $arr = $this->sn->get_info_by_uid($result['sa_current_id']);
                 $m = "您的申请已被".$arr['realname']."驳回<br /><p>具体原因是：</p><p>".$mes."</p>";
                 $messages = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
