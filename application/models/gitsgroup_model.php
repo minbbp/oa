@@ -129,7 +129,15 @@ class Gitsgroup_model extends CI_Model
 	{
 		$group_user_sql="select GROUP_CONCAT(group_id)group_str from git_groups_user where user_id=$user_id";
 		 $group_str=$this->db->query($group_user_sql)->row_array();
-		 $sql="select group_id,group_name from $this->table where group_id not in({$group_str['group_str']}) and group_state=1";
+		 if($group_str['group_str']!="")
+		 {
+		 	$sql="select group_id,group_name from $this->table where group_id not in({$group_str['group_str']}) and group_state=1";
+		 }
+		 else
+		 {
+		 	$sql="select group_id,group_name from $this->table where  group_state=1";
+		 }
+		
 		return $this->db->query($sql)->result_array();
 	}
 }
