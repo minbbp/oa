@@ -6,6 +6,13 @@
     <span class="help-inline"></span>
   </div>
 </div>
+<div class="control-group">
+  <label class="control-label" for="inputpwd">密码</label>
+  <div class="controls">
+    <input type="text" name="pwd" id="inputpwd" placeholder="密码"  value="adrd@2013"/>
+    <span class="help-inline"></span>
+  </div>
+</div>
 <input type="hidden" name ="sn_id" value="<?php echo $sn_id ?>">
 <input type="hidden" name ="s_id" value="<?php echo $s_id ?>">
 <input type="hidden" name ="sa_id" value="<?php echo $sa_id ?>">

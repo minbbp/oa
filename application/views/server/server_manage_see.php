@@ -21,7 +21,7 @@
                     $array = array();
                     $new = array();
                     foreach ($list as $val) {
-                           $array[$val['st_id']] = $val['st_name'];
+                           $array[$val['m_id']] = $val['m_name'];
                     }
                     foreach($arr as $v){
                          $new[] =$array[$v];
@@ -32,10 +32,9 @@
           <?php if($list_owner){?>
           <dt>使用人：</dt>
           <dd><?php foreach($list_owner as $value){ 
-              $arr2[] = $value['so_name'];
-          }   
-          echo implode(',', $arr2);
-?>
+//$arr2[] = $value['so_name'];
+              echo "<p>".$value['name_type']."<p>";
+       }?>
           </dd>
           <br />
           <?php } ?>

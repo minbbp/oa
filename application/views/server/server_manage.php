@@ -19,8 +19,8 @@
 			</div>
                         <form action="<?php echo site_url('server_manage/index')?>" method="get" accept-charset="utf-8" class="form-horizontal" id="server_form">   
                         <select name="type[]" id="select_all" class="span2">
-                        <option value="s_internet">ip</option>
-                        <option value="s_use">用途</option>
+                         <option value="s_internet" >ip</option>
+                        <option value="s_use" >用途</option>
                         <option value="s_type">服务</option>
                         <option value="owner">使用人</option>
                         <option value="s_cpu">cpu</option>
@@ -28,7 +28,7 @@
                         <option value="s_disk">disk</option>
                         </select>
                         <div class="input-append">
-                          <input class="span2" id="keyword" name="keyword" placeholder="请输入关键字" type="text">
+                          <input class="span2" id="keyword" name="keyword" placeholder="请输入关键字" type="text" value="<?php echo $u_keyword; ?>">
                           <button class="btn" id="yes" type="submit">Go!</button>
                         </div>
                         </form>
@@ -51,7 +51,7 @@
                   <td>
                   <?php echo anchor('server_manage/server_see/'.$v['s_id'],'查看',"class='see'"  ); ?>
                   <?php echo anchor('server_manage/server_update/'.$v['s_id'],'编辑' ); ?>
-                  <?php echo anchor('server_manage/server_del/'.$v['s_id'],'删除',"class='deltype'" ); ?>
+                  <?php echo anchor('server_manage/server_del/'.$v['s_id'],'删除',"class=''" ); ?>
                   </td>
                 </tr>
                  <?php  } ?>
@@ -80,6 +80,12 @@
 </div>
 <script>
     $(function(){
+         var u_type = "<?php echo $u_type; ?>";
+        $("select option").each(function(){
+            if($(this).val() == u_type){
+                $(this).attr('selected','selected');
+            }
+        })
         $("#yes").click(function(){
             var type = $('#select_all option:selected').val();
             var kw = $('#keyword').val();

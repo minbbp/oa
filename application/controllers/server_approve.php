@@ -14,6 +14,7 @@ class Server_approve extends CI_Controller
                 $this->load->model('server_approve_model','sa',TRUE);
                 $this->load->model('server_manage_model','s',TRUE);
                 $this->load->model('server_owner_model','so',TRUE);
+                $this->load->model('codeonline_model','co',TRUE);
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->session->userdata('DX_user_id');
                 $this->role_id=$this->session->userdata("DX_role_id");//2为超级管理员 5是运维 6是主管
@@ -24,7 +25,7 @@ class Server_approve extends CI_Controller
             $arr['uid'] = $this->user_id;
             $arr['rid'] = $this->role_id;
             $count = $this->sa->get_count($arr);
-            $page_size=10;//每页数量
+            $page_size=3;//每页数量
             //分页
             $configpage['base_url'] =site_url('Server_approve/index');
             $configpage['total_rows'] = $count;//一共有多少条数据
@@ -89,9 +90,13 @@ class Server_approve extends CI_Controller
             $data['title'] = "分配服务器";
             $keyword = urldecode($keyword);
                      if($type == 'owner'){
+                          if($keyword != ''){
                     $uid = $this->sn->get_id_by_username($keyword);
                     $arr2 = $this->sn->get_id_by_uid($uid);
                     $wherein = $this->so->get_id_by_snid($arr2);
+                     }else{
+                        $wherein = false;
+                    }
                     $configpage['uri_segment']=6;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(6));
                     $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
@@ -100,14 +105,21 @@ class Server_approve extends CI_Controller
                     foreach($array as $k => $v){
                         if($keyword == $v){
                             $whereu['s_use'] = $k;
+                            break;
+                        }else{
+                            $whereu = false;
                         }
                     }
                     $configpage['uri_segment']=6;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(6));
                     $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
                 }else if($type == 's_type'){
-                    $st_id = $this->st->get_id_by_name($keyword);
+                    if($keyword !=''){
+                    $st_id = $this->co->get_id_by_name($keyword);
                     $wheres = $st_id;
+                    }else{
+                        $wheres = false;
+                    }
                     $configpage['uri_segment']=6;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(6));
                     $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
@@ -144,14 +156,19 @@ class Server_approve extends CI_Controller
             }else if($type == 's_type'){
                $data['list'] = $this->s->getlistss($offset,$page_size,$wheres);
             }else if($type== 's_cpu' ||$type== 's_mem' ||$type== 's_disk'||$type== 's_internet'||$type== 's_cpu'||$type== 's_use'){
-             $data['list'] = $this->s->getlist($offset,$page_size,$whereu);
+                if($type== 's_use' && !$whereu){
+                       $data['list'] = null;
+                  }else{
+               $data['list'] = $this->s->getlist($offset,$page_size,$whereu);
+                  }
             }else{
-                //$data['list'] = $this->s->getlist($offset,$page_size,$where);
                 $data['list'] = $this->s->getlist($offset,$page_size);
             }
             $arr = $this->sa->get_sn($sa_id);
             $data['info'] = $this->sn->find_need($arr['sn_id']);
             $data['sa_id'] = $sa_id;
+            $data['u_type'] = $type;
+            $data['u_keyword'] = $keyword;
             $this->load->view('server/server_op_approve',$data);
         }
         public function server_see($id) {
@@ -176,8 +193,11 @@ class Server_approve extends CI_Controller
               if($this->role_id == 5){
               $data['sa_current_id'] =$this->session->userdata('DX_user_id');
               }
-              $role_id = $this->role_id;
+              $data['sa_approve_time'] = time();
               $message = $this->sa->disagree($data,$where);
+              if($this->role_id == 5){
+              $this->restart($this->input->post('sa_id'),1);
+              }
               $this->disagree_email($where['sa_id'],$data['sa_cause']);
               echo json_encode($message);
             }
@@ -210,15 +230,45 @@ class Server_approve extends CI_Controller
                 $str = '';
                 foreach($results as $v){
                    $ip = $this->s->get_name_by_id($v['s_id']);
-                   $str.= "<p>服务器：".$ip."帐号为：".$v['account']."</p>";
+                   $str.= "<p>服务器：".$ip."----帐号为：".$v['account']."----密码为:".$v['pwd']."</p>";
                 }
                 $m = "<p>您的申请已被运维人员批复,具体信息如下:</p>".$str;
                 $messages = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
                 $subject="您的申请已批准";
                 sendcloud($to, $subject, $messages);
         }
-        
-        
+        /*
+         * 从新分配 将said 查出sn_id 然后去so表全部删除
+         */
+        public function restart($sa_id,$bool=0){
+            $snarr = $this->sa->get_sn($sa_id);
+            $soarr = $this->so->find_owner($snarr['sn_id']);
+            $del_arr = array();
+            if($soarr){
+                foreach ($soarr as $value) {
+                    $del_arr[] = $value['so_id'];
+                }
+                $nums = $this->so->del_owner($del_arr);
+            }
+            if($nums){
+                $message['status'] = 1;
+                $message['msg'] = "操作成功";
+            }else{
+                $message['status'] = 0;
+                $message['msg'] = "操作失败";
+            }
+            if($bool == 0){
+            echo json_encode($message);
+            }
+        }
+        function server_get($sn_id) {
+            $arr = $this->so->find_owner($sn_id);
+            $str = '';
+            foreach ($arr as $value) {
+                $str.= "<p>".$this->s->get_name_by_id($value['s_id'])."</p>";
+            }
+            echo $str;
+        }
         
       
 }	

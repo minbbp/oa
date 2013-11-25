@@ -78,7 +78,7 @@
  <div class="span3">
  <select multiple="multiple" id="test_a"  name="server_update" size="8">
  <?php foreach ($server_rs as $user):?>
- <option value="<?php echo $user['server_id'];?>"><?php echo long2ip($user['server_ip']);?></option>
+ <option value="<?php echo $user['s_id'];?>"><?php echo ($user['s_internet']);?></option>
  <?php endforeach;?>
  </select>
  </div>

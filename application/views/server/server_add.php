@@ -74,7 +74,7 @@
                                         <div class="span3">
                                         <select multiple="multiple"  id="test_a"  name="server_update" size="8">
                                          <?php foreach($list as $value){ ?>
-                                        <option value="<?php echo $value['st_id'] ?>"><?php echo $value['st_name'] ?></option>
+                                        <option value="<?php echo $value['m_id'] ?>"><?php echo $value['m_name'] ?></option>
                                         <?php } ?>
                                         </select>
                                         </div>

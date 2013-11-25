@@ -22,18 +22,18 @@
   echo form_open("codeonline_models/save");
 ?>
 <div class="control-group pull-left">
-    <label class="control-label" for="m_name">模块名称:</label>
+    <label class="control-label" for="m_name">服务名称:</label>
     <div class="controls">
-      <input type="text" id="m_name" name="m_name"  placeholder="模块名称">
+      <input type="text" id="m_name" name="m_name"  placeholder="服务名称">
  	 <span class="help-inline"></span>
  	</div>
  </div>
  
  <div class="control-group pull-right">
-    <label class="control-label" for="pid"> 模块分类:</label>
+    <label class="control-label" for="pid"> 服务分类:</label>
     <div class="controls">
     <select name="pid">
-    <option value='0'>顶级模块</option>
+    <option value='0'>顶级服务</option>
     <?php foreach($m_pid as $p):?>
     <option value="<?php echo $p['m_id'];?>"><?php echo $p['m_name'];?></option>
     <?php endforeach;?>
@@ -42,11 +42,11 @@
     </div>
  </div>
  <div class="control-group pull-left">
-    <label class="control-label" for="m_type"> 模块类型:</label>
+    <label class="control-label" for="m_type"> 服务类型:</label>
     <div class="controls">
     <select name="m_type" id="m_type">
-    <option value='0'>线下模块</option>
-    <option value='1'>线上模块</option>
+    <option value='0'>线下服务</option>
+    <option value='1'>线上服务</option>
     </select>
     <span class="help-inline"></span>
     </div>
@@ -112,16 +112,9 @@
  </div>
  <div class="span3"><select multiple="multiple" name="m_tester" id="test_b" size="8"></select></div>
  </div>
- <div class="control-group pull-left">
-    <label class="control-label" for="m_server">服务器列表:</label>
-    <div class="controls">
-      <textarea rows="6" class="span7" id="m_server" name="m_server" placeholder="多个ip请使用逗号进行分割"></textarea>
- 	 <span class="help-inline"></span>
- 	</div>
- </div>
  <div class="clearfix"></div>
   <div class="row">
- <label>&nbsp;&nbsp;&nbsp;&nbsp;依赖模块添加：</label>
+ <label>&nbsp;&nbsp;&nbsp;&nbsp;依赖服务添加：</label>
  <div class="span3">
  <select multiple="multiple" id="re_a" size="8">
  <?php foreach($m_pid as $p):?>
@@ -188,7 +181,7 @@ $(function(){
 		$(this).val(str);
 	});
 	var elment=['#m_online','#m_name'];
-	var msg=['请填写线上版本!','模块名不能为空!'];
+	var msg=['请填写线上版本!','服务名不能为空!'];
 	validate_callback(elment,msg);
 	//复选框选择值
 	$(".add").click(function(){

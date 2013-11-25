@@ -56,7 +56,7 @@ class codeonline_apply_table_model extends MY_Model
 		$model_row=$this->db->get_where('codeonline_model',array('m_id'=>$apply_row['m_id']))->row_array();
 		//设计更新服务器信息
 		//$servers=explode(',', $apply_row['server_update']);
-		 $sql="select * from m_server where find_in_set(server_id,'{$apply_row['server_update']}')";
+		 $sql="select * from  server where s_id in ('{$apply_row['server_update']}')";
 		$server_rs=$this->db->query($sql)->result_array();
 		//项目负责人信息
 		$head_row=$this->db->get_where('users',array('id'=>$model_row['m_head']))->row_array();

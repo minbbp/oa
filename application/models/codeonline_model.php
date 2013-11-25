@@ -58,4 +58,60 @@ class Codeonline_model extends MY_Model
 	{
 		return $this->db->get_where($this->_table,array('pid'=>$pid))->result_array();
 	}
+	/**
+	 * 获取所有新的列表信息
+	 * @return  array 获取一个所有子模块的列表
+	 */
+	public function get_all_list()
+	{
+		$sql="select $this->primary_key,m_name from $this->_table where pid!=0";
+		return $this->db->query($sql)->result_array();
+	}
+	/*
+	 * 根据服务名 取得id
+	*/
+	public function get_id_by_name($name) 
+	{
+		$where['m_name'] = $name;
+		$res = $this->db->where($where)->get($this->_table);
+		$result = current($res->result_array());
+		return $result['m_id'] ? $result['m_id'] : array();
+	}
+	/*
+	 * 根据id 查名字
+	*/
+	public function get_name_by_id($id) 
+	{
+		$arr = explode(',', $id);
+		foreach($arr as $v)
+		{
+			$where['m_id'] = $v;
+			$res = $this->db->where($where)->get($this->_table);
+			$result = $res->result_array();
+			if($result)
+			{
+				$results[] = current($result);
+			}
+			else
+			{
+				$results = array();
+			}
+		}
+	
+		return $results;
+	}
+	/*
+	 * 得到数组 键值   id->名字
+	*/
+	public function get_alllist()
+	{
+		$res = $this->db->get($this->_table);
+		$result = $res->result_array();
+		$arr = array();
+		foreach($result as $v)
+		{
+			$arr[$v['m_id']] = $v['m_name'];
+		}
+		return $arr;
+	}
 }

@@ -43,7 +43,7 @@
 			<caption>更新服务器列表</caption>
 			<tr><th>编号</th><th>IP</th></tr>
 			 <?php foreach($server_rs as $sr):?>
-			 <tr><td><?php echo $sr['server_id'];?></td><td><?php echo long2ip($sr['server_ip']);?></td></tr>
+			 <tr><td><?php echo $sr['s_id'];?></td><td><?php echo ($sr['s_internet']);?></td></tr>
 			 <?php endforeach;?>
 			 </table>
 			 </td></tr>

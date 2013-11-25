@@ -13,36 +13,43 @@ class Server_manage extends CI_Controller
                 $this->load->model('server_type_model','st',TRUE);
                 $this->load->model('server_owner_model','so',TRUE);
                 $this->load->model('server_approve_model','sa',TRUE);
+                $this->load->model('codeonline_model','co',TRUE);
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->session->userdata('DX_user_id');
 	}
         public function index($type=false,$keyword=false){
             //逻辑有点混乱。有时间再优化。。。
            $keyword = urldecode($keyword);
-           
                 if($type == 'owner'){
+                    if($keyword != ''){
                     $uid = $this->sn->get_id_by_username($keyword);
                     $arr2 = $this->sn->get_id_by_uid($uid);
                     $wherein = $this->so->get_id_by_snid($arr2);
+                    }else{
+                        $wherein = false;
+                    }
                     $configpage['uri_segment']=5;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(5));
-                    $configpage['base_url'] =site_url('Server_manage/index/'.$type.'/'.$keyword);
+                    $configpage['base_url'] =site_url('server_manage/index/'.$type.'/'.$keyword);
                 }else if($type == 's_use'){
                     $array = $this->sn->get_use();
                     foreach($array as $k => $v){
                         if($keyword == $v){
                             $whereu['s_use'] = $k;
+                            break;
+                        }else{
+                            $whereu = false;
                         }
                     }
                     $configpage['uri_segment']=5;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(5));
-                    $configpage['base_url'] =site_url('Server_manage/index/'.$type.'/'.$keyword);
+                    $configpage['base_url'] =site_url('server_manage/index/'.$type.'/'.$keyword);
                 }else if($type == 's_type'){
-                    $st_id = $this->st->get_id_by_name($keyword);
+                    $st_id = $this->co->get_id_by_name($keyword);
                     $wheres = $st_id;
                     $configpage['uri_segment']=5;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(5));
-                    $configpage['base_url'] =site_url('Server_manage/index/'.$type.'/'.$keyword);
+                    $configpage['base_url'] =site_url('server_manage/index/'.$type.'/'.$keyword);
                 }else if($type== 's_cpu' ||$type== 's_mem' ||$type== 's_disk'||$type== 's_internet'||$type== 's_cpu'){
                     $whereu[$type] = $keyword;
                     $configpage['uri_segment']=5;//分页的数据查询偏移量在哪一段上
@@ -51,7 +58,7 @@ class Server_manage extends CI_Controller
                 }else{
                     $configpage['uri_segment']=3;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(3));         
-                    $configpage['base_url'] =site_url('Server_manage/index/');
+                    $configpage['base_url'] =site_url('server_manage/index/');
                 }
             $data['title'] = "服务器管理";
             if($type == 'owner'){
@@ -67,7 +74,7 @@ class Server_manage extends CI_Controller
             }else{
                 $count = $this->s->get_count();
             }
-            $page_size=1;//每页数量
+            $page_size=3;//每页数量
             $configpage['total_rows'] = $count;//一共有多少条数据
             $configpage['per_page'] = $page_size; //每页显示条数
             $configpage['first_link'] = '首页';
@@ -87,12 +94,14 @@ class Server_manage extends CI_Controller
             }
             $this->pagination->initialize($configpage);
             $data['link'] = $this->pagination->create_links();
+            $data['u_type'] = $type;
+            $data['u_keyword'] = $keyword;
             $this->load->view('server/server_manage',$data);
         }
         public function server_update($id) {
             $data['info'] = current($this->s->find_server($id));
             $data['title'] = "服务器详细信息";
-            $data['list'] = $this->st->get_all('&nbsp&nbsp&nbsp&nbsp');
+            $data['list'] = $this->co->get_all_list();
             $data['use_list'] = $this->sn->get_use();
             $data['list_owner'] = $this->so->get_owner_list($id);
             $this->load->view('server/server_see',$data);
@@ -100,7 +109,7 @@ class Server_manage extends CI_Controller
         public function server_see($id) {
             $data['info'] = current($this->s->find_server($id));
             $data['title'] = "服务器详细信息";
-            $data['list'] = $this->st->get_all('&nbsp&nbsp&nbsp&nbsp');
+            $data['list'] = $this->co->get_all_list();
             $data['use_list'] = $this->sn->get_use();
             $data['list_owner'] = $this->so->get_owner_list($id);
             $this->load->view('server/server_manage_see',$data);
@@ -134,7 +143,8 @@ class Server_manage extends CI_Controller
         public function server_add() {
              $data['title'] = "服务器添加";
              $data['use_list'] = $this->sn->get_use();
-             $data['list'] = $this->st->get_all('&nbsp&nbsp&nbsp&nbsp');
+             
+             $data['list'] = $this->co->get_all_list();
              $this->load->view('server/server_add',$data);
         }
         public function server_insert() {
@@ -189,8 +199,9 @@ class Server_manage extends CI_Controller
         public function server_allocate_add() {
             $data['sn_id'] = $this->input->post('sn_id');
             $data['account'] = trim($this->input->post('account'));
+            $data['pwd'] = trim($this->input->post('pwd'));
             $arr = explode('-', $this->input->post('s_id'));
-            if($data['account']!=''){
+            if($data['account']!='' && $data['pwd']!=''){
                 for($i=0;$i<count($arr);$i++){
                     $data['s_id'] = $arr[$i];
                     $num = $this->so->so_insert($data);

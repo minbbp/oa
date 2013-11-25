@@ -14,7 +14,7 @@ class Server_manage_model extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
-                $this->load->model('server_type_model','st',TRUE);
+                //$this->load->model('server_type_model','st',TRUE);
                 $this->load->model('server_need_model','sn',TRUE);
                 $this->load->model('server_owner_model','so',TRUE);
 	}
@@ -73,7 +73,8 @@ class Server_manage_model extends CI_Model
 	}
  public function getlistss($offset,$page_size,$where)
 	{   
-            $sql = "SELECT * FROM (`server`) WHERE find_in_set('4',s_type)  LIMIT $offset,$page_size";
+            if($where){
+            $sql = "SELECT * FROM (`server`) WHERE find_in_set('$where',s_type)  LIMIT $offset,$page_size";
             $res=$this->db->query($sql);
             $result = $res->result_array();
             foreach ($result as &$v) {
@@ -92,8 +93,21 @@ class Server_manage_model extends CI_Model
                         $v['owner_status'] = 1;
                     }        
             }
+        }else{
+            $result = array();
+        }
             return $result ? $result : array();
 	}
+        /*
+         * 得到全部服务器列表
+         */
+        
+        public function get_all_list($id) {
+            $sql = "SELECT * FROM (`server`) WHERE find_in_set('$id',s_type)";
+            $res=$this->db->query($sql);
+            $result = $res->result_array();
+            return $result ? $result : array();
+        }
         public function find_server($id) {
             $where['s_id'] = $id;
             $res = $this->db->where($where)->get('server');
@@ -130,10 +144,13 @@ class Server_manage_model extends CI_Model
             return count($result);
         }
          public function get_countss($where) {
-            //$res = $this->db->where("find_in_set('$where',s_type)")->get('server');
+             if($where){
             $sql = "SELECT * FROM (`server`) WHERE find_in_set('$where',s_type)";
             $res=$this->db->query($sql);
             $result = $res->result_array();
+             }else{
+                 $result = array();
+             }
             return count($result);
         }
         public function get_counts($wherein) {
@@ -149,5 +166,10 @@ class Server_manage_model extends CI_Model
             $res = $this->db->where('s_id',$s_id)->get('server');
             $result = current($res->result_array());
             return $result['s_internet'];
+        }
+        public function get_server_by_str($str)
+        {
+        	$sql="select * from  server where s_id in ('{$str}')";
+        	return $this->db->query($sql)->result_array();
         }
 }

@@ -77,7 +77,7 @@
  <div class="span3">
  <select multiple="multiple" id="test_a"  name="server_update" size="8">
  <?php foreach ($server_rs as $user):?>
- <option value="<?php echo $user['server_id'];?>"><?php echo long2ip($user['server_ip']);?></option>
+ <option value="<?php echo $user['s_id'];?>"><?php echo ($user['s_internet']);?></option>
  <?php endforeach;?>
  </select>
  </div>
@@ -215,20 +215,29 @@ $(function(){
 				//使用ajax提交表单
 				//提示依赖关系提示
 				var relymodel='<?php foreach($relymodels as $r){echo $r['m_name'].",";} ?>';
+				var msg='';
+				if(relymodel=='')
+				{
+					 msg="是否直接提交数据进行保存？";
+				}
+				else
+				{
+					 msg='该模块依赖:'+relymodel+"<br/>是否已经通知相关同学？";
+				}
 				$.layer({
 					 shade : [0.5 ,'#000',true], //不显示遮罩
 					 title : '依赖模块提示',
 					    area : ['400px','auto'],
 					    offset : ['400px','50%'],
 					    dialog : {
-					        msg:'该模块依赖:'+relymodel+"<br/>是否已经通知相关同学？",
+					        msg:msg,
 					        btns : 2, 
 					        type : -1,
 					        btn : ['确认','暂时保存'],
 					        yes : function(){
 					        	 href=$('form').attr('action')+'/1';
 								 $.post(href,$('form').serialize(),function(json_data){
-									 json_data=JSON.parse(json_data);
+								 json_data=JSON.parse(json_data);
 									if(json_data.status==1)
 									{//页面进行条状
 										layer.alert(json_data.msg,8,'成功提示！',function(){

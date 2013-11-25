@@ -18,14 +18,24 @@
                             <h4><?php echo $title?></h4>
 			</div>
      <div style="font-size ">
-     申请人：<?php echo $info['sn_name']?>&nbsp&nbsp&nbsp
+     申请人：<?php echo $info['sn_name']?>&nbsp&nbsp&nbsp     需要<?php echo $info['sn_num']?>台
      <hr />
      cpu:<?php echo $info['sn_cpu']?>核&nbsp&nbsp&nbsp
      内存:<?php echo $info['sn_mem']?>G&nbsp&nbsp&nbsp
      硬盘:<?php echo $info['sn_disk']?>G&nbsp&nbsp&nbsp
      <?php if($info['sn_internet']==1){echo '需要'."运营商为".$info['sn_isp'];}else{echo '不需要外网';} ?>&nbsp&nbsp&nbsp
      用途:<?php echo $info['sn_use']?>&nbsp&nbsp&nbsp
-     需要<?php echo $info['sn_num']?>台
+     <?php if($info['m_name']){ ?>申请的服务：<?php if($info['m_name']){ 
+                            foreach($info['m_name'] as $v){
+                                $arr[] =  $v['m_name'];
+                             }
+                    $str = implode(',', $arr); 
+                        echo $str;
+                            }else{
+                        echo "没申请";
+                    }
+           } ?>
+
      </div>
      <hr /> 
                     <form action="<?php echo site_url('server_approve/op_approve/'.$sa_id)?>" method="get" accept-charset="utf-8" class="form-horizontal" id="server_form">   
@@ -39,7 +49,7 @@
                         <option value="s_disk">disk</option>
                         </select>
                         <div class="input-append">
-                          <input class="span2" id="keyword" name="keyword" placeholder="请输入关键字" type="text">
+                          <input class="span2" id="keyword" name="keyword" placeholder="请输入关键字" type="text" value="<?php echo $u_keyword; ?>">
                           <button class="btn" id="yes" type="submit">Go!</button>
                         </div>
                         </form>
@@ -83,6 +93,7 @@
 <div class="showmsg">
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
+      <h4 id="h4title"></h4>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
   </div>
   <div class="modal-body">
@@ -98,7 +109,12 @@
       
 <script>
     $(function(){
-        
+         var u_type = "<?php echo $u_type; ?>";
+        $("select option").each(function(){
+            if($(this).val() == u_type){
+                $(this).attr('selected','selected');
+            }
+        })
          $("#yes").click(function(){
             var type = $('#select_all option:selected').val();
             var kw = $('#keyword').val();
@@ -108,19 +124,24 @@
             return false;
         })
         $(".allocate").click(function(){
+            $("#h4title").text("分配服务器");
                  var href=$(this).attr("href");
                  var time=new Date().getTime();
                var str='';
                  $('input[name="select_allocate"]:checked').each(function(i){ 
                    str+=$(this).val()+'-'; 
                 }); 
+                if(str!=''){
                if (str.length > 0) { 
                     str = str.substring(0,str.length - 1); 
                 }
                 href= href+"/"+str;
                  $("#myModal .modal-body").empty().load(href,{time:time});
                  $("#myModal").modal();
-                 return false;
+                }else{
+                    layer.alert("必须选择一个服务器",8,'错误提示！');
+                }
+                return false;
          });   
          $("#put").bind("click",function(){
                 var href = $("#table_m").attr('action');
@@ -138,6 +159,7 @@
            });        
                    //处理点击查看按钮显示
 	$(".see").click(function(){
+        $("#h4title").text("查看服务器");
             var href=$(this).attr("href");
             var time=new Date().getTime();
             $("#myModal .modal-body").empty().load(href,{time:time});

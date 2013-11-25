@@ -14,14 +14,16 @@ class Server_need extends CI_Controller
 		$this->load->library(array('dx_auth','session','pagination','form_validation'));
                 $this->load->model('server_need_model','sn',TRUE);
                 $this->load->model('server_approve_model','sa',TRUE);
-                $this->load->model('server_type_model','st',TRUE);
+                //$this->load->model('server_type_model','st',TRUE);
+                $this->load->model('codeonline_model','co',TRUE);
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->session->userdata('DX_user_id');
 	}
         
         public function index(){
             $data['title']="服务器申请";
-            $data['list'] = $this->st->get_all('&nbsp&nbsp&nbsp&nbsp');
+            //$data['list'] = $this->st->get_all('&nbsp&nbsp&nbsp&nbsp');
+            $data['list'] = $this->co->get_all_list();
             $data['use_list'] = $this->sn->get_use();
             $this->load->view("server/server_apply",$data);
         }
@@ -54,6 +56,7 @@ class Server_need extends CI_Controller
                     $data['sn_num'] = $this->input->post('num');
                     $data['sn_time'] = time();
                     $data['u_id'] = $this->user_id;
+                    if($data['sn_cpu']< 9999 && $data['sn_mem']< 9999 && $data['sn_disk']< 9999 && $data['sn_num']< 9999 ){
                     $sn_id = $this->sn->add_apply($data);
                     if(is_int($sn_id)){
                         //需求表插入成功->审批表插入
@@ -67,14 +70,16 @@ class Server_need extends CI_Controller
                              }else {
                                   $message['status'] =  0;
                                   $message['msg'] = "提交失败,请联系管理员";
-                                  log_message('error','审批表插入失败');
                              }
-                             
                     }else{
                         $message['status'] =  0;
                         $message['msg'] = "提交失败,请联系管理员";
-                        log_message('error','需求表插入失败');
                     }
+              }else{
+                        $message['status'] =  0;
+                        $message['msg'] = "提交失败,长度超过限制";
+                  
+              }
                     echo json_encode($message);
               }
 

@@ -10,7 +10,7 @@ class Codeonline extends MY_Controller
 	{
 		parent::__construct();
 		$this->load->model('Codeonline_model','cm',TRUE);
-		$this->load->model('M_server_model','ms',TRUE);//载入服务器模型
+		$this->load->model('Server_manage_model','ms',TRUE);//载入服务器模型
 		$this->load->model('M_test_model','mt',TRUE);//载入服务器模型
 		$this->load->model('Codeonline_files_model','cf',TRUE);//配置文件保存信息
 		$this->load->model('Codeonline_apply_table_model','cat',TRUE);//保存申请信息
@@ -51,7 +51,7 @@ class Codeonline extends MY_Controller
 	public function apply($m_id)
 	{
 		$data['title']="代码上线申请";
-		$data['server_rs']=$this->ms->get_rs('m_id',$m_id);
+		$data['server_rs']=$this->ms->get_all_list($m_id);
 		$data['tester_rs']=$this->mt->get_tester_by_m_id($m_id);
 		$data['m_id']=$m_id;
 		$data['relymodels']=$this->mrm->get_relymodel($m_id);
@@ -70,7 +70,7 @@ class Codeonline extends MY_Controller
 	public function update($apply_id,$tester_id,$m_id)
 	{
 		$data['title']="代码上线申请";
-		$data['server_rs']=$this->ms->get_rs('m_id',$m_id);
+		$data['server_rs']=$this->ms->get_all_list($m_id);
 		$data['tester_rs']=$this->mt->get_tester_by_m_id($m_id);
 		$data['m_id']=$m_id;
 		$data['relymodels']=$this->mrm->get_relymodel($m_id);
@@ -210,33 +210,36 @@ class Codeonline extends MY_Controller
 				$tmp['apply_id']=$apply_id;
 				$filedata[]=$tmp;
 			}
-			if($this->cf->save_batch($filedata))
+			if(!empty($filedata))
 			{
-				//echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
-				//$msg=$this->load->view('mail/mail_codeonline',$data,TRUE);
-				//sendcloud($to, $subject, $msg,array());
-				//
-				if($status==1)
+				if($this->cf->save_batch($filedata))
 				{
-					if($this->codeonline_apply($apply_id,$codeonline_data['tester_id'],$m_id))
+					//echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
+					//$msg=$this->load->view('mail/mail_codeonline',$data,TRUE);
+					//sendcloud($to, $subject, $msg,array());
+					//
+					if($status==1)
 					{
-						echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
+						if($this->codeonline_apply($apply_id,$codeonline_data['tester_id'],$m_id))
+						{
+							echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
+						}
+						else
+						{
+							echo json_encode(array('status'=>0,'msg'=>'保存审批数据失败！'));
+						}
 					}
 					else
 					{
-						echo json_encode(array('status'=>0,'msg'=>'保存审批数据失败！'));
+						echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
 					}
+				
 				}
 				else
 				{
-					echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
+					echo json_encode(array('status'=>0,'msg'=>'保存数据失败！'));
+					log_message('error','保存修改配置文件信息失败！');
 				}
-				
-			}
-			else
-			{
-				echo json_encode(array('status'=>0,'msg'=>'保存数据失败！'));
-				log_message('error','保存修改配置文件信息失败！');
 			}
 		}
 		else

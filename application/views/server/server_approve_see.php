@@ -18,18 +18,14 @@
           <?php  } ?>
           <dt>服务器用途：</dt>
           <dd><?php echo $info['sn_use']?></dd><br />
-          <?php if($info['st_name']){ ?>
+          <?php if($info['m_name']){ ?>
           <dt>申请的服务：</dt>
-          <dd>   <?php if($info['st_name']){ 
-                            foreach($info['st_name'] as $v){
-                                $arr[] =  $v['st_name'];
+          <dd>   <?php if($info['m_name']){ 
+                            foreach($info['m_name'] as $v){
+                                $arr[] =  $v['m_name'];
                              }
                     $str = implode(',', $arr); 
-                    if(mb_strlen($str)>15){
-                        echo mb_substr($str, 0, 15)."...";  
-                    }else{
                         echo $str;
-                    };
                             }else{
                         echo "没申请";
                     }

@@ -12,7 +12,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8 offset1">
+ <div class="span8 offset1" style="width: 700px">
 			<div class="page-header">
                         <h3><?php echo $title?></h3>
 			</div>
@@ -32,12 +32,13 @@
 			<td><?php echo $val['sn_use']; ?></td>
 			<td><?php echo date('Y-m-d H:i',$val['sn_time']); ?></td>
                         <td><!--<?php if($val['sa_status'] == 0){ echo "未审核";}else if($val['sa_status'] == 1){ echo "已通过"; }else{ echo "已退回";} ; ?>-->
-                            <?php echo $val['nums'] ? "已分配".$val['nums']."台":"没分配"; ?>
+                            <?php ;echo $val['nums'] ? "<div sn_id=".$val['sn_id']."  class='movesee' >"."已分配".$val['nums']."台"."</div>":"没分配"; ?>
                         </td>
                         <td><?php echo anchor('server_approve/server_agree/'.$val['sa_id'], '同意', "class='agree'") ?> | 
                             <?php echo anchor('server_approve/server_disagree/'.$val['sa_id'], '退回', "class='disagree'") ?> | 
-                            <?php echo anchor('server_approve/server_see/'.$val['sn_id'], '查看', "class='see'") ?>| 
-                            <?php if($role_id == 5 && $val['nums']!=0){echo anchor('server_approve/server_agree_op/'.$val['sa_id'], '分配完成', "class='change'");} ?>
+                            <?php echo anchor('server_approve/server_see/'.$val['sn_id'], '查看', "class='see'") ?> 
+                            <?php if($role_id == 5 && $val['nums']!=0){echo anchor('server_approve/server_agree_op/'.$val['sa_id'], '|分配完成', "class='change'");} ?>
+                            <?php if($role_id == 5 && $val['nums']!=0){echo anchor('server_approve/restart/'.$val['sa_id'], '|重新分配', "class='restart'");} ?>
                         </td>
 			</tr>
                          <?php } ?>
@@ -60,10 +61,51 @@
 </div>
 </div>
 <!-- Modal -->
+<!-- div -->
+
+<div  style="width: 110px;height: 100px;display: none;background:rgb(255,255,102);border-radius: 15px; color:rgb(0,136,204);text-align:center " id="movefind">正在拼命查询…</div>
+<!-- div -->
 </div>
 <script type="text/javascript">
 $(function(){
-    
+             $(".restart").click(function(){
+            var href=$(this).attr("href");
+            layer.confirm('确定重新分配?', function(){ 
+                $.post(href,function(json_data){
+                if(json_data.status==1)
+                 {
+                     layer.alert(json_data.msg,9,'成功提示！',function(){
+                         location.reload();
+                     });
+                 }else{
+                     layer.alert(json_data.msg,8,'错误提示！');
+                 }
+                 },'json');
+                });
+            return false;
+            }); 
+            //
+            $('.movesee').mouseover(function(){
+                var top = $(this).offset().top;
+                var left = $(this).offset().left;
+                var h = $(this).parent().height();
+                var hx = $(this).parent().parent().height();
+                h = (hx-h)/2+h;
+                var sn_id = $(this).attr('sn_id');
+                var href = "<?php echo site_url('server_approve/server_get/'); ?>";
+                href = href+"/"+sn_id;
+                console.log(href);
+                 $("#movefind").show(); 
+                $("#movefind").offset({top:top+h,left:left});
+                            $.post(href,function(data){
+                               $("#movefind").html(data);
+                            });
+                  })
+            
+            $('.movesee').mouseout(function(){
+                $("#movefind").hide();
+            })
+            //
           $(".change").click(function(){
          var href=$(this).attr("href");
          layer.confirm('确定分配完成？', function(){ 

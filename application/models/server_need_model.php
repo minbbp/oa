@@ -12,7 +12,8 @@ class Server_need_model extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();	
-                $this->load->model('server_type_model','st',TRUE);
+                //$this->load->model('server_type_model','st',TRUE);
+                $this->load->model('codeonline_model','co',TRUE);
 	}
         public function add_apply($data)
 	{   
@@ -32,7 +33,7 @@ class Server_need_model extends CI_Model
                 $v['sn_use'] = $this->select_use($arr['sn_use']);
                 $v['sn_time'] = $arr['sn_time'];
                 $v['sn_name'] = $this->get_username_by_id($uid);
-                $v['st_name'] = $this->st->get_server_type($tid);
+                $v['m_name'] = $this->co->get_name_by_id($tid);
             }
             return $data;
         }
@@ -67,7 +68,7 @@ class Server_need_model extends CI_Model
                 $arr['sn_time'] = $arr['sn_time'];
                 $arr['sn_name'] = $this->get_username_by_id($uid);
                 $arr['sn_realname'] = $this->get_realname_by_id($uid);
-                $arr['st_name'] = $this->st->get_server_type($tid);
+                $arr['m_name'] = $this->co->get_name_by_id($tid);
                 return $arr;
         }
         /*

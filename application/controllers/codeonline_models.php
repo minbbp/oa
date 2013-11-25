@@ -26,7 +26,7 @@ class Codeonline_models extends MY_Controller
 		$re_rs=$this->cm->alllist($offset,PER_PAGE);
 		$this->pagination->initialize($config);
 		$page=$this->pagination->create_links();
-		$this->load->view('codeonline_models/index',array('re_rs'=>$re_rs,'page'=>$page,'title'=>'模块资源管理'));
+		$this->load->view('codeonline_models/index',array('re_rs'=>$re_rs,'page'=>$page,'title'=>'服务管理'));
 	}
 	/**
 	 * 子类层级关系,暂时没有使用到
@@ -37,7 +37,7 @@ class Codeonline_models extends MY_Controller
 		$offset=intval($this->uri->segment(4));
 		$re_rs=$this->cm->alllist($offset,PER_PAGE,$pid);
 		$page=$this->pagination->create_links();
-		$this->load->view('codeonline_models/child',array('re_rs'=>$re_rs,'page'=>$page,'title'=>'模块资源管理'));
+		$this->load->view('codeonline_models/child',array('re_rs'=>$re_rs,'page'=>$page,'title'=>'服务管理'));
 	}
 	/**
 	 * 编辑模块列表,如果存在$m_id 则是编辑，否则则是添加
@@ -56,17 +56,17 @@ class Codeonline_models extends MY_Controller
 			$data['op_users']=$op_users;
 			$data['m_rs']=$this->cm->get_one($m_id);//获取当前结果集
 			$data['m_pid']=$this->cm->get_info_by_pid();//依赖模块信息
-			$data['server_rs']=$this->ms->get_rs('m_id',$m_id);
+			//$data['server_rs']=$this->ms->get_rs('m_id',$m_id);服务器模块综合之后，不需要这个东西了
 			$data['devloper_rs']=$this->md->get_rs('m_id',$m_id);
 			$data['rely_rs']=$this->mr->get_rs('m_id',$m_id);
 			$data['test_rs']=$this->mt->get_rs('m_id',$m_id);
-			$data['title']="修改模块";
+			$data['title']="修改服务";
 			$this->load->view('codeonline_models/edit',$data);
 		}
 		else
 		{
 			$m_pid=$this->cm->get_info_by_pid();
-			$this->load->view('codeonline_models/add',array('title'=>'新增模块','m_pid'=>$m_pid,'all_user'=>$all_users,'level_users'=>$level_users,'op_users'=>$op_users));
+			$this->load->view('codeonline_models/add',array('title'=>'新增服务','m_pid'=>$m_pid,'all_user'=>$all_users,'level_users'=>$level_users,'op_users'=>$op_users));
 		}
 	}
 	/**
@@ -86,13 +86,13 @@ class Codeonline_models extends MY_Controller
 		$datamodel['m_adduser_id']=$this->user_id;
 		$data_devloper['m_devloper']=$this->input->post('m_devloper');
 		$data_tester['m_tester']=$this->input->post('m_tester');
-		$data_mserver['m_server']=$this->input->post('m_server');
+		//$data_mserver['m_server']=$this->input->post('m_server'); 废弃的业务逻辑
 		$data_relymodel['m_relymodel']=$this->input->post('m_relymodel');
 		$m_id=$this->cm->save($datamodel);
 		if($m_id)
 		{
 			//保存开发者，服务器，测试者，依赖模块信息
-			$this->ms->insert_more($data_mserver['m_server'],$m_id);
+			//$this->ms->insert_more($data_mserver['m_server'],$m_id);//废弃的业务逻辑
 			$this->mr->insert_more($data_relymodel['m_relymodel'],$m_id);
 			$this->md->insert_more($data_devloper['m_devloper'],$m_id);
 			$this->mt->insert_more($data_tester['m_tester'],$m_id);
@@ -121,11 +121,11 @@ class Codeonline_models extends MY_Controller
 		$datamodel['m_adduser_id']=$this->user_id;
 		$data_devloper['m_devloper']=$this->input->post('m_devloper');
 		$data_tester['m_tester']=$this->input->post('m_tester');
-		$data_mserver['m_server']=$this->input->post('m_server');
+		//$data_mserver['m_server']=$this->input->post('m_server');废弃的业务逻辑
 		$data_relymodel['m_relymodel']=$this->input->post('m_relymodel');
 		$this->cm->save($datamodel,$m_id);
 			//保存开发者，服务器，测试者，依赖模块信息
-		$this->ms->update_more($data_mserver['m_server'],$m_id);
+		//$this->ms->update_more($data_mserver['m_server'],$m_id); 废弃的业务逻辑
 		$this->mr->update_more($data_relymodel['m_relymodel'],$m_id);
 		$this->md->update_more($data_devloper['m_devloper'],$m_id);
 		$this->mt->update_more($data_tester['m_tester'],$m_id);

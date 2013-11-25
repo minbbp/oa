@@ -28,14 +28,14 @@
                                     <div class="control-group">
                                       <label class="control-label" for="inputMem">Mem</label>
                                       <div class="controls">
-                                          <input type="text" name="mem" id="inputMem"  placeholder="内存"  value="<?php echo set_value('mem'); ?>"/><?php echo form_error('mem'); ?>
+                                          <input type="text" name="mem" id="inputMem"  placeholder="内存"  value="<?php echo set_value('mem'); ?>"/> G<?php echo form_error('mem'); ?>
                                           <span class="help-inline"></span>
                                       </div>
                                     </div>
                                     <div class="control-group">
                                       <label class="control-label" for="inputDisk">Disk</label>
                                       <div class="controls">
-                                        <input type="text" name="disk" id="inputDisk" placeholder="硬盘"  value="<?php echo set_value('disk'); ?>"/><?php echo form_error('disk'); ?>
+                                        <input type="text" name="disk" id="inputDisk" placeholder="硬盘"  value="<?php echo set_value('disk'); ?>"/> G<?php echo form_error('disk'); ?>
                                         <span class="help-inline"></span>
                                       </div>
                                     </div>
@@ -78,7 +78,7 @@
                                         <div class="span3">
                                         <select multiple="multiple" id="test_a"  name="server_update" size="8">
                                          <?php foreach($list as $value){ ?>
-                                        <option value="<?php echo $value['st_id'] ?>"><?php echo $value['st_name'] ?></option>
+                                        <option value="<?php echo $value['m_id'] ?>"><?php echo $value['m_name'] ?></option>
                                         <?php } ?>
                                         </select>
                                         </div>

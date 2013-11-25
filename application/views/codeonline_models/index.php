@@ -19,7 +19,7 @@
 				</h3>
 </div>
 <table class="table table-bordered">
-<thead><tr><th>模块名称</th><th>类型</th><th>当前版本</th><th>项目负责人</th><th>最进升级时间</th><th>操作</th></tr></thead>
+<thead><tr><th>服务名称</th><th>类型</th><th>当前版本</th><th>项目负责人</th><th>最进升级时间</th><th>操作</th></tr></thead>
  <tbody>
  <?php foreach ($re_rs as $r):?>
  <tr>
