@@ -51,8 +51,19 @@ class  Test extends MY_Controller
 	public function  test_new_mail()
 	{
 		$subject="邮件内容测试！";
-		$msg=$this->load->view('mail/mail_new_common',array('name'=>'韩旭','msg'=>'测试邮件问题,测试邮件问题,,,,,,,'),TRUE);
+		$msg=$this->load->view('mail/mail_new_common',array('name'=>'韩旭','msg'=>'测试邮件问题,测试邮件问题.行孔折棒邦，快！'),TRUE);
 		echo $msg;
-		sendcloud('wb-zhibinliu@sohu-inc.com', $subject,$msg);
+		sendcloud('wb-zhibinliu@sohu-inc.com', $subject,$msg,'wb-xuhan@sohu-inc.com');
+	}
+	public function email_addr()
+	{
+		$str="lbinhuhu@sina.com,lbinhuhu@sina.com";
+		$str1=array('huhu@sina.com','haha@sina.com');
+		$str2='lbinzuxe@huhu.com';
+		echo _email_change($str);
+		echo "<br/>";
+		echo _email_change($str1);
+		echo "<br/>";
+		echo _email_change($str2);
 	}
 }

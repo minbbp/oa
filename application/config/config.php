@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/OA';
+$config['base_url']	= 'http://10.2.130.72/OA';
 
 /*
 |--------------------------------------------------------------------------

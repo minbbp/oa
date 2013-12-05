@@ -21,7 +21,6 @@ class Server_approve_model extends CI_Model
             $data['sa_status'] = 0;
             $data['sa_current_id'] = $pid;
             $data['sa_cause']='';
-            //$data['sa_approve_time'] = time();
             if($pid == 0){
                 //pid=0为主管 直接交给运维审批Type=2
                 $data['sa_type'] = 2;
@@ -44,6 +43,7 @@ class Server_approve_model extends CI_Model
                 $message = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
                 sendcloud($to, $subject, $message,$c);
             }
+            
             $this->db->insert('server_approve',$data);
             return $this->db->insert_id();
 	}
@@ -61,7 +61,8 @@ class Server_approve_model extends CI_Model
                 $where['sa_current_id'] = $uid;
             }
             $where['sa_status'] = 0;
-            $res = $this->db->where($where)->limit($page_size,$offset)->get('server_approve');
+            $res = $this->db->where($where)->order_by('sn_id','asc')->limit($page_size,$offset)->get('server_approve');
+            //echo $this->db->last_query();exit;
             $result = $res->result_array();
             return $result ? $result : array();
         }

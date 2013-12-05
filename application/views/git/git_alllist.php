@@ -58,7 +58,7 @@
 			
 			 if($git->git_state==1)
 			{
-				echo "<span class='icon-ok'></span>";
+				echo "<span class='icon16 icon_tick'></span>";
 			}
 			 else if($git->git_state==-1)
 			{

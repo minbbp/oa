@@ -48,9 +48,17 @@ class Codeonline extends MY_Controller
 	 *  上线申请表单，需要查询出测试人员和对应的服务器列表
 	 *  @param  number $m_id 对应模块的主键
 	 */
-	public function apply($m_id)
+	public function apply($m_id,$is_ungent=0)
 	{
-		$data['title']="代码上线申请";
+		if($is_ungent==1)
+		{
+			$data['title']="紧急上线申请";
+		}
+		else
+		{
+			$data['title']="上线申请";
+		}
+		
 		$data['server_rs']=$this->ms->get_all_list($m_id);
 		$data['tester_rs']=$this->mt->get_tester_by_m_id($m_id);
 		$data['m_id']=$m_id;
@@ -58,6 +66,7 @@ class Codeonline extends MY_Controller
 		$testjson=$this->crm->get_all();
 		//echo json_encode($testjson);
 		$data['testjson']=json_encode($testjson);
+		$data['is_ungent']=$is_ungent;
 		$this->load->view('codeonline/apply',$data);
 	}
 	/**
@@ -189,6 +198,7 @@ class Codeonline extends MY_Controller
 		$codeonline_data['online_description']=$this->input->post('online_description');
 		$codeonline_data['end_state']=0;//未关闭
 		$codeonline_data['apply_addtime']=time();
+		$codeonline_data['is_ungent']=$this->input->post('is_ungent');
 		$codeonline_data['myapply_status']=$status;//0,为保存数据不提交上线申请。1为提交上线申请
 		$apply_id=$this->cat->save($codeonline_data);
 		//获取apply_id
@@ -297,13 +307,27 @@ class Codeonline extends MY_Controller
 			{
 				if($this->user_id==$view_data['c_model']['m_head'])
 				{
-					$view_data['to_users']=$this->user->get_useremail_by_id($view_data['c_model']['op_id']);
-					$view_data['to_adduser']=$this->user->get_useremail_by_id($this->user_id);
-					//推送信息给运维人员,同时抄送信息给申请者
-					$data['apply_id']=$apply_id;
-					$data['type_id']=2;
-					$data['user_id']=$view_data['c_model']['op_id'];
-					$data['a_status']=0;
+					$is_ungent=$view_data['apply_rs']['is_ungent'];
+					if($is_ungent==1)//属于紧急上线，不能直接推送消息给运维需要推送消息给指定的主管
+					{
+						$view_data['to_users']=$this->user->get_useremail_by_id(UN_UNGENT_LEVEL);
+						$view_data['to_adduser']=$this->user->get_useremail_by_id($this->user_id);
+						$data['apply_id']=$apply_id;
+						$data['type_id']=3;
+						$data['user_id']=UN_UNGENT_LEVEL;
+						$data['a_status']=0;
+					}
+					else
+					{
+						$view_data['to_users']=$this->user->get_useremail_by_id($view_data['c_model']['op_id']);
+						$view_data['to_adduser']=$this->user->get_useremail_by_id($this->user_id);
+						//推送信息给运维人员,同时抄送信息给申请者
+						$data['apply_id']=$apply_id;
+						$data['type_id']=2;
+						$data['user_id']=$view_data['c_model']['op_id'];
+						$data['a_status']=0;
+					}
+					
 					if($this->ca->save($data))
 					{
 						//发送邮件
@@ -355,7 +379,7 @@ class Codeonline extends MY_Controller
 				{
 					//发送邮件
 					$msg=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
-						sendcloud($view_data['to_users']['email'], '[通知]上线申请审批',$msg,$view_data['to_adduser']['email']);
+					sendcloud($view_data['to_users']['email'], '[通知]上线申请审批',$msg,$view_data['to_adduser']['email']);
 					return TRUE;
 				}
 				else

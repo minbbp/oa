@@ -37,13 +37,16 @@ $email = array(
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span8">
-<fieldset>
-<legend>添加用户 </legend>
-<p  class="text-left ">用户默认密码：optest</p>
+ <div class="span8 offset1">
+<div class="page-header">
+	<h3>添加用户 </h3>
+</div>
+
 <?php echo form_open($this->uri->uri_string())?>
 
 <dl class="dl-horizontal">
+<dt>用户默认密码：</dt>
+<dd>optest</dd>
 	<dt><?php echo form_label('用户名：', $username['id']);?></dt>
 	<dd>
 		<?php echo form_input($username)?>

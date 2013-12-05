@@ -12,7 +12,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6"  style="margin-left:10px">
 			<div class="page-header">
 				<h3>
 					git 认证操作说明_<?php echo $title?>

@@ -14,16 +14,19 @@ class Server_manage_model extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
-                //$this->load->model('server_type_model','st',TRUE);
                 $this->load->model('server_need_model','sn',TRUE);
                 $this->load->model('server_owner_model','so',TRUE);
 	}
-        public function getlist($offset,$page_size,$where='')
+        public function getlist($offset,$page_size,$where='',$order='')
 	{   
             if($where){
-            $res = $this->db->where($where)->limit($page_size,$offset)->get('server');
+                if(isset($where['s_internet'])){
+                    $res = $this->db->like('s_internet',$where['s_internet'])->order_by('s_owner','asc')->limit($page_size,$offset)->get('server');
+                }else{
+                    $res = $this->db->where($where)->order_by('s_owner','asc')->limit($page_size,$offset)->get('server');
+                }
             }else{
-            $res = $this->db->limit($page_size,$offset)->get('server');
+            $res = $this->db->order_by('s_owner','asc')->limit($page_size,$offset)->get('server');
             }
             $result = $res->result_array();
             foreach ($result as &$v) {
@@ -47,7 +50,7 @@ class Server_manage_model extends CI_Model
                 public function getlists($offset,$page_size,$wherein)
 	{   
              if($wherein){
-            $res = $this->db->where_in('s_id',$wherein)->limit($page_size,$offset)->get('server');
+            $res = $this->db->where_in('s_id',$wherein)->order_by('s_owner','asc')->limit($page_size,$offset)->get('server');
             $result = $res->result_array();
             foreach ($result as &$v) {
                 $v['sn_use'] = $this->sn->select_use($v['s_use']);
@@ -74,7 +77,7 @@ class Server_manage_model extends CI_Model
  public function getlistss($offset,$page_size,$where)
 	{   
             if($where){
-            $sql = "SELECT * FROM (`server`) WHERE find_in_set('$where',s_type)  LIMIT $offset,$page_size";
+            $sql = "SELECT * FROM (`server`) WHERE find_in_set('$where',s_type) ORDER BY `s_owner` asc LIMIT $offset,$page_size";
             $res=$this->db->query($sql);
             $result = $res->result_array();
             foreach ($result as &$v) {
@@ -167,9 +170,5 @@ class Server_manage_model extends CI_Model
             $result = current($res->result_array());
             return $result['s_internet'];
         }
-        public function get_server_by_str($str)
-        {
-        	$sql="select * from  server where s_id in ('{$str}')";
-        	return $this->db->query($sql)->result_array();
-        }
+
 }

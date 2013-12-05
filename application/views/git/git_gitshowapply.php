@@ -12,13 +12,12 @@
     <!-- bootstrap end -->
   </head>
   <body>
- 
+
  <div class="span8 offset1">
 			<div class="page-header">
-				<h1>
+				<h3>
 					git 认证申请 
-				</h1>
-				
+				</h3>
 			</div>
 				<?php echo form_open("git/apply_add",array('class'=>'form-horizontal','id'=>'gitform'))?>
 				<?php if(!empty($git_groups)):?>
@@ -53,10 +52,11 @@
 				<div id="add_key_content"></div>	
 				<div class="control-group">
 					<div class="controls">
-						<button class="btn" type="submit" id="submit">&nbsp;&nbsp;&nbsp;&nbsp;提交&nbsp;&nbsp;&nbsp;&nbsp;</button>
+						<button class="btn btn-success" type="submit" id="submit">&nbsp;&nbsp;&nbsp;&nbsp;提交&nbsp;&nbsp;&nbsp;&nbsp;</button>
 					</div>
 				</div>
 			<?php echo form_close();?>
+		
 			<div class="alert">
 				 <button type="button" class="close" data-dismiss="alert">×</button>
 				 <h4>申请流程说明</h4>

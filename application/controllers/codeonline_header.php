@@ -25,7 +25,7 @@ class Codeonline_header extends MY_Controller
 		$rs=$this->cam->alllist($offset,PER_PAGE,$this->user_id,$type_id);
 		$this->pagination->initialize($config);
 		$page=$this->pagination->create_links();
-		$this->load->view('codeonline_apply/head_myapply',array('apply_rs'=>$rs,'page'=>$page,'title'=>'测试确认工单'));
+		$this->load->view('codeonline_apply/head_myapply',array('apply_rs'=>$rs,'page'=>$page,'title'=>'项目负责人审批'));
 	}
 	/**
 	 * 
@@ -33,21 +33,36 @@ class Codeonline_header extends MY_Controller
 	 */
 	public function pass($a_id)
 	{
+		//是否属于紧急上线申请判断
+		
 		$old_rs=$this->cam->get_one($a_id);//保存旧的值，需要插入新的审批数据
+		$apply_rs=$this->cat->get_one($old_rs['apply_id']);
 		$data['a_status']=1;
 		$data['a_optime']=time();//处理时间
 		if($this->cam->save($data,$a_id))
 		{
-			//判断申请人和项目负责人是否是同一个，如果为同一个的话，则直接要运维进行处理，否则的话，需要项目负责人进行审批
-			$old_rs['prve_id']=$a_id;
-			unset($old_rs['a_id']);
-			$users=$this->cat->get_head_by_apply_id($old_rs['apply_id']);
-			$old_rs['type_id']=2;
-			$old_rs['user_id']=$users['op_id'];
-			if($this->cam->save($old_rs))
+			//
+			if($apply_rs['is_ungent']==1)
+			{
+				$old_rs['prve_id']=$a_id;
+				unset($old_rs['a_id']);
+				//$users=$this->cat->get_head_by_apply_id($old_rs['apply_id']);
+				$old_rs['type_id']=3;
+				$old_rs['user_id']=UN_UNGENT_LEVEL;
+			}
+			else
+			{
+				$old_rs['prve_id']=$a_id;
+				unset($old_rs['a_id']);
+				$users=$this->cat->get_head_by_apply_id($old_rs['apply_id']);
+				$old_rs['type_id']=2;
+				$old_rs['user_id']=$users['op_id'];
+			}
+			$insert_id=$this->cam->save($old_rs);
+			if($insert_id)
 			{
 				echo json_encode(array('status'=>1,'msg'=>'审批通过！'));
-				$this->pass_mail($a_id);
+				$this->pass_mail($insert_id);
 				
 			}
 			else

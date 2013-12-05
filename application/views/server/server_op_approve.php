@@ -17,15 +17,17 @@
 			<div class="page-header">
                             <h4><?php echo $title?></h4>
 			</div>
-     <div style="font-size ">
-     申请人：<?php echo $info['sn_name']?>&nbsp&nbsp&nbsp     需要<?php echo $info['sn_num']?>台
+     <div style="font-size:14px">
+     申请人：<?php echo $info['sn_realname']?>&nbsp&nbsp&nbsp     需要<?php echo $info['sn_num']?>台
      <hr />
      cpu:<?php echo $info['sn_cpu']?>核&nbsp&nbsp&nbsp
      内存:<?php echo $info['sn_mem']?>G&nbsp&nbsp&nbsp
      硬盘:<?php echo $info['sn_disk']?>G&nbsp&nbsp&nbsp
      <?php if($info['sn_internet']==1){echo '需要'."运营商为".$info['sn_isp'];}else{echo '不需要外网';} ?>&nbsp&nbsp&nbsp
      用途:<?php echo $info['sn_use']?>&nbsp&nbsp&nbsp
-     <?php if($info['m_name']){ ?>申请的服务：<?php if($info['m_name']){ 
+     <?php if($info['m_name']){ ?>
+     <hr />
+     申请的服务：<?php if($info['m_name']){ 
                             foreach($info['m_name'] as $v){
                                 $arr[] =  $v['m_name'];
                              }
@@ -50,7 +52,7 @@
                         </select>
                         <div class="input-append">
                           <input class="span2" id="keyword" name="keyword" placeholder="请输入关键字" type="text" value="<?php echo $u_keyword; ?>">
-                          <button class="btn" id="yes" type="submit">Go!</button>
+                          <button class="btn btn-info" id="yes" type="submit">Go!</button>
                         </div>
                         </form>
      <hr />
@@ -86,8 +88,8 @@
             </table>
      <?php echo $link ?>
 <div>
- <?php echo anchor('server_manage/server_allocate/'.$info['sn_id']."/".$sa_id."/",'分配',"class ='btn allocate' id='allocate'" ); ?>   
- <a href="<?php echo site_url('server_approve/index') ?>" class="btn"  >返回</a>
+ <?php echo anchor('server_manage/server_allocate/'.$info['sn_id']."/".$sa_id."/",'分配',"class ='btn allocate btn-success ' id='allocate'" ); ?>   
+ <a href="<?php echo site_url('server_approve/index') ?>" class="btn btn-danger "  >返回</a>
  </div>
 <!-- Modal -->
 <div class="showmsg">
@@ -99,7 +101,7 @@
   <div class="modal-body">
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
     <button class="btn btn-primary" id="put" data-dismiss="modal" aria-hidden="true">确认</button>
   </div>
 </div>

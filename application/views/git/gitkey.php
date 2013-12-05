@@ -11,12 +11,12 @@
     <!-- bootstrap end -->
   </head>
   <body>
-  <div class="span5">
+  <div class="span5" style="margin-left:20px;">
   <div class="page_header">
   <h4> 机器列表</h4>
   </div>
   <?php if(!empty($allkeys)):?>
-  <table class="table table-bordered">
+  <table class="table table-bordered" >
   <thead><tr><th>机器标识</th><th>状态</th> <th>添加时间</th></tr></thead>
    <tbody>
    <?php foreach ($allkeys as $key):?>

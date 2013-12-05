@@ -11,7 +11,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
-  <div class="span7">
+  <div class="span7 offset1">
   <p>运维中心欢迎您<b><?php echo $username['username'];?></b>项目处于正在开发中，个人中心模块暂时无法使用</p>
   <div class="progress progress-striped active">
   <div class="bar" style="width: 32%;"></div>

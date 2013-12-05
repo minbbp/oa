@@ -57,7 +57,7 @@ else
 </table>
 <?php echo $page?>
 </div>
-<div class="reject_view span5 hidden">
+<div class="reject_view span5 hidden" style="margin-left:10px;">
 <form method="post" id='re_form'>
 <label  for="gcre_description">驳回原因:</label>
 <textarea rows="4" class="span5" name="gcre_description" id="gcre_description"></textarea>
@@ -73,6 +73,7 @@ $('.pass').click(function(){
 	var href=$(this).attr('href');
 	var time=new Date().getTime();
 	$.get(href,{time:time},function(data){
+		console.log(data);
 		layer.alert(data,9,'');
 		});
 	$("a[href='"+href+"']").parents('tr').remove();

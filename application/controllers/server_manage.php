@@ -10,7 +10,8 @@ class Server_manage extends CI_Controller
 		$this->load->helper(array('form','url','message'));
 		$this->load->library(array('dx_auth','session','pagination','form_validation'));
                 $this->load->model('server_manage_model','s',TRUE);
-                $this->load->model('server_type_model','st',TRUE);
+                $this->load->model('server_ip_model','si',TRUE);
+                $this->load->model('server_need_model','sn',TRUE);
                 $this->load->model('server_owner_model','so',TRUE);
                 $this->load->model('server_approve_model','sa',TRUE);
                 $this->load->model('codeonline_model','co',TRUE);
@@ -22,7 +23,7 @@ class Server_manage extends CI_Controller
            $keyword = urldecode($keyword);
                 if($type == 'owner'){
                     if($keyword != ''){
-                    $uid = $this->sn->get_id_by_username($keyword);
+                    $uid = $this->sn->get_id_by_realname($keyword);
                     $arr2 = $this->sn->get_id_by_uid($uid);
                     $wherein = $this->so->get_id_by_snid($arr2);
                     }else{
@@ -104,6 +105,8 @@ class Server_manage extends CI_Controller
             $data['list'] = $this->co->get_all_list();
             $data['use_list'] = $this->sn->get_use();
             $data['list_owner'] = $this->so->get_owner_list($id);
+            $data['ipnei_list'] = $this->group_ip($this->si->get_ip($id),1);
+            $data['ipwai_list'] = $this->group_ip($this->si->get_ip($id),2);
             $this->load->view('server/server_see',$data);
         }
         public function server_see($id) {
@@ -112,6 +115,8 @@ class Server_manage extends CI_Controller
             $data['list'] = $this->co->get_all_list();
             $data['use_list'] = $this->sn->get_use();
             $data['list_owner'] = $this->so->get_owner_list($id);
+            $data['ipnei_list'] = $this->group_ip($this->si->get_ip($id),1);
+            $data['ipwai_list'] = $this->group_ip($this->si->get_ip($id),2);
             $this->load->view('server/server_manage_see',$data);
         }
         public function server_edit() {
@@ -120,6 +125,7 @@ class Server_manage extends CI_Controller
             $data['s_mem'] = $this->input->post('mem');
             $data['s_disk'] = $this->input->post('disk');
             $data['s_internet'] = $this->input->post('internet');
+            $data['s_winternet'] = $this->input->post('winternet');
             $data['s_isp'] = $this->input->post('isp');
             if($this->input->post('type')){
             $data['s_type'] = implode(',',$this->input->post('type'));
@@ -131,19 +137,28 @@ class Server_manage extends CI_Controller
              $nums = $this->so->del_owner($owner);
             }
             $row = $this->s->edit_server($data,$where);
-            if($row == 1 || $nums!=0){
+            $this->si->del_ip($where['s_id']);
+            if($this->input->post('internetnei')){
+                    $arr = $this->input->post('internetnei');
+                    $nums2 = $this->si->insert_ip($arr,$where['s_id'],1);
+                }
+           if($this->input->post('internetwai')){
+                    $arr2 = $this->input->post('internetwai');
+                    $nums3 = $this->si->insert_ip($arr2,$where['s_id'],2);
+                }
+            if($row == 1 || $nums!=0 ||$nums2!=0||$nums3!=0){
                 $m['status'] = 1;
                 $m['msg'] = "编辑成功";
             }else{
+                //如果删除------没法提示
                 $m['status'] = 1;
-                $m['msg'] = "编辑失败,或没做修改";
+                $m['msg'] = "编辑成功";
             }
             echo json_encode($m);
         }
         public function server_add() {
              $data['title'] = "服务器添加";
              $data['use_list'] = $this->sn->get_use();
-             
              $data['list'] = $this->co->get_all_list();
              $this->load->view('server/server_add',$data);
         }
@@ -152,15 +167,21 @@ class Server_manage extends CI_Controller
             $data['s_mem'] = $this->input->post('mem');
             $data['s_disk'] = $this->input->post('disk');
             $data['s_internet'] = $this->input->post('internet');
+            $data['s_winternet'] = $this->input->post('winternet');
+            if($data['s_winternet']==''){
+                $data['s_winternet']=NULL;
+            }
             $data['s_isp'] = $this->input->post('isp');
+            if($this->input->post('type')){
             $data['s_type'] = implode(',',$this->input->post('type'));
+            }
             $data['s_desc'] = $this->input->post('desc');
             $data['s_use'] = $this->input->post('use');
             foreach($data as $k => $v){
-                if($v=='' && $k!='s_type'){
+                if($v=='' && $k!='s_type' && $k!='s_winternet'){
                     $bool = 1;
                     break;
-                }else{
+                }else{ 
                     $bool = 2;
                 }
             }
@@ -180,13 +201,20 @@ class Server_manage extends CI_Controller
             echo json_encode($message);
         }
          public function server_del($id){
+             //判断是否有使用人 如果有 不让删除 先清空使用人
+            $num = $this->so->count_owner($id);
+            if($num == 0){
             $row = $this->s->server_delete($id);
-            if($row == 1){
+           if($row == 1){
                 $message['status']=1;
                 $message['msg']="删除成功";
             }else{
                 $message['status']=0;
                 $message['msg']="删除失败,请刷新后重试";
+            }
+            }else{
+                $message['status']=0;
+                $message['msg']="删除失败,请删除使用人在删除机器";
             }
             echo json_encode($message);
         }
@@ -200,11 +228,15 @@ class Server_manage extends CI_Controller
             $data['sn_id'] = $this->input->post('sn_id');
             $data['account'] = trim($this->input->post('account'));
             $data['pwd'] = trim($this->input->post('pwd'));
+            $data['u_id'] = $this->sn->get_uid_by_snid($data['sn_id']);
             $arr = explode('-', $this->input->post('s_id'));
             if($data['account']!='' && $data['pwd']!=''){
                 for($i=0;$i<count($arr);$i++){
                     $data['s_id'] = $arr[$i];
                     $num = $this->so->so_insert($data);
+                $tempw['s_id'] = $arr[$i];
+                $this->db->set('s_owner', 's_owner+1', FALSE);
+                 $this->db->where($tempw)->update('server');
                 }
             if($num ){
                 $message['status'] = 1;
@@ -219,5 +251,18 @@ class Server_manage extends CI_Controller
             }
             echo json_encode($message);
         }
-}	
+        public function search() {
+            $use = $_GET['use'];
+            echo json_encode($this->sn->get_use());
+        }
+        public function group_ip($array,$type){
+            $temp = array();
+            foreach ($array as $value) {
+                if($value['si_type']==$type){
+                    $temp[] = $value;
+                }
+            }
+            return $temp;
+        }
+}
 ?>

@@ -11,7 +11,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6"  style="margin-left:10px">
 			<div class="page-header">
 				<h4>
 					git认证审批 

@@ -113,8 +113,9 @@ class Git extends CI_Controller
 			if($this->gol->save($opdata))
 			{
 				//数据存储之后，发送邮件给运维工程师
-				$subject="请处理".$this->session->userdata('DX_realname')."的git认证申请";
+				$subject="请处理".$this->session->userdata('DX_realname')."的git认证申请!";
 				$data['msg']=$subject;
+				$data['name']='刘士超';
 				$msg=$this->load->view('mail/mail_common',$data,TRUE);
 				sendcloud(ADRD_EMAIL_ONE, $subject, $msg);
 				echo "我们已经发送邮件通知运维工程师处理您的申请啦！";
@@ -140,7 +141,7 @@ class Git extends CI_Controller
 			if($level_op_id=$this->gol->save($leveldata))
 			{// 发送邮件通知主管
 				$maildata['name']=$level_info['realname'];
-				$maildata['msg']="请审批您的下属{$this->session->userdata('DX_realname')}的git认证申请";
+				$maildata['msg']="请审批您的下属{$this->session->userdata('DX_realname')}的git认证申请！";
 				$msg=$this->load->view('mail/mail_common',$maildata,TRUE);
 				$subject="请审批{$this->session->userdata('DX_realname')}git认证申请 ";
 				sendcloud($level_info['email'], $subject, $msg);
@@ -196,7 +197,7 @@ class Git extends CI_Controller
 		// 去除主管的邮件信息
 		
 		$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
-		$data['msg']="{$subject},请您审批！";
+		$data['msg']=$this->utf8->clean_string("{$subject},请您审批！");
 		$msg=$this->load->view('mail/mail_common',$data,TRUE);
 		return sendcloud($tmp,$subject,$msg);
 	}
@@ -407,12 +408,12 @@ class Git extends CI_Controller
 	{
 		if($type==1)
 		{
-			$data['msg']="请尽快审批{$this->session->userdata('DX_realname')}git认证添加机器申请！";
+			$data['msg']="请尽快审批{$this->session->userdata('DX_realname')}git认证添加机器申请!";
 			$subject='git认证机器添加审批';
 		}
 		else
 		{
-			$data['msg']="请尽快审批{$this->session->userdata('DX_realname')}git认证添加组申请！";
+			$data['msg']="请尽快审批{$this->session->userdata('DX_realname')}git认证添加组申请!";
 			   $subject="git 认证 git组添加审批";
 		}
 		$message=$this->load->view('mail/mail_common',$data,true);

@@ -1,6 +1,23 @@
+<!DOCTYPE html>
 <html>
-	<head><title>Manage URI Permissions</title></head>
-	<body>	
+  <head>
+  <meta charset="utf-8">
+    <title>用户角色权限</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
+     <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
+    <!-- bootstrap end -->
+  </head>
+  <body>
+ <div class="span8 offset1">
+ <div class="page-header">
+				<h3>
+					用户角色权限
+				</h3>
+</div>	
 	<?php  				
 		// Build drop down menu
 		foreach ($roles as $role)
@@ -17,9 +34,10 @@
 		// Build form
 		echo form_open($this->uri->uri_string());
 		
-		echo form_label('Role', 'role_name_label');
+		echo form_label('角色', 'role_name_label');
 		echo form_dropdown('role', $options); 
-		echo form_submit('show', 'Show URI permissions'); 
+		echo "&nbsp;&nbsp;";
+		echo form_submit('show', '查看权限',"class='btn'"); 
 		
 		echo form_label('', 'uri_label');
 				
@@ -35,7 +53,8 @@
 		echo form_textarea('allowed_uris', $allowed_uris); 
 				
 		echo '<br/>';
-		echo form_submit('save', 'Save URI Permissions');
+		echo '<br/>';
+		echo form_submit('save', '保存权限',"class='btn btn-success'");
 		
 		echo form_close();
 	?>

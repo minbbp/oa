@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="control-group">
                                       <div class="controls">
-                                        <input type="submit" class="btn" id="submit" value="提交申请" />
+                                        <input type="submit" class="btn btn-success" id="submit" value="提交申请" />
                                       </div>
                                     </div>
                     		<?php echo form_close();?>
@@ -121,7 +121,6 @@
          $('#inlineRadio2').click(function(){
               $('#sisp').hide(500);
           })
-          
           for(var i =1;i<=4;i++){
               if(i<=2){
                   $('#radio'+i).click(function(){
@@ -164,7 +163,11 @@
          $.post(href,$('form').serialize(),function(json_data){
                if(json_data.status==1)
                 {
-                    layer.alert(json_data.msg,9,'成功提示！');
+                    layer.alert(json_data.msg,9,'成功提示！',function(){
+                        location.reload();
+                    });
+                    //$("form")[0].reset();
+                    
                 }else{
                     layer.alert(json_data.msg,8,'错误提示！');
                 }

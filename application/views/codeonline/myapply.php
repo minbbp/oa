@@ -14,16 +14,16 @@
   <body>
  <div class="span8 offset1">
 			<div class="page-header">
-				<h4>
+				<h3>
 					<?php echo $title; ?>
-				</h4>
+				</h3>
 			</div>
 			<table class="table table-bordered table-hover">
-			<thead><tr><th>#</th><th>模块</th> <th>升级版本</th><th>上线时间</th><th>申请状态</th><th>上线状态</th><th class="span1">操作</th></tr></thead>
+			<thead><tr><th>#</th><th>模块</th> <th>升级版本</th><th>上线时间</th><th>申请状态</th><th>上线状态</th><th>操作</th></tr></thead>
 			<tbody>
 			<?php foreach($codeonlines as $c):?>
 			<tr><td><small style="font-size:8px;" ><?php echo $c['apply_id']?></small></td> 
-			<td><?php echo $c['m_name'];?></td>
+			<td><?php echo $c['m_name']; if($c['is_ungent']==1){echo "&nbsp;<label class='label label-important'>急</label>";}?></td>
 			<td><small class=""><?php echo $c['git_tag']?></small></td>
 			<td>
 			<?php 
@@ -34,11 +34,13 @@
 			 <td><?php if($c['end_state']==0){  echo" <small class='label'>未上线</small>";}else if($c['end_state']==-1){echo "<small class='label label-warning'>驳回</small>";}else{echo "<small class='label label-success'>已成功</small>";} ?></td>
 			<td>
 			<?php 
-			echo anchor('codeonline/show/'.$c['apply_id'],'查看','class="showinfo"');echo "<br/>";
+			echo anchor('codeonline/show/'.$c['apply_id'],'查看','class="showinfo"');
+			
 			if($c['myapply_status']==2)
 			{
+				echo "&nbsp;|&nbsp;";
 				echo anchor('codeonline/update/'.$c['apply_id']."/".$c['tester_id']."/".$c['m_id'],'修改');
-				echo "<br/>";
+				echo "&nbsp;|&nbsp;";
 				echo anchor('codeonline/commit_apply/'.$c['apply_id']."/".$c['tester_id']."/".$c['m_id'],'提交审批','class="commit_apply"');
 			}?>
 			</td>

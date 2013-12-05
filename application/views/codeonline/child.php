@@ -32,7 +32,8 @@
  <?php echo date("Y-m-d",$r['change_time']==""?$r['m_addtime']:$r['change_time']);?>
  </td>
  <td>
- <?php echo anchor('codeonline/apply/'.$r['m_id'],'申请代码上线');?>
+ <?php echo anchor('codeonline/apply/'.$r['m_id'],'上线申请');?>&nbsp;&nbsp;|&nbsp;&nbsp;
+ <?php echo anchor('codeonline/apply/'.$r['m_id'].'/1','紧急上线申请');?>
  </td>
  </tr>
  <?php endforeach;?>

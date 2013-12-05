@@ -11,12 +11,12 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6" style="margin-left: 30px;margin-top: 30px">
 			<div class="page-header">
 				<h4><?php echo $title ?>
 				</h4>
 			</div>
-			<form action="<?php echo site_url('/server_approve/server_save_disagree')?>" method="post"id="form_data">
+			<form style="margin-left:20px" action="<?php echo site_url('/server_approve/server_save_disagree')?>" method="post"id="form_data">
 			<label for="description">退回原因：</label>
 			<textarea rows="4" class="span5" name="description" id="description"></textarea>
                         <input type="hidden" name="sa_id" value="<?php echo $sa_id ?>">

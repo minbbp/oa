@@ -34,7 +34,7 @@
  <td>
  <?php echo anchor('codeonline_models/edit/'.$r['m_id'],'编辑');?>
  &nbsp;|&nbsp;
- <?php echo anchor('codeonline_models/delete/'.$r['m_id'],'删除');?>
+ <?php echo anchor('codeonline_models/delete/'.$r['m_id'],'删除','class="delete"');?>
  </td>
  </tr>
  <?php endforeach;?>

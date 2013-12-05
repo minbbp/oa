@@ -17,25 +17,21 @@
              </tr>
              <br />
              <tr>                
-                <td>申请的服务:</td>                <td>  
-                    <?php if($info['st_name']){ 
-                            foreach($info['st_name'] as $v){
-                                $arr[] =  $v['st_name'];
+                <td>申请的服务:</td>                <td  colspan="3">  <?php if($info['m_name']){foreach($info['m_name'] as $v){
+                                $arr[] =  $v['m_name'];
                              }
                     $str = implode(',', $arr); 
-                    if(mb_strlen($str)>15){
-                        echo mb_substr($str, 0, 15)."...";  
-                    }else{
                         echo $str;
-                    };
                             }else{
                         echo "没申请";
-                    }
-                    ?></td>
-                <td>服务器描述:</td><td> <?php echo $info['sn_desc']?></td>
+                    } ?></td>
+                
              <br />
              <tr>                  
                 <td>申请时间:</td> <td> <?php echo date('Y年m月d日',$info['sn_time'])?></td>
                 <td>申请几台:</td><td> <?php echo  $info['sn_num']?></td>
           </tr>
+		  <tr>
+		  <td>服务器描述:</td><td  colspan="3"> <?php echo $info['sn_desc']?></td>
+		  </tr>
          </table>

@@ -33,6 +33,20 @@ private $user_id;
 		
 	}
 	/**
+	 * 同意审批通过
+	 */
+	public function pass($gcre_id)
+	{
+		$data['gcre_state']=1;
+		//1,修改当前状态
+		if($this->creator->save($data,$gcre_id))
+		{
+			//2,检查当前表中的审批是否都审批结束了，如果都审批结束了，则推送消息给op，同时发送邮件给指定的op
+			$this->check_commit($gcre_id);
+		}
+	}
+	
+	/**
 	 *  审核内容添加
 	 */
 	public function edit($gcre_id)

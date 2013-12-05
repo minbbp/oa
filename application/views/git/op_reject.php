@@ -11,10 +11,10 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6"  style="margin-left:10px">
 			<div class="page-header">
 				<h4>
-					git认证审批 
+					git认证驳回 
 				</h4>
 			</div>
 			<form action="<?php echo base_url('index.php/git_ops/savereject')?>" method="post">

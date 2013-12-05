@@ -64,7 +64,12 @@ class Codeonline_model extends MY_Model
 	 */
 	public function get_all_list()
 	{
-		$sql="select $this->primary_key,m_name from $this->_table where pid!=0";
+		$sql="select $this->primary_key,m_name from $this->_table where pid!=0 ";
+		return $this->db->query($sql)->result_array();
+	}
+	public function get_all_lists()
+	{
+		$sql="select $this->primary_key,m_name from $this->_table where pid!=0 and status!=-1";
 		return $this->db->query($sql)->result_array();
 	}
 	/*

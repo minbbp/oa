@@ -19,7 +19,7 @@
 					</h3>
 				</div>
 				<table class="table table-bordered">
-			 <caption><h4>上线申请信息</h4></caption>
+			 <caption><h4><?php if($apply_row['is_ungent']==1){echo "<label class='label label-important'>紧急</label>";}?>上线申请信息</h4></caption>
 			 <tr class="success"><td>申请工单号：</td><td><?php echo $apply_row['apply_no'];?></td><td>升级模块:</td><td><?php echo $model_row['m_name']; ?></td></tr>
 			  <tr><td>申请人:</td><td><?php echo $apply_user['realname']?></td><td>申请人邮件：</td><td> <?php echo $apply_user['email']?></td></tr>
 			  <tr><td>模块负责人:</td><td><?php echo $head_row['realname'];?></td><td>负责人邮件:</td><td><?php echo $head_row['email'];?></td></tr>

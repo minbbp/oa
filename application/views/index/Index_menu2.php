@@ -3,9 +3,10 @@
 <!-- 新效果-->
 <div class="accordion span3" id="accordion2">
   <div class="accordion-group">
-  	<div class="accordion-heading">
+  	<div class="accordion-heading head-active">
   	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse0">
-        个人中心
+       <span class="nav-icon nav-icon-home"></span>
+        <p>个人中心</p>
   	</a>
   	</div>
   	<div id="collapse0" class="accordion-body collapse">
@@ -22,7 +23,8 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        git认证管理
+       <span class="nav-icon nav-icon-git"></span>
+       <p> git认证管理</p>
       </a>
     </div>
     <div id="collapseOne" class="accordion-body collapse ">
@@ -50,7 +52,8 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecodeonline">
-        代码上线
+    <span class="nav-icon nav-icon-code"></span>     
+        <p>代码上线</p>
       </a>
     </div>
     <div id="collapsecodeonline" class="accordion-body collapse ">
@@ -60,6 +63,7 @@
  			<li><?php echo anchor("/codeonline/myapply/","我的上线申请 ","target=index_center");?></li>
  			<li><?php echo anchor("/codeonline_tester/myapply/","代码上线测试确认 ","target=index_center");?></li>
  			<li><?php echo anchor("/codeonline_header/myapply/","代码上线负责人审批 ","target=index_center");?></li>
+ 			<li><?php echo anchor("/codeonline_ungent/myapply/","紧急上线审批 ","target=index_center");?></li>
  			<li><?php echo anchor("/codeonline_op/myapply/","代码上线处理 ","target=index_center");?></li>
  			<li><?php echo anchor("/requirements/index/","需求管理 ","target=index_center");?></li>
 		</ul>
@@ -71,7 +75,8 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-        服务器管理
+    <span class="nav-icon nav-icon-serverm"></span>     
+     <p>服务器管理</p>
       </a>
     </div>
     <div id="collapseThree" class="accordion-body collapse ">
@@ -89,7 +94,8 @@
    <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#fuwu">
-        服务管理
+      <span class="nav-icon nav-icon-personm"></span>
+        <p>服务管理</p>
       </a>
     </div>
     <div id="fuwu" class="accordion-body collapse ">
@@ -104,17 +110,18 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-        	<i class='icon-user'></i>用户管理
+        	<span class="nav-icon nav-icon-personm"></span>
+        	<p>用户管理</p>
       </a>
     </div>
     <div id="collapseTwo" class="accordion-body collapse">
       <div class="accordion-inner">
-      <ul class="nav nav-list nav-pills text-center">
+      <ul class="nav nav-list">
  		<li><?php echo anchor("/backend/","用户管理","target=index_center");?></li>
  		<li><?php echo anchor("/backend/roles/","角色定义","target=index_center");?></li>
  		<li><?php echo anchor("/backend/uri_permissions/","角色权限","target=index_center");?></li>
  		<li><?php echo anchor("/auth/change_password/","修改密码","target=index_center");?></li>
-		<li><?php echo anchor("/auth/logout/","<i class='icon-off'></i>安全退出");?></li>
+		<li><?php echo anchor("/auth/logout/","安全退出");?></li>
  </ul>
   </div>
   </div>
@@ -131,5 +138,9 @@
 	$(this).parent('li').addClass('active').siblings().removeClass('active');
 	return false;
 		});
+	$(".accordion-heading").click(function(){
+		$(this).parents('.span3').find('.accordion-heading').removeClass('head-active');
+		$(this).addClass('head-active');
+	});
  });
  </script>

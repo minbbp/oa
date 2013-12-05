@@ -21,30 +21,37 @@
                                     <div class="control-group">
                                       <label class="control-label" for="inputCpu">Cpu</label>
                                       <div class="controls">
-                                        <input type="text" name="cpu" id="inputCpu" placeholder="Cpu"   value="<?php echo $info['s_cpu']; ?>"/><?php echo form_error('cpu'); ?>
+                                        <input type="text" name="cpu" id="inputCpu" placeholder="Cpu"   value=""/><?php echo form_error('cpu'); ?><span class="inline"> 核</span>
                                         <span class="help-inline"></span>
                                       </div>
                                     </div>
                                     <div class="control-group">
                                       <label class="control-label" for="inputMem">Mem</label>
                                       <div class="controls">
-                                          <input type="text" name="mem" id="inputMem"  placeholder="内存"  value="<?php echo $info['s_mem']; ?>"/><?php echo form_error('mem'); ?>
+                                          <input type="text" name="mem" id="inputMem"  placeholder="内存"  value=""/><?php echo form_error('mem'); ?><span class="inline"> G</span>
                                           <span class="help-inline"></span>
                                       </div>
                                     </div>
                                     <div class="control-group">
                                       <label class="control-label" for="inputDisk">Disk</label>
                                       <div class="controls">
-                                        <input type="text" name="disk" id="inputDisk" placeholder="硬盘"  value="<?php echo $info['s_disk']; ?>"/><?php echo form_error('disk'); ?>
+                                        <input type="text" name="disk" id="inputDisk" placeholder="硬盘"  value=""/><?php echo form_error('disk'); ?><span class="inline"> G</span>
                                         <span class="help-inline"></span>
                                       </div>
                                     </div>
-                                    <div class="control-group">
-                                      <label class="control-label" for="input_internet">internet</label>
+                                    <div class="control-group inter">
+                                      <label class="control-label" for="input_internet">内网IP</label>
                                       <div class="controls">
-                                          <input type="text" name="internet" id="input_internet"  placeholder="internet"  value="<?php echo $info['s_internet']; ?>"/>
+                                          <input type="text" name="internet" id="input_internet"  placeholder="内网ip地址(不能为空)"  value=""/>
                                           <span class="help-inline"></span>
-                                      </div>
+                                      </div>                    
+                                    </div>
+                                    <div class="control-group inter">
+                                      <label class="control-label" for="input_winternet">外网IP</label>
+                                      <div class="controls">
+                                          <input type="text" name="winternet" id="input_winternet"  placeholder="外网ip地址(可以为空)"  value=""/>
+                                          <span class="help-inline"></span>
+                                      </div>                    
                                     </div>
                                     <div class="control-group">
                                       <label class="control-label" >Isp</label>
@@ -54,6 +61,9 @@
                                               </label>
                                               <label class="radio inline ">
                                                 <input type="radio"  name="isp"  id="inlineRadio4" value="联通" > 联通
+                                              </label>
+                                                <label class="radio inline ">
+                                                <input type="radio"  name="isp"  id="inlineRadio5" value="不需要" >不需要
                                               </label>
                                       </div>
                                     </div>
@@ -91,13 +101,13 @@
                                         <div class="control-group">
                                         <label class="control-label" for="textarea-desc">服务器作用描述</label>
                                         <div class="controls">
-                                            <textarea rows="5" class="span4" name="desc" id="textarea-desc"  value=""><?php echo $info['s_desc']; ?></textarea><?php echo form_error('desc'); ?>   
+                                            <textarea rows="5" class="span4" name="desc" id="textarea-desc"  value=""></textarea><?php echo form_error('desc'); ?>   
                                             <span id="descerror"></span>
                                         </div>
                                         </div>
                                     <div class="control-group">
                                       <div class="controls">
-                                        <input type="submit" class="btn" id="submit"  value="提交申请" />
+                                        <input type="submit" class="btn" id="submit"  value="确认添加" />
                                       </div> 
                                     </div>
                     		<?php echo form_close();?>

@@ -1,6 +1,23 @@
+<!DOCTYPE html>
 <html>
-	<head><title>Manage Custom Permissions</title></head>
-	<body>
+  <head>
+  <meta charset="utf-8">
+    <title>用户角色权限</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
+    <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
+     <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
+    <!-- bootstrap end -->
+  </head>
+  <body>
+ <div class="span8 offset1">
+ <div class="page-header">
+				<h3>
+					用户角色权限
+				</h3>
+</div>
 	<?php
 		echo '<b>Here is an example how to use custom permissions</b><br/><br/>';
 		
@@ -56,5 +73,6 @@
 		echo form_close();
 			
 	?>
+	</div>
 	</body>
 </html>

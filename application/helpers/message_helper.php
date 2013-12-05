@@ -20,10 +20,10 @@ if(!function_exists('message'))
 		$_CI->load->view($view,$data);
 	}
 }
-/**
+ /**
  * 使用sendcloud 发送邮件
  */
-if(!function_exists('sendcloud'))
+if(!function_exists('sendcloudold'))
 {
 	/**
 	 * 默认情况下，发送邮件到本地文件，不再调用服务器进行发送文件。如要真实发送邮件修改state即可
@@ -32,10 +32,10 @@ if(!function_exists('sendcloud'))
 	 * @param string $message  可以是一个视图，字符以及等相关资源
 	 * @param string $cc  抄送，可以是字符也可以是数组。发送多个的时候，推荐使用数组
 	 */
-	function sendcloud($to,$subject,$message,$cc=null)
+	function sendcloudold($to,$subject,$message,$cc=null)
 	{
 		//把收件人，邮件标题，以及邮件内容写入到一个文本文件。真正的环境中的时候在开启邮件发送
-		$state=FALSE;
+		$state=TRUE;
 		if($state===TRUE)
 		{
 			$_CI=&get_instance();
@@ -48,8 +48,11 @@ if(!function_exists('sendcloud'))
 			}
 			$_CI->email->subject($subject);
 			$_CI->email->message($message);
+			//file_put_contents(dirname(BASEPATH)."/email_path/20131127_1.eml", $_CI->email->_finalbody);
 			return  $_CI->email->send();
-			//echo $_CI->email->print_debugger();
+			 //file_put_contents(dirname(BASEPATH)."/email_path/20131127_3.eml", $_CI->email->_finalbody);
+			 //file_put_contents(dirname(BASEPATH)."/email_path/20131127_3_debug.eml",$_CI->email->print_debugger()) ;
+			
 		}
 		else
 		{
@@ -79,5 +82,81 @@ if(!function_exists('sendcloud'))
 			$str.="endmail:=============================================================\r\n\r\n";
 			return file_put_contents($filename,$str,FILE_APPEND);
 		}
+	}
+} 
+/**
+ * 使用curl 方式重写了邮件发送方法
+ */
+if(!function_exists('sendcloud'))
+{
+	function sendcloud($to,$subject,$message,$cc=null,$open=TRUE){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+		curl_setopt($ch, CURLOPT_URL, 'https://sendcloud.sohu.com/webapi/mail.send.json');
+		//不同于登录SendCloud站点的帐号，您需要登录后台创建发信子帐号，使用子帐号和密码才可以进行邮件的发送。
+		$info=array(
+			'api_user' => 'postmaster@adrdop-sendmore.sendcloud.org',
+			'api_key' => 'd2oG5mXj',
+			'from' => 'postmaster@adrdop-sendmore.sendcloud.org',
+			'fromname' => '运维支撑平台',
+			'to' => _email_change($to),
+			'subject' => $subject,
+			'html' => $message,
+			);
+		if($cc)
+		{
+			$info['cc']=_email_change($cc);
+		}
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$info);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		if($open)
+		{
+			$result = curl_exec($ch);
+		}
+		else
+		{
+			//记录发送内容到文本文件
+			$email_path=dirname(BASEPATH)."/email_path/";
+			$filename=$email_path.date('Y-m-d').".email.txt";
+			$info['addtime']=date('Y-m-d H:i:s');
+			$info['html'] = preg_replace( "<style(.*?)</style>","",$info['html'] );
+			$info['html']=strip_tags($info['html']);
+			$str=implode('|---|', $info);
+			$str="\r\n".trim($str)."\r\n";
+			file_put_contents($filename,$str,FILE_APPEND);
+			$result=TRUE;
+		}
+		curl_close($ch);
+		if($result === false) //请求失败
+		{
+			log_message('error', 'last error : ' . curl_error($ch));
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
+}
+/**
+ * 把符合CI 格式的数据进行装换，转换为sendcloud 发送的邮件地址列表
+ */
+if(!function_exists('_email_change'))
+{
+	function _email_change($email)
+	{
+		
+		$str="";
+		if(is_array($email))
+		{
+			$str.=implode(';', $email);
+		}
+		else
+		{
+			$str.=implode(';',explode(',', $email));
+		}
+		return $str;
 	}
 }

@@ -33,7 +33,7 @@
  	 <span class="help-inline"></span>
  	</div>
  </div>
- 
+ <input type="hidden" name="is_ungent" value="<?php echo $is_ungent;?>"> 
  <div class="control-group ">
     <label class="control-label" for="git_url">源码git地址:</label>
     <div class="controls">

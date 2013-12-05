@@ -34,6 +34,7 @@ class Server_need_model extends CI_Model
                 $v['sn_time'] = $arr['sn_time'];
                 $v['sn_name'] = $this->get_username_by_id($uid);
                 $v['m_name'] = $this->co->get_name_by_id($tid);
+                $v['sn_realname'] = $this->get_realname_by_id($uid);
             }
             return $data;
         }
@@ -101,6 +102,17 @@ class Server_need_model extends CI_Model
                 $uid = current($result);
                 return $uid['id'];
 	}
+        /*
+         * 根据真实名字 获取uid
+         */
+                public function get_id_by_realname($username)
+	{
+                $where['realname'] = $username; 
+		$res = $this->db->where($where)->get('users');
+                $result = $res->result_array();
+                $uid = current($result);
+                return $uid['id'];
+	}
         public function get_id_by_uid($id) {
             $where['u_id'] = $id;
             $res = $this->db->where($where)->get('server_need');
@@ -127,5 +139,11 @@ class Server_need_model extends CI_Model
                 $uid = current($result);
                 return $uid;
 	}
+        public function get_uid_by_snid($sn_id) {
+            $where['sn_id'] = $sn_id;
+            $res = $this->db->where($where)->get('server_need');
+            $result = current($res->result_array());
+            return $result['u_id'];
+        }
         
 }

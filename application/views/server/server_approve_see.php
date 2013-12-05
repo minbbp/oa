@@ -3,7 +3,7 @@
 <h4>申请人帐号为：<?php echo $info['sn_name']?></h4>
 <br />
 <div class="bs-docs-example"> 
-        <dl class="dl-horizontal" style="font-size: 18px">
+        <dl class="dl-horizontal" style="font-size: 16px;">
           <dt>cpu：</dt>
           <dd><?php echo $info['sn_cpu']?>核</dd><br />
           <dt>内存：</dt>

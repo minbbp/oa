@@ -51,11 +51,12 @@
 <div class="opshow hidden">
 <p class="text-error">运维人员需要如何如何的进行操作</p>
 </div>
-<div id="bohui" class="span6  hidden">
+<div id="bohui" class="span6  hidden" style="margin-left:10px">
 <form method='post'>
 <label for="gop_description">驳回原因：</label>
 <textarea rows="3" class="span5" name="gop_description" id="gop_description"></textarea>
 <label></label>
+<label></label><br/>
 <input type='submit' id="submit" class="btn btn-danger" value="驳回">&nbsp;&nbsp;&nbsp;<a href="javascript::void(0)"  id='guanbi'>关闭</a>
 </form>
 </div>

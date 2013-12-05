@@ -14,7 +14,6 @@ class Server_owner_model extends CI_Model
 	{
 		parent::__construct();	
                 $this->load->model('server_need_model','sn',TRUE);
-                //$this->load->model('server_type_model','st',TRUE);
 	}
         public function so_insert($data) {
             $this->db->insert('server_owner',$data);
@@ -47,7 +46,7 @@ class Server_owner_model extends CI_Model
                $wheres['sn_id'] = $v['sn_id'];
                $ress = $this->db->where($wheres)->get('server_need');
                $results = current($ress->result_array());
-               $uname = $this->sn->get_username_by_id($results['u_id']);
+               $uname = $this->sn->get_realname_by_id($results['u_id']);
                if($results['sn_type']){
                $new = explode(',',$results['sn_type']);
                unset($array);
@@ -66,8 +65,16 @@ class Server_owner_model extends CI_Model
             return $result;
         }          
         public function del_owner($arr) {
+            $res = $this->db->where_in('so_id',$arr)->get('server_owner');
+            $result = $res->result_array();
+            foreach ($result as $value) {
+                $tempw['s_id'] = $value['s_id'];
+                $this->db->set('s_owner', 's_owner-1', FALSE);
+                 $this->db->where($tempw)->update('server');
+                log_message('error',$this->db->last_query());
+            }
             $this->db->where_in('so_id',$arr)->delete('server_owner');
-            return $this->db->affected_rows();;
+            return $this->db->affected_rows();
         }
         public function get_id_by_snid($arr) {
             if($arr){
@@ -95,6 +102,16 @@ class Server_owner_model extends CI_Model
             $res = $this->db->where($where)->get('server_owner'); 
             $result = $res->result_array();
             return $result ? $result : array();
+        }
+        public function count_owner($s_id) {
+            $where['s_id'] = $s_id;
+             $num = $this->db->where($where)->count_all_results('server_owner');
+             return $num;
+        }
+        public function get_sid_by_uid($u_id){
+            $where['u_id'] = $u_id;
+            $result = $this->db->where($where)->get('server_owner')->result_array();
+            return $result;
         }
              
 }

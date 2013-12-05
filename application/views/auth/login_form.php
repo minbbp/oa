@@ -3,13 +3,15 @@ $username = array(
 	'name'	=> 'username',
 	'id'	=> 'username',
 	'size'	=> 30,
-	'value' => set_value('username')
+	'value' => set_value('username'),
+	'placeholder'=>'用户名'
 );
 
 $password = array(
 	'name'	=> 'password',
 	'id'	=> 'password',
-	'size'	=> 30
+	'size'	=> 30,
+    'placeholder'=>'密码'
 );
 
 $remember = array(
@@ -17,7 +19,6 @@ $remember = array(
 	'id'	=> 'remember',
 	'value'	=> 1,
 	'checked'	=> set_value('remember'),
-	'style' => 'margin:0;padding:0'
 );
 
 $confirmation_code = array(
@@ -27,102 +28,67 @@ $confirmation_code = array(
 );
 
 ?>
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta charset="utf-8">
-    <title>运维OA_login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  	<style type="text/css">
-      body {
-        padding-top: 40px;
-        padding-bottom: 40px;
-        background-color: #f5f5f5;
-      }
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运维OA_login</title>
+<link href="<?php echo base_url("bootstrap/css/bootstrap.min.css")?>" rel="stylesheet" media="screen">
+<link href="<?php echo base_url("bootstrap/css/login.css");?>" rel="stylesheet" media="screen">
+</head>
 
-      .form-signin {
-        max-width: 300px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: #fff;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-      }
-      .form-signin .form-signin-heading,
-      .form-signin .checkbox {
-        margin-bottom: 10px;
-      }
-      .form-signin input[type="text"],
-      .form-signin input[type="password"] {
-        font-size: 16px;
-        height: auto;
-        margin-bottom: 15px;
-        padding: 7px 9px;
-      }
+<body>
 
-    </style>
-  	<script src="<?=base_url()?>/bootstrap/js/jquery-1.10.2.min.js"></script>
-    <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
+<body class="loginpage">
+
+	<div class="loginbox">
+    	<div class="loginboxinner">
+        	
+            <div class="logo">
+            	<h1><span>运维OA登陆</span></h1>
+            </div><!--logo-->
+            
+            <br clear="all"><br>
+            
+            
+            
+            <?php echo form_open($this->uri->uri_string(),array('id'=>'login'));?>
+			<?php echo $this->dx_auth->get_auth_error(); ?>
+            	
+                <div class="username">
+                	<div class="usernameinner">
+                	<?php echo form_input($username)?>
+   					 <?php echo form_error($username['name']); ?>
+                    </div>
+                </div>
+                
+                <div class="password">
+                	<div class="passwordinner">
+                    	<?php echo form_password($password)?>
+    					<?php echo form_error($password['name']); ?>
+                    </div>
+                </div>
+                <?php if ($show_captcha): ?>
+                <dl>
+				<dt>请输入验证码</dt>
+				<dd><?php echo $this->dx_auth->get_captcha_image(); ?></dd>
+				<dt><?php echo form_label('验证码：', $confirmation_code['id']);?></dt>
+				<dd>
+					<?php echo form_input($confirmation_code);?>
+					<?php echo form_error($confirmation_code['name']); ?>
+				</dd>
+				</dl>
+				<?php endif; ?>
+                <div class="keep"><?php echo form_checkbox($remember);?><span>记住我</span></div>
+                <button type="submit">登 陆</button>
+            <?php echo form_close()?>
+        </div><!--loginboxinner-->
+    </div><!--loginbox-->
+   <script type="text/javascript">
     <!--
     if (parent.frames.length > 0) { parent.location.href=location.href;}
     -->
     </script>
-    <!-- bootstrap end -->
-  </head>
-  <body>
- <div class="container">
-
-
-<?php echo form_open($this->uri->uri_string(),array('class'=>'form-signin'))?>
-
-<?php echo $this->dx_auth->get_auth_error(); ?>
-
-<h3>运维OA登陆</h3>
-<dl>	
-	<dt><?php echo form_label('用户账号：', $username['id']);?></dt>
-	<dd>
-	<?php echo form_input($username)?>
-    <?php echo form_error($username['name']); ?>
-	</dd>
-
-  <dt><?php echo form_label('用户密码：', $password['id']);?></dt>
-	<dd>
-		<?php echo form_password($password)?>
-    <?php echo form_error($password['name']); ?>
-	</dd>
-
-<?php if ($show_captcha): ?>
-	<dt>Enter the code exactly as it appears. There is no zero.</dt>
-	<dd><?php echo $this->dx_auth->get_captcha_image(); ?></dd>
-
-	<dt><?php echo form_label('验证码：', $confirmation_code['id']);?></dt>
-	<dd>
-		<?php echo form_input($confirmation_code);?>
-		<?php echo form_error($confirmation_code['name']); ?>
-	</dd>
-	
-<?php endif; ?>
-
-	<dt></dt>
-	<dd>
-		<?php echo form_checkbox($remember);?>&nbsp;&nbsp;记住我
-	</dd>
-	
-	<dt></dt>
-	
-	<dd><br/><input type="submit" name="login" value="登陆" class="btn btn-large btn-primary"  /></dd>
-</dl>
-
-<?php echo form_close()?>
-</fieldset>
-</div>
+</body>
 </body>
 </html>

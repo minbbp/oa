@@ -14,9 +14,9 @@
   <body>
  <div class="span8 offset1">
 			<div class="page-header">
-				<h1>
+				<h3>
 					git 认证审批
-				</h1>
+				</h3>
 			</div>
 			<table class="table table-bordered">
 			<thead><tr><th>#</th><th>申请者</th><th>申请内容</th><th>申请时间</th><th>操作</th></tr></thead>

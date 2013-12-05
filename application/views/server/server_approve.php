@@ -28,7 +28,7 @@
                          <?php foreach($list as $val){ ?>
 			<tr>
                         <td></td> 
-			<td><?php echo $val['sn_name']; ?></td>
+			<td><?php echo $val['sn_realname']; ?></td>
 			<td><?php echo $val['sn_use']; ?></td>
 			<td><?php echo date('Y-m-d H:i',$val['sn_time']); ?></td>
                         <td><!--<?php if($val['sa_status'] == 0){ echo "未审核";}else if($val['sa_status'] == 1){ echo "已通过"; }else{ echo "已退回";} ; ?>-->
@@ -51,12 +51,12 @@
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3>查看申请信息</h3>
+        <h4>查看申请信息</h4>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" style="max-height: 420px">
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
   </div>
 </div>
 </div>
@@ -70,7 +70,7 @@
 $(function(){
              $(".restart").click(function(){
             var href=$(this).attr("href");
-            layer.confirm('确定重新分配?', function(){ 
+            layer.confirm('确定从新分配?', function(){ 
                 $.post(href,function(json_data){
                 if(json_data.status==1)
                  {
@@ -94,7 +94,6 @@ $(function(){
                 var sn_id = $(this).attr('sn_id');
                 var href = "<?php echo site_url('server_approve/server_get/'); ?>";
                 href = href+"/"+sn_id;
-                console.log(href);
                  $("#movefind").show(); 
                 $("#movefind").offset({top:top+h,left:left});
                             $.post(href,function(data){
@@ -138,7 +137,7 @@ $(function(){
             }else if(json_data.status==1)
             {
                 layer.alert(json_data.msg,9,'成功提示！',function(){
-                location.reload();
+                location.href = "<?php echo site_url('server_approve/index/')?>";
                 });
             }else{
                 layer.alert(json_data.msg,8,'错误提示！');

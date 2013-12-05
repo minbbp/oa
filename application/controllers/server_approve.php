@@ -25,9 +25,9 @@ class Server_approve extends CI_Controller
             $arr['uid'] = $this->user_id;
             $arr['rid'] = $this->role_id;
             $count = $this->sa->get_count($arr);
-            $page_size=3;//每页数量
+            $page_size=6;//每页数量
             //分页
-            $configpage['base_url'] =site_url('Server_approve/index');
+            $configpage['base_url'] =site_url('server_approve/index');
             $configpage['total_rows'] = $count;//一共有多少条数据
             $configpage['per_page'] = $page_size; //每页显示条数
             $configpage['first_link'] = '首页';
@@ -112,7 +112,7 @@ class Server_approve extends CI_Controller
                     }
                     $configpage['uri_segment']=6;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(6));
-                    $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
+                    $configpage['base_url'] =site_url('server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
                 }else if($type == 's_type'){
                     if($keyword !=''){
                     $st_id = $this->co->get_id_by_name($keyword);
@@ -122,16 +122,16 @@ class Server_approve extends CI_Controller
                     }
                     $configpage['uri_segment']=6;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(6));
-                    $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
+                    $configpage['base_url'] =site_url('server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
                 }else if($type== 's_cpu' ||$type== 's_mem' ||$type== 's_disk'||$type== 's_internet'||$type== 's_cpu'){
                     $whereu[$type] = $keyword;
                     $configpage['uri_segment']=6;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(6));
-                    $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
+                    $configpage['base_url'] =site_url('server_approve/op_approve/'.$sa_id."/".$type.'/'.$keyword);
                 }else{
                     $configpage['uri_segment']=4;//分页的数据查询偏移量在哪一段上
                     $offset=intval($this->uri->segment(4));         
-                    $configpage['base_url'] =site_url('Server_approve/op_approve/'.$sa_id."/");
+                    $configpage['base_url'] =site_url('server_approve/op_approve/'.$sa_id."/");
                 }
                 
              if($type == 'owner'){

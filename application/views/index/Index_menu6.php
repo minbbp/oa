@@ -6,9 +6,10 @@
 <!-- 新效果-->
 <div class="accordion span3" id="accordion2">
   <div class="accordion-group">
-  	<div class="accordion-heading">
+  	<div class="accordion-heading head-active">
   	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse0">
-        个人中心
+         <span class="nav-icon nav-icon-home"></span>
+        <p>个人中心</p>
   	</a>
   	</div>
   	<div id="collapse0" class="accordion-body collapse">
@@ -25,7 +26,8 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        git认证管理
+        <span class="nav-icon nav-icon-git"></span>
+       <p> git认证管理</p>
       </a>
     </div>
     <div id="collapseOne" class="accordion-body collapse ">
@@ -48,7 +50,8 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapsecodeonline">
-        代码上线
+        <span class="nav-icon nav-icon-code"></span>     
+        <p>代码上线</p>
       </a>
     </div>
     <div id="collapsecodeonline" class="accordion-body collapse ">
@@ -67,16 +70,15 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-  服务器管理
+  <span class="nav-icon nav-icon-serverm"></span>     
+     <p>服务器管理</p>
       </a>
     </div>
     <div id="collapseThree" class="accordion-body collapse ">
       <div class="accordion-inner">
         <ul class="nav nav-list">
 			<li class="active"><?php echo anchor("/server_need/index/","服务器申请","target=index_center");?></li>
- 			<li><?php echo anchor("/server_manage/index/","服务器管理","target=index_center");?></li>
  			<li><?php echo anchor("/server_approve/index/","服务器审批" ,'target=index_center')?></li>
-                        <li><?php echo anchor("/server_type/index/","服务器服务管理" ,'target=index_center')?></li>
 	</ul>
       </div>
     </div>
@@ -85,12 +87,13 @@
   <div class="accordion-group">
     <div class="accordion-heading">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-        	<i class='icon-user'></i>用户管理
+        	<span class="nav-icon nav-icon-personm"></span>
+        	<p>用户管理</p>
       </a>
     </div>
     <div id="collapseTwo" class="accordion-body collapse">
       <div class="accordion-inner">
-      <ul class="nav nav-list nav-pills text-center">
+      <ul class="nav nav-list">
  		<li><?php echo anchor("/auth/change_password/","修改密码","target=index_center");?></li>
 		<li><?php echo anchor("/auth/logout/","<i class='icon-off'></i>安全退出");?></li>
  </ul>
@@ -109,5 +112,9 @@
 	$(this).parent('li').addClass('active').siblings().removeClass('active');
 	return false;
 		});
+	$(".accordion-heading").click(function(){
+		$(this).parents('.span3').find('.accordion-heading').removeClass('head-active');
+		$(this).addClass('head-active');
+	});
  });
  </script>
