@@ -380,7 +380,7 @@ class CI_Email {
 	 */
 	public function message($body)
 	{
-		$this->_body = rtrim(str_replace("\r", "", $body));
+		//$this->_body = rtrim(str_replace("\r", "", $body));
 
 		/* strip slashes only if magic quotes is ON
 		   if we do it with magic quotes OFF, it strips real, user-inputted chars.
@@ -388,11 +388,11 @@ class CI_Email {
 		   NOTE: In PHP 5.4 get_magic_quotes_gpc() will always return 0 and
 			 it will probably not exist in future versions at all.
 		*/
-		if ( ! is_php('5.4') && get_magic_quotes_gpc())
+		/* if ( ! is_php('5.4') && get_magic_quotes_gpc())
 		{
 			$this->_body = stripslashes($this->_body);
-		}
-
+		} */
+		$this->_body=$body;
 		return $this;
 	}
 
@@ -653,7 +653,7 @@ class CI_Email {
 		{
 			if (strncmp($charset, $this->charset, strlen($charset)) == 0)
 			{
-				$this->_encoding = '7bit';
+				$this->_encoding = '8bit';
 			}
 		}
 
@@ -1290,11 +1290,11 @@ class CI_Email {
 	 */
 	protected function _prep_q_encoding($str, $from = FALSE)
 	{
-		$str = str_replace(array("\r", "\n"), array('', ''), $str);
+		 $str = str_replace(array("\r", "\n"), array('', ''), $str);
 
 		// Line length must not exceed 76 characters, so we adjust for
 		// a space, 7 extra characters =??Q??=, and the charset that we will add to each line
-		$limit = 200 - 7 - strlen($this->charset);
+		$limit = 76 - 7 - strlen($this->charset);
 
 		// these special characters must be converted too
 		$convert = array('_', '=', '?');
@@ -1308,10 +1308,10 @@ class CI_Email {
 		$output = '';
 		$temp = '';
 
-		for ($i = 0, $length = strlen($str); $i < $length; $i++)
+		for ($i = 0, $length = mb_strlen($str,'8bit'); $i < $length; $i++)
 		{
 			// Grab the next character
-			$char = substr($str, $i, 1);
+			$char = mb_substr($str, $i, 1,'8bit');
 			$ascii = ord($char);
 
 			// convert ALL non-printable ASCII characters and our specials
@@ -1342,7 +1342,7 @@ class CI_Email {
 
 		// wrap each line with the shebang, charset, and transfer encoding
 		// the preceding space on successive lines is required for header "folding"
-		$str = trim(preg_replace('/^(.*)$/m', ' =?'.$this->charset.'?Q?$1?=', $str));
+		$str = trim(preg_replace('/^(.*)$/m', ' =?'.$this->charset.'?Q?$1?=', $str)); 
 
 		return $str;
 	}
