@@ -156,12 +156,13 @@ class Gitgroups extends CI_Controller
 				$data['name']=$this->session->userdata('DX_realname');
 				$data['msg']="您的git组申请，我们已经发送邮件通知相关人员了";
 				$data_op['msg']="请尽快操作 {$this->session->userdata('DX_realname')}提交的git组";
+				$data_op['name']='刘士超';
 				$op_email=$this->load->view('mail/mail_common',$data_op,TRUE);
 				$app_email=$this->load->view('mail/mail_common',$data,TRUE);
 				//$this->_sendmail(ADRD_EMAIL_ONE, $subject, $op_email);
-				 sendcloud(ADRD_EMAIL_ONE, $subject, $op_email);
+				 sendcloud(ADRD_EMAIL_ONE, $subject, $op_email,$this->session->userdata('DX_email'));
 				//$this->_sendmail($userinfo['email'], $data['msg'], $app_email);
-				 sendcloud($this->session->userdata('DX_email'), $data['msg'], $app_email);
+				 //sendcloud($this->session->userdata('DX_email'), $data['msg'], $app_email);
 			}
 			else
 			{
@@ -179,8 +180,8 @@ class Gitgroups extends CI_Controller
 				$leveldata['msg']="请尽快审批您的下属员工：{$this->session->userdata('DX_realname')}的git组申请";
 				$user_message=$this->load->view('mail/mail_common',$userdata,TRUE);
 				$level_message=$this->load->view('mail/mail_common',$leveldata,TRUE);
-				sendcloud($this->session->userdata('DX_email'), $usersubject, $user_message);
-				sendcloud($levelinfo['email'], $levelsubject, $level_message);
+				//sendcloud($this->session->userdata('DX_email'), $usersubject, $user_message);
+				sendcloud($levelinfo['email'], $levelsubject, $level_message,$this->session->userdata('DX_email'));
 			}
 	}
 	/**

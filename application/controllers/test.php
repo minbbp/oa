@@ -54,6 +54,7 @@ class  Test extends MY_Controller
 		$msg=$this->load->view('mail/mail_new_common',array('name'=>'韩旭','msg'=>'测试邮件问题,测试邮件问题.行孔折棒邦，快！'),TRUE);
 		echo $msg;
 		sendcloud('wb-zhibinliu@sohu-inc.com', $subject,$msg,'wb-xuhan@sohu-inc.com');
+
 	}
 	public function email_addr()
 	{
@@ -65,5 +66,9 @@ class  Test extends MY_Controller
 		echo _email_change($str1);
 		echo "<br/>";
 		echo _email_change($str2);
+	}
+	public function test_sdk()
+	{
+		new_sendcloud();
 	}
 }

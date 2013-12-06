@@ -121,7 +121,7 @@ body, td { font-family: HelveticaNeue, sans-serif; }
             <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                 <tbody><tr><td class="w325" width="350" height="8"></td></tr>
             </tbody></table>
-            <div class="header-content" style="color:#000;"><webversion>搜狐精 准广告研发中心 &reg;运维支撑平台</webversion></div>
+            <div class="header-content" style="color:#000;"><webversion>搜狐精准广告研发中心 &reg;运维支撑平台</webversion></div>
             <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                 <tbody><tr><td class="w325" width="350" height="8"></td></tr>
             </tbody></table>

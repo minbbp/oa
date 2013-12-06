@@ -23,7 +23,7 @@ if(!function_exists('message'))
  /**
  * 使用sendcloud 发送邮件
  */
-if(!function_exists('sendcloudold'))
+if(!function_exists('sendcloud_f'))
 {
 	/**
 	 * 默认情况下，发送邮件到本地文件，不再调用服务器进行发送文件。如要真实发送邮件修改state即可
@@ -32,9 +32,10 @@ if(!function_exists('sendcloudold'))
 	 * @param string $message  可以是一个视图，字符以及等相关资源
 	 * @param string $cc  抄送，可以是字符也可以是数组。发送多个的时候，推荐使用数组
 	 */
-	function sendcloudold($to,$subject,$message,$cc=null)
+	function sendcloud_f($to,$subject,$message,$cc=null)
 	{
 		//把收件人，邮件标题，以及邮件内容写入到一个文本文件。真正的环境中的时候在开启邮件发送
+		$message = iconv("utf-8", "utf-8//IGNORE", $message);
 		$state=TRUE;
 		if($state===TRUE)
 		{
@@ -49,8 +50,11 @@ if(!function_exists('sendcloudold'))
 			$_CI->email->subject($subject);
 			$_CI->email->message($message);
 			//file_put_contents(dirname(BASEPATH)."/email_path/20131127_1.eml", $_CI->email->_finalbody);
-			return  $_CI->email->send();
-			 //file_put_contents(dirname(BASEPATH)."/email_path/20131127_3.eml", $_CI->email->_finalbody);
+			   $_CI->email->send();
+			 // $_CI->email->print_debugger();
+			
+			 file_put_contents(dirname(BASEPATH)."/email_path/20131127_3.eml", $_CI->email->_finalbody);
+				return true;
 			 //file_put_contents(dirname(BASEPATH)."/email_path/20131127_3_debug.eml",$_CI->email->print_debugger()) ;
 			
 		}
@@ -87,14 +91,15 @@ if(!function_exists('sendcloudold'))
 /**
  * 使用curl 方式重写了邮件发送方法
  */
-if(!function_exists('sendcloud'))
+if(!function_exists('sendcloudold'))
 {
-	function sendcloud($to,$subject,$message,$cc=null,$open=TRUE){
+	function sendcloudold($to,$subject,$message,$cc=null,$open=TRUE){
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-		curl_setopt($ch, CURLOPT_URL, 'https://sendcloud.sohu.com/webapi/mail.send.json');
+		//curl_setopt($ch, CURLOPT_URL, 'https://sendcloud.sohu.com/webapi/mail.send.json');
+		curl_setopt($ch, CURLOPT_URL, '10.11.49.49:8002/webapi/mail.send.json');
 		//不同于登录SendCloud站点的帐号，您需要登录后台创建发信子帐号，使用子帐号和密码才可以进行邮件的发送。
 		$info=array(
 			'api_user' => 'postmaster@adrdop-sendmore.sendcloud.org',
@@ -159,4 +164,45 @@ if(!function_exists('_email_change'))
 		}
 		return $str;
 	}
+}
+function sendcloud($to,$subject,$msg,$cc=null)
+{
+	include BASEPATH."sendcloud/SendCloudLoader.php"; // 导入SendCloud依赖
+	//include '/path/to/sendcloud_php/SendCloudLoader.php';或者 导入SendCloud依赖
+	try {
+		// 设置脚本执行的最长时间，以免附件较大时，需要传输比较久的时间
+		// Fatal error: Maximum execution time of 30 seconds exceeded
+		// http://php.net/manual/en/function.set-time-limit.php
+		// set_time_limit(300);
+	
+		$sendCloud = new SendCloud('postmaster@adrdop-sendmore.sendcloud.org','d2oG5mXj');
+		$message = new SendCloud\Message();
+		$message->addRecipient($to) // 添加第一个收件人
+		//->addRecipients(array('to2@sendcloud.com', 'to3@sendcloud.com')) // 添加批量接受地址
+		->setReplyTo('postmaster@adrdop-sendmore.sendcloud.org'); // 添加回复地址
+		if($cc)
+		{
+			$message->addCcs(_new_email_change($cc));
+		} // 添加cc地址
+		$message->setFromName('精准广告研发') // 添加发送者称呼
+		->setFromAddress('postmaster@adrdop-sendmore.sendcloud.org') // 添加发送者地址
+		->setSubject($subject)  // 邮件主题
+		->setBody($msg); // 邮件正文html形式
+		//$message->setAltBody('SendCloud PHP SDK 测试正文，请参考');// 邮件正文纯文本形式，这个不是必须的。
+		return $sendCloud->send($message);
+		//print '<br>emailIdList:';
+		//print var_dump($sendCloud->getEmailIdList());// 取得emailId列表
+	} catch (Exception $e) {
+		//print "出现错误:";
+		//print $e->getMessage();
+		log_message('error', $e->getMessage());
+	}
+}
+function _new_email_change($email)
+{
+	if(!is_array($email))
+	{
+		$email=explode(',', $email);
+	}
+	return $email;
 }
