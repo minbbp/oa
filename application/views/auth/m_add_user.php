@@ -20,10 +20,7 @@ $email = array(
 	'size'	=> 30,
 	'value'	=> set_value('email')
 );
-
-
 ?>
-
 <!DOCTYPE html>
 <html>
   <head>

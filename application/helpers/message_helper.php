@@ -176,6 +176,7 @@ function sendcloud($to,$subject,$msg,$cc=null)
 		// set_time_limit(300);
 	
 		$sendCloud = new SendCloud('postmaster@adrdop-sendmore.sendcloud.org','d2oG5mXj');
+		$sendCloud->setServer('internal.smtpcloud.sohu.com',25);
 		$message = new SendCloud\Message();
 		$message->addRecipient($to) // 添加第一个收件人
 		//->addRecipients(array('to2@sendcloud.com', 'to3@sendcloud.com')) // 添加批量接受地址
