@@ -25,7 +25,7 @@ class Server_approve extends CI_Controller
             $arr['uid'] = $this->user_id;
             $arr['rid'] = $this->role_id;
             $count = $this->sa->get_count($arr);
-            $page_size=6;//每页数量
+            $page_size=PER_PAGE;//每页数量
             //分页
             $configpage['base_url'] =site_url('server_approve/index');
             $configpage['total_rows'] = $count;//一共有多少条数据
