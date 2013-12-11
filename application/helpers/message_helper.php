@@ -178,9 +178,19 @@ function sendcloud($to,$subject,$msg,$cc=null)
 		$sendCloud = new SendCloud('postmaster@adrdop-sendmore.sendcloud.org','d2oG5mXj');
 		$sendCloud->setServer('internal.smtpcloud.sohu.com',25);
 		$message = new SendCloud\Message();
-		$message->addRecipient($to) // 添加第一个收件人
+		//$message->addRecipient($to); // 添加第一个收件人
+		if(is_array($to))
+		{
+			//$message->addRecipient($to[0]);
+			//unset($to[0]);
+			$message->addRecipients($to);
+		}
+		else
+		{
+			$message->addRecipient($to); // 添加第一个收件人
+		}
 		//->addRecipients(array('to2@sendcloud.com', 'to3@sendcloud.com')) // 添加批量接受地址
-		->setReplyTo('postmaster@adrdop-sendmore.sendcloud.org'); // 添加回复地址
+		$message->setReplyTo('postmaster@adrdop-sendmore.sendcloud.org'); // 添加回复地址
 		if($cc)
 		{
 			$message->addCcs(_new_email_change($cc));

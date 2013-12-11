@@ -71,4 +71,8 @@ class  Test extends MY_Controller
 	{
 		new_sendcloud();
 	}
+	public function testmore()
+	{
+		sendcloud(array('838402064@qq.com','wb-zhibinliu@sohu-inc.com'), '多封邮件测试发送', '邮件测试发送');
+	}
 }

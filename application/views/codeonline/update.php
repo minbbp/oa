@@ -66,7 +66,7 @@
 <td><input name="file_item[]"  class="span2"  value="<?php echo $f['file_item'];?>"  type="text"/></td>
 <td><input name="file_item_old_value[]" class="span1"  value="<?php echo $f['file_item_old_value'];?>"  type="text"/></td>
 <td><input name="file_item_new_value[]" class="span1"   value="<?php echo $f['file_item_new_value'];?>"  type="text"/></td>
-<td><a href="javascript:void(0)" class="add_tr"><span class="icon-plus"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon-remove"></span></a></td>
+<td><a href="javascript:void(0)" class="add_tr"><span class="icon16 icon_add"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon16 icon_delete"></span></a></td>
 </tr>
 <?php endforeach;?>
 </table>
@@ -75,42 +75,38 @@
 <div class="clearfix"></div>
  <div class="row">
  <label>&nbsp;&nbsp;&nbsp;&nbsp;升级服务器添加：</label>
- <div class="span3">
- <select multiple="multiple" id="test_a"  name="server_update" size="8">
+ <div class="span3 multiple">
+ <select multiple="multiple" id="test_a"  name="server_updateold" size="8">
  <?php foreach ($server_rs as $user):?>
  <option value="<?php echo $user['s_id'];?>"><?php echo ($user['s_internet']);?></option>
  <?php endforeach;?>
  </select>
  </div>
  <div class="span2 text-center">
-  <p style="margin-top:30px; "><span class="btn add">添加&gt;&gt;</span></p>
+  <p style="margin-top:30px; "><span class="btn add btn-success">添加&gt;&gt;</span></p>
   <p style="margin-top:20px; "><span class="btn btn-danger remove">&lt;&lt;移除</span></p>
  </div>
- <div class="span3"><select multiple="multiple" name="server_update[]" id="test_b" size="8"></select></div>
+ <div class="span3 multiple"><select multiple="multiple" name="server_update[]" id="test_b" size="8"></select></div>
  </div>
 
- <div class="control-group " style="margin-top:20px">
-    <label class="control-label" for='tester_id'>测试人员:</label>
-    <div class="controls">
+ <div class="row" style="margin-top:20px">
+    <label class="control-label" for='tester_id' style="text-align: left;width:70px;">测试人员:</label>
       <select class="span2" id="tester_id" name="tester_id">
      <?php foreach ($tester_rs as $user):?>
  	<option value="<?php echo $user['test_id'];?>"  <?php if($user['test_id']==$apply_row['tester_id']){echo "selected='selected'";}?>><?php echo $user['realname'];?></option>
  	<?php endforeach;?>
       </select>
-    </div>
  </div>
-  <div class="control-group">
-    <label class="control-label" for="online_description">备注:</label>
-    <div class="controls">
-      <textarea  id="online_description" class="span5" rows="5" name="online_description"><?php echo $apply_row['online_description']?></textarea>
+  <div class="row" style="margin-top:20px;">
+    <label class="control-label" style="text-align:left;width:70px;"  for="online_description">备注:</label>
+     <textarea  id="online_description" class="span7" rows="10" name="online_description"><?php echo $apply_row['online_description']?></textarea>
     <span class="help-inline"></span>
-    </div>
  </div>
-<div class="control-group">
+<div class="control-group" style="margin-top:20px;">
     <label class="control-label" for=re_status></label>
-    <div class="controls">
-       <input type="button" class="btn" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
-       <input type="submit" class="btn btn-primary span2" id="submit" value="提交"> 
+    <div class="controls pull-right">
+       <input type="button" class="btn btn-warning" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
+       <input type="submit" class="btn btn-success span2" id="submit" value="提交"> 
     </div>
  </div>
 <?php echo form_close();?>
@@ -226,13 +222,22 @@ $(function(){
 				//使用ajax提交表单
 				//提示依赖关系提示
 				var relymodel='<?php foreach($relymodels as $r){echo $r['m_name'].",";} ?>';
+				var msg='';
+				if(relymodel=='')
+				{
+					 msg="是否直接提交数据进行保存？";
+				}
+				else
+				{
+					 msg='该模块依赖:'+relymodel+"<br/>是否已经通知相关同学？";
+				}
 				$.layer({
 					 shade : [0.5 ,'#000',true], //不显示遮罩
 					 title : '依赖模块提示',
 					    area : ['400px','auto'],
 					    offset : ['400px','50%'],
 					    dialog : {
-					        msg:'该模块依赖:'+relymodel+"<br/>是否已经通知相关同学？",
+					        msg:msg,
 					        btns : 2, 
 					        type : -1,
 					        btn : ['确认','暂时保存'],

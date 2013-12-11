@@ -25,7 +25,7 @@ class Server_approve extends CI_Controller
             $arr['uid'] = $this->user_id;
             $arr['rid'] = $this->role_id;
             $count = $this->sa->get_count($arr);
-            $page_size=PER_PAGE;//每页数量
+            $page_size=6;//每页数量
             //分页
             $configpage['base_url'] =site_url('server_approve/index');
             $configpage['total_rows'] = $count;//一共有多少条数据
@@ -144,7 +144,7 @@ class Server_approve extends CI_Controller
                 //$count = $this->s->get_count($where);
                 $count = $this->s->get_count();
             }
-            $page_size=2;//每页数量
+            $page_size=10;//每页数量
             $configpage['total_rows'] = $count;//一共有多少条数据
             $configpage['per_page'] = $page_size; //每页显示条数
             $configpage['first_link'] = '首页';
@@ -223,16 +223,21 @@ class Server_approve extends CI_Controller
                 $info = $this->sn->find_need($result['sn_id']);
                 $name = $info['sn_realname'];//申请人真实名字
                 $to = $this->sn->get_email_by_uid($info['u_id']);//申请人email
-                
                 $wheres['sn_id'] =  $result['sn_id'];
                 $ress = $this->db->where($wheres)->get('server_owner');
                 $results = $ress->result_array();
-                $str = '';
+                $arr = array();
                 foreach($results as $v){
+                   $temp = array();
                    $ip = $this->s->get_name_by_id($v['s_id']);
-                   $str.= "<p>服务器：".$ip."----帐号为：".$v['account']."----密码为:".$v['pwd']."</p>";
+                   $temp['ip'] = $ip;
+                   $temp['account'] = $v['account'];
+                   $temp['pwd'] = $v['pwd'];
+                   $arr[] = $temp;
+                   unset($temp);
                 }
-                $m = "<p>您的申请已被运维人员批复,具体信息如下:</p>".$str;
+                $temps['arr'] = $arr;
+                $m = $this->load->view('mail/mail_server_alloc',$temps,true);
                 $messages = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
                 $subject="您的申请已批准";
                 sendcloud($to, $subject, $messages);

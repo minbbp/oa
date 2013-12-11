@@ -29,6 +29,7 @@
 			 <tr class="error"><td>git标签</td><td><?php echo $apply_row['git_tag'];?></td><td>git地址：</td><td><small style=" font-size:8;"><?php echo $apply_row['git_url'];?></small></td></tr>
 			 <tr class="info"><td>涉及更新配置文件</td>
 			 <td colspan="3">
+			 <?php if(empty($config_rs)){echo "无更新配置文件!";}else{?>
 			<table class="table table-bordered">
 			<caption>修改的配置文件</caption>
 			<tr><th>文件名</th><th>修改项</th><th>旧值</th><th>新值</th></tr>
@@ -36,9 +37,11 @@
 			 <tr><td><?php echo $cf['file_name']?></td><td><?php echo $cf['file_item']?></td><td><?php echo $cf['file_item_old_value']?></td><td> <?php echo $cf['file_item_new_value'];?></td></tr>
 			 <?php endforeach;?>
 			 </table>
+			 <?php }?>
 			 </td></tr>
 			 <tr class="info"><td>涉及更新服务器</td>
 			 <td colspan="3">
+			 <?php if(empty($server_rs)){echo "无需更新任何服务器";}else{?>
 			<table class="table table-bordered">
 			<caption>更新服务器列表</caption>
 			<tr><th>编号</th><th>IP</th></tr>
@@ -46,13 +49,14 @@
 			 <tr><td><?php echo $sr['s_id'];?></td><td><?php echo ($sr['s_internet']);?></td></tr>
 			 <?php endforeach;?>
 			 </table>
+			 <?php }?>
 			 </td></tr>
 			 <tr><td>备注：</td><td colspan="3"><?php echo $apply_row['online_description'];?></td></tr>
 			 <tr class="error"><td>上线时间：</td><td><?php echo $apply_row['online_time'];?></td><td>申请时间：</td><td><?php echo date('Y-m-d H:i:s',$apply_row['apply_addtime']);?></td></tr>
-			 <tr><td></td><td></td><td></td><td></td></tr>
-			 <tr><td></td><td></td><td></td><td></td></tr>
+			 <!-- <tr><td></td><td></td><td></td><td></td></tr>
+			 <tr><td></td><td></td><td></td><td></td></tr> -->
 			 </table>
-			 <a href="javascript:history.back()" class="btn btn-primary span2">&lt;&lt;返回</a>
+			 <a href="javascript:history.back()" class="btn btn-warning span2 ">&lt;&lt;返回</a>
 			</div>
 			 
  </body>

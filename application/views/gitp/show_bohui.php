@@ -2,7 +2,7 @@
 <html>
   <head>
   <meta charset="utf-8">
-    <title>运维OA_login</title>
+    <title><?php echo $title?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -13,19 +13,16 @@
   <body>
  <div class="span6"  style="margin-left:10px">
 			<div class="page-header">
-				<h3>
-					git认证驳回 
-				</h3>
+				<h4>
+					<?php echo $title?>
+				</h4>
 			</div>
-			<form action="<?php echo base_url('index.php/git_ops/savereject')?>" method="post">
-			<input type="hidden" name="gits_opid" value="<?php echo $gits_opid;?>"> 
-			<input type="hidden" name="git_id" value="<?php echo $git_id;?>"> 
-			<label for="description">驳回原因：</label>
-			<textarea rows="4" class="span5" name="description" id="description"></textarea>
-			<label >
-			<a href="javascript::void(0)" class="btn btn-danger" id="reset" >取消</a>&nbsp;&nbsp;&nbsp;
+			<form action="<?php echo base_url('index.php/grouplevel/bohui/'.$gle_id,'id="bohui"')?>" method="post">
+			<label for='gle_description'>驳回原因:</label>
+			<textarea rows="3" class="span6" name="gle_description" id='gle_description'></textarea>
+			<label></label>
+			<a href="javascript::void(0)" class="btn btn-danger xubox_close xulayer_png32 xubox_close0" id="reset" >取消</a>&nbsp;&nbsp;&nbsp;
 			<input type="submit" id="submit" class="btn btn-primary " value="保存"/>
-			 </label>
 			</form>
 </div>
 <input type="hidden" name="sendmsg" id="sendmsg" value='0' />
@@ -33,22 +30,23 @@
 var index = parent.layer.getFrameIndex(window.name);
 $(function(){
 $("#reset").click(function(){
-  parent.layer.close(index);
+	//console.log($('.xubox_close').html());
+ //$('#sendmsg').val();
+ parent.layer.close(index);
 });
 
 $("#submit").click(function(){
 	var href=$('form').attr('action');
 	var time=new Date().getTime();
-	if($('#description').val()=="")
+	if($('#gle_description').val()=="")
 		{
 			parent.layer.alert('驳回原因不能为空！',9,'');
 			return false;
 		}
-	var git_id=$("input[name='git_id']").val();
-	var gits_opid=$("input[name='gits_opid']").val();
-	var description=$('#description').val();
-	$.post(href,{git_id:git_id,gits_opid:gits_opid,description:description,time:time},function(data){
-		if(data==1)
+	var description=$('#gle_description').val();
+	$.post(href,{msg:description,time:time},function(data){
+		data=data.split('_');
+		if(data[1]==1)
 		{
 			parent.layer.alert('驳回申请成功！',9,'消息提示');
 			$('#sendmsg').val(1);
@@ -57,7 +55,7 @@ $("#submit").click(function(){
 		else
 		{
 			$('#sendmsg').val(0);
-			parent.layer.alert(data,8,'错误提示！');
+			parent.layer.alert(data[1],8,'错误提示！');
 		}
 			
 		});

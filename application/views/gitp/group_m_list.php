@@ -45,10 +45,10 @@
 <div></div>
 <div class="span7">
 <ul class="nav nav-pills">
-<li class='active'><?php echo anchor('gitgroups/groups/1','可用git组')?></li>
-<li><?php echo anchor('gitgroups/groups/-1','禁用git组')?></li>
-<li><?php echo anchor('gitgroups/groups/2','删除git组')?></li>
-<li><?php echo anchor('gitgroups/groups/0','新申请git组')?></li>
+<li <?php if($state==1){echo "class='active'";}?>><?php echo anchor('gitgroups/groups/1','可用git组')?></li>
+<li <?php if($state==-1){echo "class='active'";}?>><?php echo anchor('gitgroups/groups/-1','禁用git组')?></li>
+<li <?php if($state==2){echo "class='active'";}?>><?php echo anchor('gitgroups/groups/2','删除git组')?></li>
+<li <?php if($state==0){echo "class='active'";}?>><?php echo anchor('gitgroups/groups/0','新申请git组')?></li>
 </ul>
 </div>
 <table class='table table-bordered table-hover'>
@@ -58,8 +58,24 @@
 <td><?php echo $group['group_id']?></td>
 <td><?php echo $group['group_name']?></td>
 <td><?php echo $group['realname']?></td>
-<td><?php if($group['group_state']==1){echo "<span class='icon-ok'></span>";}
-			else{echo "<span class='icon-remove'></span>";}
+<td><?php 
+		if($group['group_state']==1)
+		{
+			echo "<span class='icon16 icon_accept'></span>";
+		}
+		else if($group['group_state']==0)
+		{
+			echo "<span class='icon16 icon_add'></span>";
+		}
+		else if($group['group_state']==-1)
+		{
+			echo "<span class='icon16 icon_delete'></span>";
+			
+		}
+		else if($group['group_state']==2)
+		{
+			echo "<span class='icon16 icon_cross'></span>";
+		}
 	?>
 	</td>
 	<td><?php echo date('Y-m-d',$group['addtime'])?></td>
@@ -88,6 +104,19 @@ if($group['group_state']==1)
 <?php endforeach;?>
 </table>
 <?php echo $page?>
+<div class="alert alert-info">
+				 <button type="button" class="close" data-dismiss="alert">×</button>
+				 <h4>状态说明</h4>
+				 <div>
+				 <p class="muted">
+				 <span class='icon16 icon_accept'></span><span>可用状态</span>
+				 &nbsp;&nbsp;<span class="icon16 icon_add"></span>新申请
+				 &nbsp;&nbsp;<span class="icon16 icon_delete"></span> 禁用
+				 &nbsp;&nbsp;<span class="icon16 icon_cross"></span>删除状态
+				 </p>
+				 </div>
+			</div>
+</div>
 </div>
  <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
 <script type="text/javascript">

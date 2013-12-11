@@ -331,7 +331,9 @@ class Codeonline extends MY_Controller
 					if($this->ca->save($data))
 					{
 						//发送邮件
-						$msg=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
+						$edata['name']=$view_data['to_users']['realname'];
+						$edata['msg']=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
+						$msg=$this->load->view('mail/mail_common',$edata,TRUE);
 						sendcloud($view_data['to_users']['email'], '[通知]上线申请审批',$msg,$view_data['to_adduser']['email']);
 						return TRUE;
 					}
@@ -354,7 +356,9 @@ class Codeonline extends MY_Controller
 					if($this->ca->save($data))
 					{
 						//发送邮件
-						$msg=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
+						$edata['name']=$view_data['to_users']['realname'];
+						$edata['msg']=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
+						$msg=$this->load->view('mail/mail_common',$edata,TRUE);
 						sendcloud($view_data['to_users']['email'], '[通知]上线申请审批',$msg,$view_data['to_adduser']['email']);
 						return TRUE;
 					}
@@ -378,8 +382,10 @@ class Codeonline extends MY_Controller
 				if($this->ca->save($data))
 				{
 					//发送邮件
-					$msg=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
-					sendcloud($view_data['to_users']['email'], '[通知]上线申请审批',$msg,$view_data['to_adduser']['email']);
+					$edata['name']=$view_data['to_users']['realname'];
+					$edata['msg']=$this->load->view('mail/mail_codeonline.php',$view_data,TRUE);
+					$msg=$this->load->view('mail/mail_common',$edata,TRUE);
+					sendcloud($view_data['to_users']['email'], '[通知]上线申请测试确认审批',$msg,$view_data['to_adduser']['email']);
 					return TRUE;
 				}
 				else

@@ -102,7 +102,7 @@
 	}); 
            $(".deltype").click(function(){
             var href=$(this).attr("href");
-            layer.confirm('确定删除?(删除后将删除服务器上所对应的帐号)', function(){ 
+            layer.confirm('确定删除?(须先删除服务器所有帐号)', function(){ 
                 $.post(href,function(json_data){
                 if(json_data.status==1)
                  {

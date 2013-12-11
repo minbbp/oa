@@ -95,7 +95,7 @@
 		var href=$(this).attr('href');
 		var time=new Date().getTime();
 		$.get(href,{time:time},function(data){
-			layer.msg(data,5,1);
+			layer.alert(data,9,'查看详细');
 		});
 		return false;
 		});

@@ -49,7 +49,7 @@ class Git_level extends CI_Controller
 		 $gops['state']=1;
 		 if($this->gol->save($gops,$gits_opid))
 		 {
-			 if($gops['apply_type']!=1)//1，为git认证新增加机器
+		  if($gops['apply_type']!=1)//1，为git认证新增加机器
 			 {//检查用户组持有者是否申请通过了。否则直接给运维存取数据
 		 	  	if($this->creator->check_state($gits_opid))
 		 	 	 {
@@ -83,8 +83,10 @@ class Git_level extends CI_Controller
 		{
 			$tmp=$this->git->get_userinfo_by_git_id($gops['git_id']);
 			$subject="请对{$tmp['realname']}git申请进行处理";
-			$msg="请尽快处理！谢谢！";
-			sendcloud(ADRD_EMAIL_ONE, $subject, $msg);
+			$edata['msg']="{$subject}";
+			$edata['name']='刘士超';
+			$msg=$this->load->view('mail/mail_common',$edata,TRUE);
+			sendcloud(ADRD_EMAIL_ONE,$subject,$msg);
 			echo "系统已经发送邮件通知运维了！";
 			exit;
 		}
@@ -113,8 +115,10 @@ class Git_level extends CI_Controller
 		if($this->gol->save($data,$gits_opid))
 		{
 			$tmp=$this->git->get_userinfo_by_git_id($git_id);
-			$subject="您的上级驳回了您的git申请操作";
-			$msg=$subject."驳回原因".$data['description'];
+			$subject="您的上级主管驳回了您的git申请操作";
+			$edata['msg']=$subject."驳回原因:".$data['description'];
+			$edata['name']=$tmp['realname'];
+			$msg=$this->load->view('mail/mail_common',$edata,TRUE);
 			sendcloud($tmp['email'], $subject, $msg);
 			echo 1;
 			exit;

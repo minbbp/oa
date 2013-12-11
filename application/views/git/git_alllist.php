@@ -37,10 +37,10 @@
 			 <?php if($state===0 ||$state===1):?>
 			 <?php else:?>
 			<ul class="nav nav-pills">
-			<li class="active"><?php echo anchor('git/alllist/1','可用git认证');?></li>
-			<li><?php echo anchor('git/alllist/2','禁用git认证');?></li>
-			<li><?php echo anchor('git/alllist/-1','删除git认证');?></li>
-			<li><?php echo anchor('git/alllist/0','新申请git认证');?></li>
+			<li <?php if($git_state==1):?>class="active"<?php endif;?>><?php echo anchor('git/alllist/1','可用git认证');?></li>
+			<li <?php if($git_state==2):?>class="active"<?php endif;?>><?php echo anchor('git/alllist/2','禁用git认证');?></li>
+			<li <?php if($git_state==-1):?>class="active"<?php endif;?>><?php echo anchor('git/alllist/-1','删除git认证');?></li>
+			<li <?php if($git_state==0):?>class="active"<?php endif;?>><?php echo anchor('git/alllist/0','新申请git认证');?></li>
 			</ul>
 			<?php endif;?>
 			</div>
@@ -62,15 +62,15 @@
 			}
 			 else if($git->git_state==-1)
 			{
-				echo "<span class='icon-ban-circle'></span>";
+				echo "<span class='icon16 icon_cross'></span>";
 			}
 			else if($git->git_state==2)
 			{
-				echo "<span class='icon-remove'></span>";
+				echo "<span class='icon16 icon_delete'></span>";
 			}
 			else if($git->git_state==0)
 			{
-				echo "<small class='text-error'>不可用</small>";
+				echo "<small class='icon16 icon_key'></small>";
 			}
 			
 		
@@ -204,6 +204,7 @@ $(function(){
 				return false;
 			}
 			});
+		
 });
 </script>
 </body>

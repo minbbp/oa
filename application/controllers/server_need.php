@@ -12,17 +12,15 @@ class Server_need extends CI_Controller
 		parent::__construct();
 		$this->load->helper(array('form','url','message'));
 		$this->load->library(array('dx_auth','session','pagination','form_validation'));
-        $this->load->model('server_need_model','sn',TRUE);
-        $this->load->model('server_approve_model','sa',TRUE);
-         //$this->load->model('server_type_model','st',TRUE);
-        $this->load->model('codeonline_model','co',TRUE);
+                $this->load->model('server_need_model','sn',TRUE);
+                $this->load->model('server_approve_model','sa',TRUE);
+                $this->load->model('codeonline_model','co',TRUE);
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->session->userdata('DX_user_id');
 	}
      public function index()
      {
              $data['title']="服务器申请";
-            //$data['list'] = $this->st->get_all('&nbsp&nbsp&nbsp&nbsp');
             $data['list'] = $this->co->get_all_list();
             $data['use_list'] = $this->sn->get_use();
             $this->load->view("server/server_apply",$data);

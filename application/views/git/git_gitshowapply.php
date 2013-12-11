@@ -2,7 +2,7 @@
 <html>
   <head>
   <meta charset="utf-8">
-    <title>运维OA_login</title>
+    <title><?php echo $title;?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="<?php echo base_url('/bootstrap/css/bootstrap.min.css')?>" rel="stylesheet" media="screen">
@@ -46,8 +46,10 @@
 				<div class="control-group show3">
 					<label class="control-label" for="gitpub">ssh-key:</label>
 					<div class="controls">
-						<textarea id="gitpub"  name="gitpub[]" rows="5" class="span5" ></textarea>
+						<textarea id="gitpub"  name="gitpub[]" rows="5" class="m_gitpub span5" ></textarea>
+						<span class="help-block">小提示：ssk-key不能为空！</span>
 					</div>
+					
 				</div>
 				<div id="add_key_content"></div>	
 				<div class="control-group">
@@ -82,17 +84,37 @@
 					if($(this).val()==1){$('.show2').show();}else{$('.show2').hide();}
 					});
 				$("#add_key").click(function(){
-					$html='<div class="control-group">'+$('.show3').html()+'</div>'
+					$html='<div class="control-group">'+$('.show3').html()+'</div>';
 					$('#add_key_content').append($html);
 				 });
-				 
+				$(document).delegate('.m_gitpub','blur',function(){
+					if($(this).val()=='')
+					{
+						$(this).parents('div.control-group ').removeClass('success').addClass('error');
+						//console.log($(this).siblings('span.help-block').addClass('error').text());
+					}
+					else
+					{
+						$(this).parents('div.control-group ').removeClass('error').addClass('success');
+					}
+					});
 				$("#submit").click(function(){
+					$('.m_gitpub').trigger('blur');
+					if($('div.error').length==0){
+				
 					$.post("<?php echo base_url('index.php/git/apply_add')?>",$('#gitform').serialize(),function(data){
 							layer.alert(data,9);
 							$("#gitform")[0].reset();
 						});
 					return false;
+					}
+					else
+					{
+						layer.alert('请检查ssk-key填写',8);
+						return false;
+					}
 					});
+				
 				});
 		</script>
   </body>

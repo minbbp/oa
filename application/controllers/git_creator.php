@@ -19,7 +19,7 @@ class Git_creator extends CI_Controller
 	 */
 	public function alllist()
 	{
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$config['total_rows']=$this->creator->alllist_count($this->user_id);
 		$config['base_url']=base_url('index.php/groupcreator/alllist');
 		$offset=intval($this->uri->segment(3));
@@ -30,7 +30,6 @@ class Git_creator extends CI_Controller
 		$data['page']=$page;
 		$data['title']='我的git组审批';
 		$this->load->view('gitp/group_creator_list',$data);
-
 	}
 	/**
 	 * 同意审批通过
@@ -58,8 +57,10 @@ class Git_creator extends CI_Controller
 		{
 			$gcre_rs=$this->creator->find_one($gcre_id);
 			$app_userinfo=$this->git->get_userinfo_by_git_id($gcre_rs['git_id']);
+			$edata['name']=$app_userinfo['realname'];
+			$edata['msg']=$subject."驳回原因：".$gcre_rs['gcre_description'];
 			$subject=$this->session->userdata('DX_realname')."驳回了您的git组申请";
-			$message=$subject."驳回原因：".$gcre_rs['gcre_description'];
+			$message=$this->load->view('mail/mail_common',$edata,TRUE);
 			//  发送邮件告诉用户驳回原因
 			if(sendcloud($app_userinfo['email'], $subject, $message))
 			{
@@ -136,7 +137,12 @@ class Git_creator extends CI_Controller
 					unset($gle_rs['gits_opid'],$gle_rs['user_id']);
 					if($this->gol->save($gle_rs))
 					{
+						$edata['msg']='您有一个git组申请未处理，请尽快处理！';
+						$edata['name']='刘士超';
+						$msg=$this->load->view('mail/mail_common',$edata,TRUE);
+						sendcloud(ADRD_EMAIL_ONE, '您有一个git组申请未处理',$msg);
 						echo " 请等待运维人员进行审批！";
+						
 					}
 					else
 					{

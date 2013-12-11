@@ -19,7 +19,7 @@ class Grouplevel extends CI_Controller
 	 */
 	public function alllist()
 	{
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$config['total_rows']=$this->gle->alllist_count($this->user_id);
 		$config['base_url']=base_url('index.php/grouplevel/alllist');
 		$offset=intval($this->uri->segment(3));
@@ -62,6 +62,10 @@ class Grouplevel extends CI_Controller
 		{
 			echo "审批失败，请联系管理员！_0";
 		}
+	}
+	public  function show_bohui($gle_id)
+	{
+		$this->load->view('gitp/show_bohui',array('gle_id'=>$gle_id,'title'=>'驳回git组申请'));
 	}
 	/**
 	 * 驳回用户的申请请求,发送邮件通知用户
@@ -117,7 +121,10 @@ class Grouplevel extends CI_Controller
 				  $data['gop_state']=0;
 				  $data['addtime']=time();
 				  $this->gop->save($data);
-				  sendcloud(array(ADRD_EMAIL_ONE), '您有有一个git组申请未处理', '您有一个git组申请为处理，请尽快处理！');
+				  $edata['msg']='您有一个git组申请未处理，请尽快处理！';
+				  $edata['name']='刘士超';
+				  $msg=$this->load->view('mail/mail_common',$edata,TRUE);
+				  sendcloud(ADRD_EMAIL_ONE, '您有一个git组申请未处理',$msg);
 		}
 	}
 }

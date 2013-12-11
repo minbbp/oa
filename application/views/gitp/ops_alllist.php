@@ -54,10 +54,9 @@
 <div id="bohui" class="span6  hidden" style="margin-left:10px">
 <form method='post'>
 <label for="gop_description">驳回原因：</label>
-<textarea rows="3" class="span5" name="gop_description" id="gop_description"></textarea>
-<label></label>
-<label></label><br/>
-<input type='submit' id="submit" class="btn btn-danger" value="驳回">&nbsp;&nbsp;&nbsp;<a href="javascript::void(0)"  id='guanbi'>关闭</a>
+<textarea rows="4" class="span5" name="gop_description" id="gop_description"></textarea>
+<br/><br/>
+<input type='submit' id="submit" class="btn btn-success" value="驳回">&nbsp;&nbsp;&nbsp;
 </form>
 </div>
 <script type="text/javascript">
@@ -65,24 +64,17 @@ $(function(){
  $(".showinfo").click(function(){
 	 var href=$(this).attr('href');
 	 var time=new Date().getTime();
-	 $.get(href,{time:time},function(data){
-		 $('.opshow').html(data);
-		 });
-	 
 		$.layer({
-				type:1,
+				type:2,
 				title:'操作说明',
-				offset:['20px','20px'],
-				area:['550','320'],
-				
+				offset:['80px','180px'],
+				area:['500','320'],
 				bgcolor:'#fff',
-				page:{dom:'.opshow'},
-				
+				border : [2,0.3, '#000', true],
+				iframe:{src:href+'/'+time},
 				close : function(index){
 					layer.close(index);
-					//$('.opshow').show();
 				}
-				
 			});
 		 return false;
 	 });
@@ -92,12 +84,12 @@ $(function(){
 		 $.get(href,{time:time},function(data){
 			if(data==1)
 			{
-				layer.alert('审批通过啦！',9);
+				layer.alert('审批通过！',9);
 				$("a[href='"+href+"']").parents('tr').remove();
 			}
 			else
 			{
-				layer.alert('审批失败啦！请联系管理员！',8);
+				layer.alert('审批失败！请联系管理员！',8);
 			}
 	   });
 		
@@ -111,7 +103,9 @@ $(function(){
 			type:1,
 			title:'驳回原因',
 			page:{dom:'#bohui'},
-			area:['450px','300px']
+			offset:['80px','180px'],
+			border : [2,0.3, '#000', true],
+			area:['500','220'],
 			});
 		$('#guanbi').on('click',function(){
 				layer.close(i);

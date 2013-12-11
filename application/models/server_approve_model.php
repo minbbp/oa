@@ -118,19 +118,14 @@ class Server_approve_model extends CI_Model
                         $message['status'] = 1;
                         $message['msg'] = "审批通过"; 
                          //写邮件
-                         
                             $info['info'] = $this->sn->find_need($result['sn_id']);
                             $to = ADRD_OP_TWO;
                             $subject = '新的服务器申请审批';
                             $m = $this->load->view('mail/mail_server_apply',$info,true);
                             $name = "运维人员";
                             $messages = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
-                            //$c = 
                             sendcloud($to, $subject, $messages);
-                            //
-                            
                         }else{
-                        log_message('error',$this->db->last_query());
                         $message['status'] = 0;
                         $message['msg'] = "审批失败,请联系管理员";  
                         }

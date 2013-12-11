@@ -66,18 +66,18 @@ class Gitgroups extends CI_Controller
 				$add_user_group[]=$tmp;
 			}
 			$this->gpuser->insert_more($add_user_group);
-			$this->create_check_andsendmail($insertgroup_id);
 			$mdata['show_msg']=1;
 			$mdata['title']='添加用户组信息成功！';
 			$mdata['all_users']=$this->myusers->get_all_users();
 			$this->load->view('gitp/edit',$mdata);
 			//redirect('gitgroups/index');
+			$this->create_check_andsendmail($insertgroup_id);
 		}
 		else
 		{
-			 $data['show_msg']=0;
+			$data['show_msg']=0;
 			$data['all_users']=$this->myusers->get_all_users();
-			$data['title']="用户组信息填写不合格";
+			$data['title']="git组信息填写不合格";
 			$this->load->view('gitp/edit',$data);
 		}
 		
@@ -91,7 +91,7 @@ class Gitgroups extends CI_Controller
 		$this->load->library('pagination');
 		$config['base_url']=base_url('index.php/gitgroups/groups/'.$state.'/');
 		$config['total_rows']=$this->groups->m_list_count($state);
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$config['uri_segment']=4;
 		$offset=intval($this->uri->segment(4));
 		$rs=$this->groups->m_list($offset,$config['per_page'],$state);
@@ -100,6 +100,7 @@ class Gitgroups extends CI_Controller
 		$allgroups['page']=$page;
 		$allgroups['groups']=$rs;
 		$allgroups['title']='git组管理';
+		$allgroups['state']=$state;
 		$this->load->view('gitp/group_m_list',$allgroups);
 	}
 	/**
@@ -110,7 +111,7 @@ class Gitgroups extends CI_Controller
 		$this->load->library('pagination');
 		$config['base_url']=base_url('index.php/gitgroups/alllist');
 		$config['total_rows']=$this->groups->alllist_count();
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->groups->alllist($config['per_page'],$offset,$this->user_id);
 		$this->pagination->initialize($config);
@@ -222,7 +223,7 @@ class Gitgroups extends CI_Controller
 		$this->load->library('pagination');
 		$config['base_url']=base_url('index.php/gitgroups/search');
 		$config['total_rows']=$this->groups->t_search($group_name);
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->groups->search($offset,$config['per_page'],$group_name);
 		$this->pagination->initialize($config);

@@ -26,12 +26,12 @@ class Git extends CI_Controller
 	}
 
 	/**
-	 * git 账号申请,视图展示
+	 * git 账号申请视图展示
 	 */
 	function gitshowapply()
 	{
 		//使用git组显示信息，获取所有的用户组
-		$data['git_groups']=$this->group->get_all();
+	   $data['git_groups']=$this->group->get_all();
 	   $this->load->view("git/git_gitshowapply",$data);
 	}
 	/**
@@ -48,6 +48,7 @@ class Git extends CI_Controller
 	    $data['add_user']=$this->user_id;
 	    $data['git_state']=0;
 	    $data['addtime']=time();
+	    //保存用户申请数据
 	    $insert_id=$this->git->save_apply($data);
 	    if($insert_id!=0)
 	    {//保存文件，进行批量保存
@@ -56,8 +57,9 @@ class Git extends CI_Controller
 	    	foreach($gitpubs as $sdata)
 	    	{
 	    		 // 写文件，保存文件内容
-	    		$time=time().'_'.rand(0, 10);
-	    		$git_pub=$this->_filter_line($sdata);//过滤字符串
+	    		$time=date('Y-m-d').'_'.rand(0, 10);//文件命名
+	    		//过滤字符串
+	    		$git_pub=$this->_filter_line($sdata);
 	    		$tmp['gitpub']=$this->session->userdata('DX_username')."".$time.".pub";
 	    		if(FALSE===file_put_contents('./uploads/pub/'.$tmp['gitpub'], $git_pub))
 				{
@@ -103,21 +105,23 @@ class Git extends CI_Controller
 	{
 		$pid=$this->session->userdata('DX_pid');
 		if($pid==0)
-		{//直接发送请求给op，可以是全部的op，但是目前只发送给其中的一个。
-			//1, 先把要审核的信息存储到数据库中，2，信息存储完毕之后发送邮件给运维
-			$opdata['type_id']=1;
+		{	
+			//直接发送请求给op，但是目前只发送给刘士超进行处理。
+			//1, 先把要审核的信息存储到数据库中
+			//2,信息存储完毕之后发送邮件给运维
+			$opdata['type_id']=1;//1为运维审批，0为主管审批
 			$opdata['git_id']=$insert_id;
 			$opdata['user_id']=$this->user_id;
 			$opdata['state']=0;
 			$opdata['btime']=time();
 			if($this->gol->save($opdata))
 			{
-				//数据存储之后，发送邮件给运维工程师
+				//数据存储之后，发送邮件给运维工程师,同时抄送申请者
 				$subject="请处理".$this->session->userdata('DX_realname')."的git认证申请!";
 				$data['msg']=$subject;
 				$data['name']='刘士超';
 				$msg=$this->load->view('mail/mail_common',$data,TRUE);
-				sendcloud(ADRD_EMAIL_ONE, $subject, $msg);
+				sendcloud(ADRD_EMAIL_ONE, $subject, $msg,$this->session->userdata('DX_email'));
 				echo "我们已经发送邮件通知运维工程师处理您的申请啦！";
 			}
 			else
@@ -144,9 +148,10 @@ class Git extends CI_Controller
 				$maildata['msg']="请审批您的下属{$this->session->userdata('DX_realname')}的git认证申请！";
 				$msg=$this->load->view('mail/mail_common',$maildata,TRUE);
 				$subject="请审批{$this->session->userdata('DX_realname')}git认证申请 ";
-				sendcloud($level_info['email'], $subject, $msg);
+				//发送信息通知主管的时候，抄送邮件给申请者一份
+				sendcloud($level_info['email'],$subject,$msg,$this->session->userdata('DX_email'));
 				$gits=$this->git->get_one($insert_id);
-				if(!empty($gits['add_datagroups']))
+				if($gits['add_datagroups']!="")
 				{//通知相关用户组人员进行审批
 						$gits_array=explode(',', $gits['add_datagroups']);
 						$creator_data['gle_id']=$level_op_id;
@@ -157,7 +162,7 @@ class Git extends CI_Controller
 						{
 							$creator_data['group_id']=$group_id;
 							$creator_data['gcre_creator']=$this->group->get_creator_by_group_id($group_id);
-							// 如果主管，怎不需要主管再进行审批。直接略过即可
+							// 如果说组的拥有者为当前用户的主管，则不需要主管再进行审批。
 							if($creator_data['gcre_creator']!=$level_info['id'])
 							{
 								$this->creator->save($creator_data);
@@ -181,7 +186,12 @@ class Git extends CI_Controller
 			}
 		}
 	}
-	//为git组创建者发送邮件的方法
+	/**
+	 * 为git组创建者发送邮件的方法
+	 * 用户申请git认证时发送邮件通知git组的创建者
+	 * @param int $group_id
+	 * @return boolean 如果发送成功返回true，失败返回false 
+	 */
 	public function sendmail_togroupcreator($group_id)
 	{
 		$emails=$this->group->get_email_by_group_id($group_id);
@@ -197,6 +207,7 @@ class Git extends CI_Controller
 		// 去除主管的邮件信息
 		
 		$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
+		$data['name']='git组拥有者';
 		$data['msg']=$this->utf8->clean_string("{$subject},请您审批！");
 		$msg=$this->load->view('mail/mail_common',$data,TRUE);
 		return sendcloud($tmp,$subject,$msg);
@@ -444,7 +455,7 @@ class Git extends CI_Controller
 		$rs=$this->git->alllist($config['per_page'],$offset,$git_state);
 		$this->pagination->initialize($config);
 		$page=$this->pagination->create_links();
-		$mygit=array('all_gits'=>$rs,"page"=>$page);
+		$mygit=array('all_gits'=>$rs,"page"=>$page,'git_state'=>$git_state);
 		$this->load->view("git/git_alllist",$mygit);
 	}
 	/**

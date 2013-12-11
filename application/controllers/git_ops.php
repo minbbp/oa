@@ -76,8 +76,10 @@ class Git_ops extends CI_Controller
 			//git 字符串增加结束
 			$users=$this->git->get_userinfo_by_git_id($gits_oprs['git_id']);
 			$subject="您的git用户组申请已经可以使用了";
-			$msg="您的git用户组申请已经开通了，请您使用！";
-			sendcloud($users['email'], $subject, $msg);
+			$edata['msg']="您的git用户组申请已经开通了，请您使用。";
+			$edata['name']=$users['realname'];
+			$msg=$this->load->view('mail/mail_common',$edata,TRUE);
+			sendcloud($users['email'], $subject,$msg);
 			echo "已发送邮件通知用户啦！";
 		}
 	}
@@ -114,7 +116,9 @@ class Git_ops extends CI_Controller
 		$userinfo=$this->user->get_useremail_by_id($gits['add_user']);
 		$user_email=$userinfo['email'];
 		$subject="您的git认证申请已经开通";
-		$message="您git认证申请已经开通,请参照找相关说明进行使用";
+		$edata['msg']="您git认证申请已经开通,请参照找相关说明进行使用";
+		$edata['name']=$userinfo['realname'];
+		$message=$this->load->view('mail/mail_common',$edata,TRUE);
 		sendcloud($user_email, $subject, $message);
 		echo "已经发送邮件通知了相关用户";
 	}
@@ -136,8 +140,10 @@ class Git_ops extends CI_Controller
 		$userinfo=$this->user->get_useremail_by_id($gits['add_user']);
 		$user_email=$userinfo['email'];
 		$subject="您的git认证添加机器已经申请成功";
-		$message="您git认证  添加机器已经成功，您现在可以使用该机器连接自己的库以及git组";
-		sendcloud($user_email, $subject, $message);
+		$edata['msg']="您git认证  添加机器已经成功，您现在可以使用该机器连接自己的库以及git组";
+		$edata['name']=$userinfo['realname'];
+		$message=$this->load->view('mail/mail_common',$edata,TRUE);
+		sendcloud($user_email,$subject,$message);
 		echo "已经发送邮件通知了相关用户";
 	}
 	/**
@@ -164,8 +170,9 @@ class Git_ops extends CI_Controller
 		unset($gits_oprs['gits_opid']);
 		if($this->gol->save($gits_oprs,$gits_opid))
 		{
-			$msg="您的git认证申请被驳回";
-			$content="git认证相关申请被{$this->session->userdata('DX_realname')}驳回.驳回原因：$description";
+			$subject="您的git认证申请被驳回";
+			$edata['name']='亲爱的用户';
+			$edata['msg']="git认证相关申请被{$this->session->userdata('DX_realname')}驳回.驳回原因：$description";
 			$tmp_to=$this->git->get_userinfo_by_git_id($git_id);
 			$to=$tmp_to['email'];
 			if($gits_oprs['apply_type']==0)
@@ -173,7 +180,8 @@ class Git_ops extends CI_Controller
 				$data['git_state']=-1;
 				$this->git->save($data,$git_id);
 			}
-			sendcloud($to, $msg, $content);
+			$msg=$this->load->view("mail/mail_common",$edata,TRUE);
+			sendcloud($to, $subject,$msg);
 			echo 1;
 		}
 		else

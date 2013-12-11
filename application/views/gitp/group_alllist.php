@@ -37,8 +37,8 @@
 <td><?php echo $group['group_id']?></td>
 <td><?php echo $group['group_name']?></td>
 <td><?php echo $group['realname']?></td>
-<td><?php if($group['group_state']==1){echo "<span class='icon-ok'></span>";}
-			else{echo "<span class='icon-remove'></span>";}
+<td><?php if($group['group_state']==1){echo "<span class='icon16 icon_accept'></span>";}
+			else{echo "<span class='icon16 icon_decline'></span>";}
 	?>
 	</td>
 <td>
@@ -48,7 +48,15 @@
 <?php endforeach;?>
 </table>
 <?php echo $page?>
+<div class="alert alert-info">
+				 <button type="button" class="close" data-dismiss="alert">×</button>
+				 <h4>状态说明</h4>
+				 <div>
+				 <p class="muted"><span class='icon16 icon_accept'></span><span>可用状态</span>&nbsp;&nbsp;<span class='icon16 icon_decline'></span>不可用状态</p>
+				 </div>
+			</div>
 </div>
+
 <script type="text/javascript">
 	$(function(){
 		$(".showuser").click(function(){

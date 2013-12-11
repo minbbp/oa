@@ -75,7 +75,7 @@ class Server_manage extends CI_Controller
             }else{
                 $count = $this->s->get_count();
             }
-            $page_size=PER_PAGE;//每页数量
+            $page_size=3;//每页数量
             $configpage['total_rows'] = $count;//一共有多少条数据
             $configpage['per_page'] = $page_size; //每页显示条数
             $configpage['first_link'] = '首页';

@@ -38,10 +38,8 @@
 			
 			if($c['myapply_status']==2)
 			{
-				echo "&nbsp;|&nbsp;";
-				echo anchor('codeonline/update/'.$c['apply_id']."/".$c['tester_id']."/".$c['m_id'],'修改');
-				echo "&nbsp;|&nbsp;";
-				echo anchor('codeonline/commit_apply/'.$c['apply_id']."/".$c['tester_id']."/".$c['m_id'],'提交审批','class="commit_apply"');
+				echo anchor('codeonline/update/'.$c['apply_id']."/".$c['tester_id']."/".$c['m_id'],"&nbsp;|&nbsp;修改");
+				echo anchor('codeonline/commit_apply/'.$c['apply_id']."/".$c['tester_id']."/".$c['m_id'],"&nbsp;|&nbsp;提交审批",'class="commit_apply"');
 			}?>
 			</td>
 			</tr>
@@ -60,6 +58,7 @@ $(function(){
 			var href=$(this).attr('href');
 			//发送get 请求，获取的机器数目
 			 $.get(href,{time:time},function(data){
+				 layer.alert(data);
 				 data=JSON.parse(data);
 				 console.log(data);
 				if(data.status==1)

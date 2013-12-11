@@ -84,7 +84,7 @@
 
  <div class="row ">
  <label>&nbsp;&nbsp;&nbsp;&nbsp;开发人员添加：</label>
- <div class="span3">
+ <div class="span3 multiple">
  <select multiple="multiple"  id="a_dev" size="8">
  <?php foreach ($all_users as $user):?>
  <option value="<?php echo $user['id'];?>"><?php echo $user['realname'];?></option>
@@ -92,14 +92,14 @@
  </select>
  </div>
  <div class="span2 text-center">
-  <p style="margin-top:30px; "><span class="btn add">添加&gt;&gt;</span></p>
+  <p style="margin-top:30px; "><span class="btn add btn-success">添加&gt;&gt;</span></p>
   <p style="margin-top:20px; "><span class="btn btn-danger remove">&lt;&lt;移除</span></p>
  </div>
- <div class="span3"><select multiple="multiple" id="b_dev" name="m_devloper" size="8"></select></div>
+ <div class="span3 multiple"><select multiple="multiple" id="b_dev" name="m_devloper[]" size="8"></select></div>
  </div>
  <div class="row">
  <label>&nbsp;&nbsp;&nbsp;&nbsp;测试人员添加：</label>
- <div class="span3">
+ <div class="span3 multiple">
  <select multiple="multiple" id="test_a"  size="8">
  <?php foreach ($all_users as $user):?>
  <option value="<?php echo $user['id'];?>"><?php echo $user['realname'];?></option>
@@ -107,15 +107,15 @@
  </select>
  </div>
  <div class="span2 text-center">
-  <p style="margin-top:30px; "><span class="btn add">添加&gt;&gt;</span></p>
+  <p style="margin-top:30px; "><span class="btn add btn-success">添加&gt;&gt;</span></p>
   <p style="margin-top:20px; "><span class="btn btn-danger remove">&lt;&lt;移除</span></p>
  </div>
- <div class="span3"><select multiple="multiple" name="m_tester" id="test_b" size="8"></select></div>
+ <div class="span3 multiple"><select multiple="multiple" name="m_tester[]" id="test_b" size="8"></select></div>
  </div>
  <div class="clearfix"></div>
   <div class="row">
  <label>&nbsp;&nbsp;&nbsp;&nbsp;依赖服务添加：</label>
- <div class="span3">
+ <div class="span3 multiple">
  <select multiple="multiple" id="re_a" size="8">
  <?php foreach($m_pid as $p):?>
     <option value="<?php echo $p['m_id'];?>"><?php echo $p['m_name'];?></option>
@@ -123,19 +123,19 @@
  </select>
  </div>
  <div class="span2 text-center">
-  <p style="margin-top:30px; "><span class="btn add">添加&gt;&gt;</span></p>
+  <p style="margin-top:30px; "><span class="btn add btn-success">添加&gt;&gt;</span></p>
   <p style="margin-top:20px; "><span class="btn btn-danger remove">&lt;&lt;移除</span></p>
  </div>
- <div class="span3">
- <select multiple="multiple" id="re_b" name="m_relymodel" size="8">
+ <div class="span3 multiple">
+ <select multiple="multiple" id="re_b" name="m_relymodel[]" size="8">
  </select>
  </div>
  </div>
 <div class="control-group  clearfix">
     <label class="control-label" for=re_status></label>
-    <div class="controls">
-       <input type="button" class="btn" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
-       <input type="submit" class="btn btn-primary span2" id="submit" value="提交"> 
+    <div class="controls pull-right">
+       <input type="button" class="btn btn-warning" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
+       <input type="submit" class="btn btn-success span2" id="submit" value="提交"> 
     </div>
  </div>
 <?php echo form_close();?>

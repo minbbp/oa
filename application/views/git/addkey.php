@@ -12,18 +12,18 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6" style="margin-left:15px;">
 	<div class="page-header">
-		<h4>加入新的ssh-key</h4>
+		<h3>加入新的ssh-key</h3>
 	</div>
 	<form action="<?php echo base_url('index.php/git/savekey')?>" method="post">
 	<input type="hidden" name="git_id" value="<?php echo $git_id;?>"/>
 	<label for="gitpub">ssh-key(对应的机器生成的ssk-key):</label>
 	<textarea rows="6" class="span5" name="gitpub" id="gitpub"></textarea>
 	<label></label>
-	<label>
-	<a href="javascript::" id="reset" class="btn">取消</a>&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="submit" value="提交" class="btn btn-primary" id="submit"/> 
+	<label style="margin-top:10px;">
+	<a href="javascript::void(0)" id="reset" class="btn btn-danger">取消</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="submit" value="提交" class="btn btn-success" id="submit"/> 
 	</label>
 	</form>
 	</div>

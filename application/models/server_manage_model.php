@@ -170,5 +170,12 @@ class Server_manage_model extends CI_Model
             $result = current($res->result_array());
             return $result['s_internet'];
         }
-
+        /**
+         * 代码上线部分使用的获取服务器列表的方法 minbbp add method 
+         */
+        public function get_server_by_str($str)
+        {
+        	$sql="select s_internet from server where s_id in ({$str})";
+        	return $this->db->query($sql)->result_array();
+        }
 }

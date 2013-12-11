@@ -58,6 +58,7 @@ class Codeonline_models extends MY_Controller
 			$data['m_pid']=$this->cm->get_info_by_pid();//依赖模块信息
 			//$data['server_rs']=$this->ms->get_rs('m_id',$m_id);服务器模块综合之后，不需要这个东西了
 			$data['devloper_rs']=$this->md->get_rs('m_id',$m_id);
+			//print_r($data['devloper_rs']);
 			$data['rely_rs']=$this->mr->get_rs('m_id',$m_id);
 			$data['test_rs']=$this->mt->get_rs('m_id',$m_id);
 			$data['title']="修改服务";
@@ -84,10 +85,10 @@ class Codeonline_models extends MY_Controller
 		$datamodel['m_head']=$this->input->post('m_head');
 		$datamodel['m_addtime']=time();
 		$datamodel['m_adduser_id']=$this->user_id;
-		$data_devloper['m_devloper']=$this->input->post('m_devloper');
-		$data_tester['m_tester']=$this->input->post('m_tester');
+		$data_devloper['m_devloper']=implode(',',$this->input->post('m_devloper'));
+		$data_tester['m_tester']=implode(',',$this->input->post('m_tester'));
 		//$data_mserver['m_server']=$this->input->post('m_server'); 废弃的业务逻辑
-		$data_relymodel['m_relymodel']=$this->input->post('m_relymodel');
+		$data_relymodel['m_relymodel']=implode(',',$this->input->post('m_relymodel'));
 		$m_id=$this->cm->save($datamodel);
 		if($m_id)
 		{
@@ -119,10 +120,10 @@ class Codeonline_models extends MY_Controller
 		$datamodel['m_head']=$this->input->post('m_head');
 		$datamodel['m_addtime']=time();
 		$datamodel['m_adduser_id']=$this->user_id;
-		$data_devloper['m_devloper']=$this->input->post('m_devloper');
-		$data_tester['m_tester']=$this->input->post('m_tester');
+		$data_devloper['m_devloper']=implode(',',$this->input->post('m_devloper'));
+		$data_tester['m_tester']=implode(',',$this->input->post('m_tester'));
 		//$data_mserver['m_server']=$this->input->post('m_server');废弃的业务逻辑
-		$data_relymodel['m_relymodel']=$this->input->post('m_relymodel');
+		$data_relymodel['m_relymodel']=implode(',',$this->input->post('m_relymodel'));
 		$this->cm->save($datamodel,$m_id);
 			//保存开发者，服务器，测试者，依赖模块信息
 		//$this->ms->update_more($data_mserver['m_server'],$m_id); 废弃的业务逻辑

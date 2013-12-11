@@ -19,7 +19,7 @@ private $user_id;
 	 */
 	public function alllist()
 	{
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$config['total_rows']=$this->creator->alllist_count($this->user_id);
 		$config['base_url']=base_url('index.php/groupcreator/alllist');
 		$offset=intval($this->uri->segment(3));

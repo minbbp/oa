@@ -12,9 +12,9 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6" style="margin-left:10px;">
 	<div class="page-header">
-		<h4>加入新的git组</h4>
+		<h3>加入新的git组</h3>
 	</div>
 	<?php if(!empty($nogroups)):?>
 	<form action="<?php echo base_url('index.php/git/savegroup')?>" method="post"  class="form-horizontal">
@@ -39,7 +39,7 @@
 	</div>
 	</form>
 	<?php else:?>
-	   <p class="text-center">系统暂时没有git组！<a href="javascript::" id="reset" >关闭</a></p>
+	   <h4 class="text-center">系统暂时没有git组！<a href="javascript::" id="reset" >关闭</a></h4>
 	   
 	<?php endif;?>
 	</div>

@@ -71,7 +71,6 @@ class Server_owner_model extends CI_Model
                 $tempw['s_id'] = $value['s_id'];
                 $this->db->set('s_owner', 's_owner-1', FALSE);
                  $this->db->where($tempw)->update('server');
-                log_message('error',$this->db->last_query());
             }
             $this->db->where_in('so_id',$arr)->delete('server_owner');
             return $this->db->affected_rows();

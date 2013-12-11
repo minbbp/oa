@@ -29,7 +29,7 @@ class Groupops extends  CI_Controller
 	 */
 	public function alllist()
 	{
-		$config['per_page']=5;
+		$config['per_page']=PER_PAGE;
 		$config['total_rows']=$this->gop->alllist_count();
 		$config['base_url']=base_url('index.php/groupops/alllist');
 		$offset=intval($this->uri->segment(3));
@@ -75,7 +75,10 @@ class Groupops extends  CI_Controller
 			$userinfo=$this->myusers->get_useremail_by_id($gop_rs['change_id']);
 			//更新状态，发送邮件
 			$this->groups->save($group_data,$gop_rs['group_id']);
-			sendcloud($userinfo['email'], "您的git用户组已经开通啦", '您好！ <p> 你的git用户组'.$group_rs['group_name'].'已经可以使用啦！</p>');
+			$edata['name']=$userinfo['realname'];
+			$edata['msg']='您的git用户组'.$group_rs['group_name'].'已经开通了！';
+			$msg=$this->load->view('mail/mail_common',$edata,TRUE);
+			sendcloud($userinfo['email'], "git用户组已经开通[通知]", $msg);
 			//审核通过发送邮件通知相关人员，同时修改用户组信息状态为可用
 			echo 1;
 		}
@@ -96,7 +99,10 @@ class Groupops extends  CI_Controller
 			$group_rs=$this->groups->find_one($gop_rs['group_id']);
 			$userinfo=$this->myusers->get_useremail_by_id($gop_rs['change_id']);
 			//更新状态，发送邮件
-			sendcloud($userinfo['email'], '您的git用户组被驳回','您好！ <p> 你的git用户组'.$group_rs['group_name'].'被运维驳回！驳回原因：'.$gop_rs['gop_description'].'</p>');
+			$edata['name']=$userinfo['realname'];
+			$edata['msg']='您的git用户组'.$group_rs['group_name'].'被运维驳回！驳回原因：'.$gop_rs['gop_description'];
+			$msg=$this->load->view('mail/mail_common',$edata,TRUE);
+			sendcloud($userinfo['email'], '您的git用户组被驳回',$msg);
 			//发邮件告知申请者
 			echo 1;
 		}

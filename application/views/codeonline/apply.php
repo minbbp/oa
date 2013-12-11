@@ -66,7 +66,7 @@
 <td><input name="file_item[]"  class="span2" type="text"/></td>
 <td><input name="file_item_old_value[]" class="span1"  type="text"/></td>
 <td><input name="file_item_new_value[]" class="span1" type="text"/></td>
-<td><a href="javascript:void(0)" class="add_tr"><span class="icon-plus"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon-remove"></span></a></td>
+<td><a href="javascript:void(0)" class="add_tr"><span class="icon16 icon_add"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon16 icon_delete"></span></a></td>
 </tr>
 </table>
 <table></table>
@@ -74,18 +74,18 @@
 <div class="clearfix"></div>
  <div class="row">
  <label>&nbsp;&nbsp;&nbsp;&nbsp;升级服务器添加：</label>
- <div class="span3">
- <select multiple="multiple" id="test_a"  name="server_update" size="8">
+ <div class="span3 multiple">
+ <select multiple="multiple" id="test_a"  name="server_update_old" size="8">
  <?php foreach ($server_rs as $user):?>
  <option value="<?php echo $user['s_id'];?>"><?php echo ($user['s_internet']);?></option>
  <?php endforeach;?>
  </select>
  </div>
  <div class="span2 text-center">
-  <p style="margin-top:30px; "><span class="btn add">添加&gt;&gt;</span></p>
+  <p style="margin-top:30px; "><span class="btn add btn-success">添加&gt;&gt;</span></p>
   <p style="margin-top:20px; "><span class="btn btn-danger remove">&lt;&lt;移除</span></p>
  </div>
- <div class="span3"><select multiple="multiple" name="server_update[]" id="test_b" size="8"></select></div>
+ <div class="span3 multiple"><select multiple="multiple" name="server_update[]" id="test_b" size="8"></select></div>
  </div>
 
  <div class="row " style="margin-top:20px">
@@ -104,9 +104,9 @@
  </div>
 <div class="control-group" style="margin-top:20px;">
     <label class="control-label" for=re_status></label>
-    <div class="controls">
-       <input type="button" class="btn" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
-       <input type="submit" class="btn btn-primary span2" id="submit" value="提交"> 
+    <div class="controls pull-right">
+       <input type="button" class="btn btn-warning" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
+       <input type="submit" class="btn btn-success span2" id="submit" value="提交"> 
     </div>
  </div>
 <?php echo form_close();?>
@@ -236,12 +236,13 @@ $(function(){
 					        btn : ['确认','暂时保存'],
 					        yes : function(){
 					        	 href=$('form').attr('action')+'/1';
+					        	
 								 $.post(href,$('form').serialize(),function(json_data){
 								 json_data=JSON.parse(json_data);
 									if(json_data.status==1)
 									{//页面进行条状
 										layer.alert(json_data.msg,8,'成功提示！',function(){
-											location.href='<?php echo base_url('index.php/codeonline/index');?>';
+											location.href='<?php echo base_url('index.php/codeonline/myapply');?>';
 											});
 									}
 									else
@@ -254,11 +255,12 @@ $(function(){
 					        {
 					        	 href=$('form').attr('action')+'/2';
 								 $.post(href,$('form').serialize(),function(json_data){
+									 console.log(json_data);
 									json_data=JSON.parse(json_data);
 									if(json_data.status==1)
 									{//页面进行条状
 										layer.alert(json_data.msg,8,'成功提示！',function(){
-											location.href='<?php echo base_url('index.php/requirements/index');?>';
+											location.href='<?php echo base_url('index.php/codeonline/myapply');?>';
 											});
 									}
 									else

@@ -2,7 +2,7 @@
 <html>
   <head>
   <meta charset="utf-8">
-    <title>运维OA_login</title>
+    <title>运维支撑平台</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -26,7 +26,7 @@
           <a class="brand" href="#"></a>
           <div class="nav-collapse collapse">
             <ul class="topnav">
-               <li class="topuser">欢迎您~<a href="#contact"><?php echo $userinfo['realname'];?></a></li>
+               <li class="topuser">欢迎您~<a href="javascript::void(0)"><?php echo $userinfo['realname'];?></a></li>
               <li><?php echo anchor("/auth/logout/","<b class='logout'></b>","target='_parent'");?></li>
             </ul>
           </div><!--/.nav-collapse -->
