@@ -83,10 +83,23 @@
 				$("input[name='is_group']").click(function(){
 					if($(this).val()==1){$('.show2').show();}else{$('.show2').hide();}
 					});
-				$("#add_key").click(function(){
+				/* $("#add_key").click(function(){
 					$html='<div class="control-group">'+$('.show3').html()+'</div>';
 					$('#add_key_content').append($html);
-				 });
+				 }); */
+				 $("#add_key").click(function(){
+						/*$html='<div class="control-group">'+$('.show3').html()+'</div>'
+						$('#add_key_content').append($html);*/
+	                                        $html='<div class="control-group">'+"<div class='control-group show3'><label class='control-label' for='gitpub'>ssh-key:</label><div class='controls'><textarea id='gitpub'  name='gitpub[]' rows='5' class='span5' ></textarea><span class='icon16 icon_decline del'></span></div></div>"+'</div>'
+						$('#add_key_content').append($html);
+	                                });
+	                                     /*更改添加*/
+	                                /*新添加*/
+	                                $('div').delegate('.del','click',function(){
+	                                    $(this).parent().parent().parent().remove();
+	                                });
+	                                 /*新添加*/
+					 
 				$(document).delegate('.m_gitpub','blur',function(){
 					if($(this).val()=='')
 					{

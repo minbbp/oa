@@ -78,7 +78,7 @@ class Codeonline extends MY_Controller
 	 */
 	public function update($apply_id,$tester_id,$m_id)
 	{
-		$data['title']="代码上线申请";
+		$data['title']="代码上线申请修改";
 		$data['server_rs']=$this->ms->get_all_list($m_id);
 		$data['tester_rs']=$this->mt->get_tester_by_m_id($m_id);
 		$data['m_id']=$m_id;
@@ -122,54 +122,49 @@ class Codeonline extends MY_Controller
 		$codeonline_data['apply_addtime']=time();
 		$codeonline_data['myapply_status']=$status;//0,为保存数据不提交上线申请。1为提交上线申请
 		$this->cat->save($codeonline_data,$apply_id);
-		//获取apply_id
 		//删除以前的文件信息，保存新的文件信息,生成批量保存文件的信息
 		$this->cf->delete($apply_id);
+		//保存更新的配置文件的值，保存成功后才能提交更新配置，文件名不能为空的话
 			$file_name=$this->input->post('file_name');
-			$file_item=$this->input->post('file_item');
-			$file_item_old_value=$this->input->post('file_item_old_value');
-			$file_item_new_value=$this->input->post('file_item_new_value');
-			$filedata=array();
-			$length=count($file_name);
-			for($i=0;$i<$length;$i++)
+			$tmp_file_name=implode(',', $file_name);
+			if(!empty($tmp_file_name))
 			{
-			$tmp['file_name']=$file_name[$i];
-			$tmp['file_item']=$file_item[$i];
-			$tmp['file_item_old_value']=$file_item_old_value[$i];
-			$tmp['file_item_new_value']=$file_item_new_value[$i];
-			$tmp['apply_id']=$apply_id;
-			$filedata[]=$tmp;
+				$file_item=$this->input->post('file_item');
+				$file_item_old_value=$this->input->post('file_item_old_value');
+				$file_item_new_value=$this->input->post('file_item_new_value');
+				$filedata=array();
+				$length=count($file_name);
+				for($i=0;$i<$length;$i++)
+				{
+					$tmp['file_name']=$file_name[$i];
+					$tmp['file_item']=$file_item[$i];
+					$tmp['file_item_old_value']=$file_item_old_value[$i];
+					$tmp['file_item_new_value']=$file_item_new_value[$i];
+					$tmp['apply_id']=$apply_id;
+					$filedata[]=$tmp;
+				}
+				if(FALSE==$this->cf->save_batch($filedata))
+				{
+					echo json_encode(array('status'=>0,'msg'=>'保存数据失败！'));
+					log_message('error','保存修改配置文件信息失败！');
+				}
 			}
-			if($this->cf->save_batch($filedata))
+			if($status==1)
 			{
-				//echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
-					//$msg=$this->load->view('mail/mail_codeonline',$data,TRUE);
-					//sendcloud($to, $subject, $msg,array());
-					//
-					if($status==1)
+					if($this->codeonline_apply($apply_id,$codeonline_data['tester_id'],$m_id))
 					{
-									if($this->codeonline_apply($apply_id,$codeonline_data['tester_id'],$m_id))
-									{
-										echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
-									}
-									else
-									{
-										echo json_encode(array('status'=>0,'msg'=>'保存审批数据失败！'));
-									}
+								echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
 					}
 					else
 					{
-							echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
+							echo json_encode(array('status'=>0,'msg'=>'保存审批数据失败！'));
 					}
-	
 			}
 			else
 			{
-					echo json_encode(array('status'=>0,'msg'=>'保存数据失败！'));
-					log_message('error','保存修改配置文件信息失败！');
+				echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
 			}
-			
-	}
+}
 	/**
 	 * 保存用户提交的上线申请
 	 * @param number $m_id
@@ -206,50 +201,44 @@ class Codeonline extends MY_Controller
 		if($apply_id)
 		{
 			$file_name=$this->input->post('file_name');
-			$file_item=$this->input->post('file_item');
-			$file_item_old_value=$this->input->post('file_item_old_value');
-			$file_item_new_value=$this->input->post('file_item_new_value');
-			$filedata=array();
-			$length=count($file_name);
-			for($i=0;$i<$length;$i++)
+			$tmp_file_name=implode(',', $file_name);
+			//log_message('error',$tmp_file_name);
+			if(!empty($tmp_file_name))
 			{
-				$tmp['file_name']=$file_name[$i];
-				$tmp['file_item']=$file_item[$i];
-				$tmp['file_item_old_value']=$file_item_old_value[$i];
-				$tmp['file_item_new_value']=$file_item_new_value[$i];
-				$tmp['apply_id']=$apply_id;
-				$filedata[]=$tmp;
-			}
-			if(!empty($filedata))
-			{
-				if($this->cf->save_batch($filedata))
+				$file_item=$this->input->post('file_item');
+				$file_item_old_value=$this->input->post('file_item_old_value');
+				$file_item_new_value=$this->input->post('file_item_new_value');
+				$filedata=array();
+				$length=count($file_name);
+				for($i=0;$i<$length;$i++)
 				{
-					//echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
-					//$msg=$this->load->view('mail/mail_codeonline',$data,TRUE);
-					//sendcloud($to, $subject, $msg,array());
-					//
-					if($status==1)
-					{
-						if($this->codeonline_apply($apply_id,$codeonline_data['tester_id'],$m_id))
-						{
-							echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
-						}
-						else
-						{
-							echo json_encode(array('status'=>0,'msg'=>'保存审批数据失败！'));
-						}
-					}
-					else
-					{
-						echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
-					}
-				
+					$tmp['file_name']=$file_name[$i];
+					$tmp['file_item']=$file_item[$i];
+					$tmp['file_item_old_value']=$file_item_old_value[$i];
+					$tmp['file_item_new_value']=$file_item_new_value[$i];
+					$tmp['apply_id']=$apply_id;
+					$filedata[]=$tmp;
+				}
+				if(FALSE==$this->cf->save_batch($filedata))
+				{
+					echo json_encode(array('status'=>0,'msg'=>'保存配置文件数据失败！'));
+					log_message('error','保存修改配置文件信息失败！');
+				}
+			}
+			if($status==1)
+			{
+				if($this->codeonline_apply($apply_id,$codeonline_data['tester_id'],$m_id))
+				{
+					echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
 				}
 				else
 				{
-					echo json_encode(array('status'=>0,'msg'=>'保存数据失败！'));
-					log_message('error','保存修改配置文件信息失败！');
+					echo json_encode(array('status'=>0,'msg'=>'保存审批数据失败！'));
 				}
+			}
+			else
+			{
+				echo json_encode(array('status'=>1,'msg'=>'保存数据成功！'));
 			}
 		}
 		else

@@ -42,14 +42,14 @@
                                     <div class="control-group inter">
                                       <label class="control-label" for="input_internet">内网IP</label>
                                       <div class="controls">
-                                          <input type="text" name="internet" id="input_internet"  placeholder="内网ip地址(不能为空)"  value=""/>
+                                          <input type="text" name="internet" id="input_internet" class="ipcheck"  placeholder="内网ip地址(不能为空)"  value=""/>
                                           <span class="help-inline"></span>
                                       </div>                    
                                     </div>
                                     <div class="control-group inter">
                                       <label class="control-label" for="input_winternet">外网IP</label>
                                       <div class="controls">
-                                          <input type="text" name="winternet" id="input_winternet"  placeholder="外网ip地址(可以为空)"  value=""/>
+                                          <input type="text" name="winternet" id="input_winternet"  class="ipchecks" placeholder="外网ip地址(可以为空)"  value=""/>
                                           <span class="help-inline"></span>
                                       </div>                    
                                     </div>
@@ -107,7 +107,7 @@
                                         </div>
                                     <div class="control-group">
                                       <div class="controls">
-                                        <input type="submit" class="btn" id="submit"  value="确认添加" />
+                                        <input type="submit" class="btn btn-success" id="submit"  value="确认添加" />
                                       </div> 
                                     </div>
                     		<?php echo form_close();?>
@@ -138,25 +138,67 @@
             $options.appendTo($other);
 	  });
         
+        function checkIP(value){
+            var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+            var reg = value.match(exp);
+            if(reg==null)
+            {
+            return false;
+            }else{
+            return true;
+            }
+        }
         
+        $('.ipcheck').blur(function(){
+            var bool;
+           bool = checkIP($(this).val());
+           if(bool){
+                $(this).next().text("");
+                $(this).parents('.control-group').removeClass('error').addClass('success');
+           }else{
+               $(this).next().text("ip地址填写错误");
+               $(this).parents('.control-group').removeClass('success').addClass('error');
+           }
+        })
         
         $('#textarea-desc').blur(function(){
            if($(this).val()==''){
                $('#descerror').text("必须输入作用描述");
+               $(this).parents('.control-group').removeClass('success').addClass('error');
            }else{
                $('#descerror').text('');
+               $(this).parents('.control-group').removeClass('error').addClass('success');
            }
        })
         var elment=['#inputCpu','#inputMem','#inputDisk'];
 	var msg=['cpu信息填写错误!','内存填写错误!','硬盘填写错误！'];
 	validate_callback(elment,msg);
-        
+	$('.ipchecks').blur(function(){
+        if($(this).val() !=''){
+   var bool;
+      bool = checkIP($(this).val());
+           if(bool){
+                $(this).next().text("");
+                $(this).parents('.control-group').removeClass('error').addClass('success');
+           }else{
+               $(this).next().text("ip地址填写错误");
+               $(this).parents('.control-group').removeClass('success').addClass('error');
+           }
+       }
+        else
+        {
+     	   $(this).next().text("");
+            $(this).parents('.control-group').removeClass('error');
+         }
+   });
 	$("#submit").click(function(){
-$('form input').trigger('blur');
-$('form textarea').trigger('blur');
-$('#test_b option').attr("selected",'selected');
-if($('#textarea-desc').val() == ''){ return false; }
+            $('form input').trigger('blur');
+            $('form textarea').trigger('blur');
+            $('#test_b option').attr("selected",'selected');
+            if($('#textarea-desc').val() == ''){ return false; }
+            $('.ipcheck').trigger('blur');   
         //使用ajax提交表单
+        if($('.error').length != 0){return false;}
         var href=$('form').attr('action');
          $.post(href,$('form').serialize(),function(json_data){
                if(json_data.status==1)

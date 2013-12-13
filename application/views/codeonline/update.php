@@ -69,6 +69,14 @@
 <td><a href="javascript:void(0)" class="add_tr"><span class="icon16 icon_add"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon16 icon_delete"></span></a></td>
 </tr>
 <?php endforeach;?>
+<?php if(empty($config_rs)):?>
+<tr><td><input name="file_name[]"   class="span2" type="text"/></td>
+<td><input name="file_item[]"  class="span2"    type="text"/></td>
+<td><input name="file_item_old_value[]" class="span1"    type="text"/></td>
+<td><input name="file_item_new_value[]" class="span1"     type="text"/></td>
+<td><a href="javascript:void(0)" class="add_tr"><span class="icon16 icon_add"></span></a>&nbsp;&nbsp;<a href="javascript:void(0)" class="remove_tr"><span class="icon16 icon_delete"></span></a></td>
+</tr>
+<?php endif;?>
 </table>
 <table></table>
 </div>
@@ -210,8 +218,36 @@ $(function(){
 		
 		
 	  });
+  $('#git_tag').blur(function(){
+		var $val=$(this).val();
+		if(''!=$val)
+		{
+			if(/v\d+\.\d+\.\d+\.\d+/.test($val))
+			{
+				$("#git_tag").parents('.control-group').removeClass('error').addClass('success');
+				$("#git_tag").siblings('.help-inline').addClass('icon-ok').text('');
+			}
+			else
+			{
+				
+				$("#git_tag").parents('.control-group').removeClass('success').addClass('error');
+				$("#git_tag").siblings('.help-inline').removeClass('icon-ok').text('git标签格式错误！正确格式v0.9.0.1');
+			}
+		}
+		else
+		{
+			$("#git_tag").parents('.control-group').removeClass('error');
+			$("#git_tag").siblings('.help-inline').text('');
+		}
+	  });
 	$("#submit").click(function(){
+		$('form input').trigger('blur');
 		$('#test_b option').attr('selected','selected');
+		if(null==$('#test_b').val())
+		{
+			layer.alert('请选择服务器');
+			return false;
+		}
 			if($('form .error').length)
 			{
 				layer.alert('表单内容填写错误！',8,'错误提示！');

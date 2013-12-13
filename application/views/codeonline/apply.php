@@ -85,7 +85,7 @@
   <p style="margin-top:30px; "><span class="btn add btn-success">添加&gt;&gt;</span></p>
   <p style="margin-top:20px; "><span class="btn btn-danger remove">&lt;&lt;移除</span></p>
  </div>
- <div class="span3 multiple"><select multiple="multiple" name="server_update[]" id="test_b" size="8"></select></div>
+ <div class="span3 multiple"><select multiple="multiple" name="server_update[]" id="test_b"  size="8"></select></div>
  </div>
 
  <div class="row " style="margin-top:20px">
@@ -203,8 +203,36 @@ $(function(){
 		
 		
 	  });
+  $('#git_tag').blur(function(){
+		var $val=$(this).val();
+		if(''!=$val)
+		{
+			if(/v\d+\.\d+\.\d+\.\d+/.test($val))
+			{
+				$("#git_tag").parents('.control-group').removeClass('error').addClass('success');
+				$("#git_tag").siblings('.help-inline').addClass('icon-ok').text('');
+			}
+			else
+			{
+				
+				$("#git_tag").parents('.control-group').removeClass('success').addClass('error');
+				$("#git_tag").siblings('.help-inline').removeClass('icon-ok').text('git标签格式错误！正确格式v0.9.0.1');
+			}
+		}
+		else
+		{
+			$("#git_tag").parents('.control-group').removeClass('error');
+			$("#git_tag").siblings('.help-inline').text('');
+		}
+	  });
 	$("#submit").click(function(){
+		$('form input').trigger('blur');
 		$('#test_b option').attr('selected','selected');
+		if(null==$('#test_b').val())
+		{
+			layer.alert('请选择服务器');
+			return false;
+		}
 			if($('form .error').length)
 			{
 				layer.alert('表单内容填写错误！',8,'错误提示！');

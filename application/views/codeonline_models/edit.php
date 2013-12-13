@@ -74,7 +74,7 @@
     <div class="controls">
       <select  id="op_id" name="op_id">
       <?php foreach ($op_users as $op):?>
-      <option value="<?php echo $op['id'];?>" <?php if($op['id']==$m_rs['m_head']){echo "selected";}?>><?php echo $op['realname'];?></option>
+      <option value="<?php echo $op['id'];?>" <?php if($op['id']==$m_rs['op_id']){echo "selected";}?>><?php echo $op['realname'];?></option>
       <?php endforeach;?>
       </select>
  	 <span class="help-inline"></span>

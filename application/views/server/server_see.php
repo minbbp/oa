@@ -42,24 +42,24 @@
                                      <div class="control-group inter">
                                       <label class="control-label" for="input_internet">内网IP</label>
                                       <div class="controls">
-                                          <input type="text" name="internet" id="input_internet"  placeholder="内网ip地址"  value="<?php echo $info['s_internet']; ?>"/>
+                                          <input type="text" name="internet" id="input_internet" class="ipcheck" placeholder="内网ip地址"  value="<?php echo $info['s_internet']; ?>"/>
                                           <span class="help-inline"></span>
-                                          <span class="help-inline"><a href="" class="internei ia icon16 icon_add" style="display:none"></a></span>
+                                          <span class="help-inline"><a href="" class="internei ia icon16 icon_add" ></a></span>
                                       </div>                    
                                     </div>
                                       <?php foreach ($ipnei_list as $value) { ?>
                                             <div class='control-group inter'>
                                                     <label class='control-label' for='input_internet'>内网IP</label><div class='controls'>
-                                                        <input  type='text' name='internetnei[]' id='input_internet'  placeholder='内网ip地址'  value='<?php echo $value['si_ip'] ?>'/><span class='help-inline'></span>
-                                                        <span class='help-inline'><a href='' class='internei ia icon16 icon_add' style="display:none"></a></span>
-                                            <span class='help-inline'><a href='' class='interb ia icon16 icon_delete'style="display:none" ></a></span></div></div>
+                                                        <input  type='text'  class="ipcheck" name='internetnei[]' id='input_internet'  placeholder='内网ip地址'  value='<?php echo $value['si_ip'] ?>'/><span class='help-inline'></span>
+                                                        <span class='help-inline'><a href='' class='internei ia icon16 icon_add' ></a></span>
+                                            <span class='help-inline'><a href='' class='interb ia icon16 icon_delete'></a></span></div></div>
                                        <?php  } ?>
                                     <div class="control-group inter">
                                       <label class="control-label" for="input_winternet">外网IP</label>
                                       <div class="controls">
-                                          <input type="text" name="winternet" id="input_winternet"   placeholder="外网ip地址"  value="<?php echo $info['s_winternet']; ?>"/>
+                                          <input type="text" name="winternet" id="input_winternet"  class="ipchecks"  placeholder="外网ip地址"  value="<?php echo $info['s_winternet']; ?>"/>
                                           <span class="help-inline"></span>
-                                          <span class="help-inline"><a href="" class="interwai ia icon16 icon_add" style="display:none" ></a></span>
+                                          <span class="help-inline"><a href="" class="interwai ia icon16 icon_add"  ></a></span>
                                       </div>                    
                                     </div>
 
@@ -68,10 +68,10 @@
                                             <div class='control-group inter'>
                                                     <label class='control-label' for='input_internet'>外网IP</label>
                                                     <div class='controls'>
-                                                    <input  type='text' name='internetwai[]' id='input_internet'  placeholder='内网ip地址'  value='<?php echo $value['si_ip'] ?>'/>
+                                                    <input  type='text' name='internetwai[]' id='input_internet'  class="ipcheck" placeholder='内网ip地址'  value='<?php echo $value['si_ip'] ?>'/>
                                                     <span class='help-inline'></span><span class='help-inline'>
-                                                        <a href='' class='interwai ia icon16 icon_add' style="display:none"></a></span>
-                                                    <span class='help-inline'><a href='' class='interb ia icon16 icon_delete' style="display:none"></a></span></div></div>
+                                                        <a href='' class='interwai ia icon16 icon_add'></a></span>
+                                                    <span class='help-inline'><a href='' class='interb ia icon16 icon_delete' ></a></span></div></div>
                                       <?php  } ?>
                                     <div class="control-group">
                                       <label class="control-label" >Isp</label>
@@ -121,8 +121,6 @@
                                         <br />
                                         <br />
                                         </div>
-     
-
                                           <?php if($list_owner){ ?>
                                          <div id ="server_owner" >
                                          <div class="row" >
@@ -168,13 +166,13 @@
       $(function(){
         $('form').delegate('.internei','click',function(){
          var c = $(this).parent().parent().parent();
-        var str = "<div class='control-group inter'><label class='control-label' for='input_internet'>内网IP</label><div class='controls'><input  type='text' name='internetnei[]' id='input_internet'  placeholder='内网ip地址'  value=''/><span class='help-inline'></span><span class='help-inline'><a href='' class='internei icon16 icon_add' ></a></span><span class='help-inline'><a href='' class='interb icon16 icon_delete' ></a></span></div></div>";
+        var str = "<div class='control-group inter'><label class='control-label' for='input_internet'>内网IP</label><div class='controls'><input class='ipcheck' type='text' name='internetnei[]' id='input_internet'  placeholder='内网ip地址'  value=''/><span class='help-inline'></span><span class='help-inline'><a href='' class='internei icon16 icon_add' ></a></span><span class='help-inline'><a href='' class='interb icon16 icon_delete' ></a></span></div></div>";
         c.after(str);
                 return false;
         })
        $('form').delegate('.interwai','click',function(){
          var c = $(this).parent().parent().parent();
-        var str = "<div class='control-group inter'><label class='control-label' for='input_internet'>外网IP</label><div class='controls'><input  type='text' name='internetwai[]' id='input_internet'  placeholder='内网ip地址'  value=''/><span class='help-inline'></span><span class='help-inline'><a href='' class='interwai icon16 icon_add' ></a></span><span class='help-inline'><a href='' class='interb icon16 icon_delete' ></a></span></div></div>";
+        var str = "<div class='control-group inter'><label class='control-label' for='input_internet'>外网IP</label><div class='controls'><input class='ipcheck' type='text' name='internetwai[]' id='input_internet'  placeholder='内网ip地址'  value=''/><span class='help-inline'></span><span class='help-inline'><a href='' class='interwai icon16 icon_add' ></a></span><span class='help-inline'><a href='' class='interb icon16 icon_delete' ></a></span></div></div>";
         c.after(str);
          return false;
         })
@@ -215,24 +213,68 @@
             $options.appendTo($other);
 	  });
         
-        
+           function checkIP(value){
+            var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+            var reg = value.match(exp);
+            if(reg==null)
+            {
+            return false;
+            }else{
+            return true;
+            }
+        }
+           $('.ipchecks').blur(function(){
+               if($(this).val() !=''){
+          var bool;
+             bool = checkIP($(this).val());
+                  if(bool){
+                       $(this).next().text("");
+                       $(this).parents('.control-group').removeClass('error').addClass('success');
+                  }else{
+                      $(this).next().text("ip地址填写错误");
+                      $(this).parents('.control-group').removeClass('success').addClass('error');
+                  }
+              }
+               else
+               {
+            	   $(this).next().text("");
+                   $(this).parents('.control-group').removeClass('error');
+                }
+          });
+          
+        $('form').delegate('.ipcheck','blur',function(){
+            var bool;
+           bool = checkIP($(this).val());
+           if(bool){
+                $(this).next().text("");
+                $(this).parents('.control-group').removeClass('error').addClass('success');
+           }else{
+               $(this).next().text("ip地址填写错误");
+               $(this).parents('.control-group').removeClass('success').addClass('error');
+           }
+        })
         
         $('#textarea-desc').blur(function(){
            if($(this).val()==''){
                $('#descerror').text("必须输入作用描述");
+               $(this).parents('.control-group').removeClass('success').addClass('error');
            }else{
                $('#descerror').text('');
+               $(this).parents('.control-group').removeClass('error').addClass('success');
            }
        })
         var elment=['#inputCpu','#inputMem','#inputDisk'];
 	var msg=['cpu信息填写错误!','内存填写错误!','硬盘填写错误！'];
 	validate_callback(elment,msg);
 	$("#submit").click(function(){
-$('form input').trigger('blur');
-$('form textarea').trigger('blur');
-$('#test_b option').attr("selected",'selected');
-$('#test_owner option').attr("selected",'selected');
-if($('#textarea-desc').val() == ''){ return false; }
+            $('form input').trigger('blur');
+            $('form textarea').trigger('blur');
+            $('#test_b option').attr("selected",'selected');
+            $('#test_owner option').attr("selected",'selected');
+            if($('#textarea-desc').val() == ''){ return false; }
+              $('.ipcheck').trigger('blur');
+               if($('.error').length != 0){return false;}
+        
         //使用ajax提交表单
         var href=$('form').attr('action');
          $.post(href,$('form').serialize(),function(json_data){

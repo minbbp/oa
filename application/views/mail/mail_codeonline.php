@@ -62,7 +62,7 @@ font-size: 14px;
  <tr><td class="ttd">设计更新配置文件：</td>
  <td class="ttdr">
  <?php 
- echo "<h4>共".count($change_file)."项,如下所示</h4><ul style='list-style-type: none;'>"; 
+ echo "<h4>".count($change_file)==0?'无修改配置文件':'共'.count($change_file).'项，如下所示'."</h4><ul style='list-style-type: none;'>"; 
  foreach ($change_file as $file)
 {
  echo "<li>{$file['file_name']} 文件的 {$file['file_item']}项的值由  {$file['file_item_old_value']} &nbsp;修改为 {$file['file_item_new_value']}</li>";
