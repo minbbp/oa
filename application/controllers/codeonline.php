@@ -448,5 +448,59 @@ class Codeonline extends MY_Controller
 		sendcloud('wb-zhibinliu@sohu-inc.com', '上线审批【通知】', $msg);
 		echo $msg;
 	}
-	
+	/**
+	 * 选择需求列表
+	 *
+	 */
+	public function alist()
+	{
+		//获取选取的月份;
+		$months = isset($_POST['months']) ? $_POST['months'] : $this->input->get('months');
+		$num =PER_PAGE;
+		$offset=intval($this->uri->segment(3));
+		$keywords = $this->input->post('keyword');
+		if(empty($keywords)&&empty($months))
+		{
+			$count = $this->crm->count_alllist();
+			$res=$this->crm->alllist($offset,$num);
+		}
+		else
+		{	//如果关键字和月份都不为空，月份和关键字一起匹配，如果月份不为空，查询月份，否则关键字查询
+			if($months == 6)
+			{
+				$mon = time()-(60*60*24*180);
+			}
+			elseif($months == 3)
+			{
+				$mon = time()-(60*60*24*90);
+			}
+			else
+			{
+				$mon = time()-(60*60*24*30);
+			}
+			if (!empty($keywords)&&!empty($months))
+			{
+				$res = $this->crm->get_by_keywords($offset,$num,$keywords,$mon);
+			}
+			elseif($months)
+			{
+				$res = $this->crm->get_by_keywords($offset,$num,'',$mon);
+			}
+			else
+			{
+				$res = $this->crm->get_by_keywords($offset,$num,$keywords);
+			}
+				
+			 $count = count($res);
+				
+		}
+		$config['base_url'] =site_url('codeonline/alist');
+		$config['total_rows'] = $count;
+		$config['per_page']=$num;
+		$config['first_link'] = '首页';
+		$config['next_link'] = '下一页';
+		$this->pagination->initialize($config);
+		$page=$this->pagination->create_links();
+		$this->load->view('codeonline/alist',array('re_rs'=>$res,'page'=>$page,'title'=>'需求管理','months'=>$months,'keywords'=>$keywords));
+	}
 }

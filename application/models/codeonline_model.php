@@ -56,7 +56,7 @@ class Codeonline_model extends MY_Model
 	 */
 	public function get_info_by_pid($pid=0)
 	{
-		return $this->db->get_where($this->_table,array('pid'=>$pid))->result_array();
+		return $this->db->get_where($this->_table,array('pid'=>$pid,'status'=>0))->result_array();
 	}
 	/**
 	 * 获取所有新的列表信息

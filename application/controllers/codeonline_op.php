@@ -89,7 +89,7 @@ class Codeonline_op extends MY_Controller
 	 * 驳回用户申请信息
 	 * @param number $a_id
 	 */
-	public  function rejectsave($a_id)
+	public  function savereject($a_id)
 	{
 		$data['a_optime']=time();
 		$data['a_status']=-1;

@@ -26,6 +26,7 @@ class Requirements extends CI_Controller
 	public function index()
 	{
 		$config['total_rows']=$this->cr->count_alllist();
+		$config['base_url']=site_url('requirements/index');
 		$offset=intval($this->uri->segment(3));
 		$re_rs=$this->cr->alllist($offset,PER_PAGE);
 		$this->pagination->initialize($config);

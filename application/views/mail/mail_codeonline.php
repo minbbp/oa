@@ -53,7 +53,7 @@ font-size: 14px;
 }
 </style>
  <table class="t">
- <caption>上线涉及信息</caption>
+ <caption><b style="color:red;"><?php if($apply_rs['is_ungent']==1){echo "紧急";}?></b>上线涉及信息</caption>
  <tr><td class="ttd">上线申请人：</td><td class="ttdr"><?php echo $to_adduser['realname'];?></td></tr>
   <tr><td class="ttd">针对需求：</td><td class="ttdr"><?php echo $require_row->required_title;?></td></tr>
  <tr><td class="ttd">git地址：</td><td class="ttdr"><?php echo $apply_rs['git_url']?></td></tr>

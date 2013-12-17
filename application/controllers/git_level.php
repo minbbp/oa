@@ -25,7 +25,7 @@ class Git_level extends CI_Controller
 	
 		$config['base_url'] = base_url('index.php/git_level/index/');
 		$config['total_rows'] = $this->gol->count_alllist(0,$this->user_id);
-		$config['per_page'] = 5;
+		$config['per_page'] = PER_PAGE;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->gol->alllist($offset,$config['per_page'],0,$this->user_id);
 		$data['rs']=$rs;

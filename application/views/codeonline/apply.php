@@ -29,7 +29,7 @@
 <div class="control-group ">
     <label class="control-label" for="require_id"> 选择需求:</label>
     <div class="controls">
-      <input type="text" id="require_id" name="require_id"  placeholder="请输入需求关键字" autocomplete="off"/>
+      <input type="text" id="require_id" name="require_id"  readonly="readonly" placeholder="请选择需求关键字" />
  	 <span class="help-inline"></span>
  	</div>
  </div>
@@ -150,12 +150,28 @@ $('.datetimepicker').datetimepicker({
  }
 //使用js来验证用户的输出
 $(function(){
-	$("#require_id").typeahead({
+	$("#require_id").focus(function(){
+		$.layer({
+			    type: 2,
+			    title: '需求选择',
+			    fix: false,
+			    closeBtn: [0,true],
+			    shadeClose: true,
+			    shade: [0.1,'#fff', true],
+			    border : [4, 0.3, '#666', true],
+			    offset: ['100px',''],
+			    area: ['670px','610px'],
+			    iframe: {src: '<?php echo base_url('index.php/codeonline/alist');?>'},
+				});
+	
+	});
+	
+	/*$("#require_id").typeahead({
         source:<?php echo $testjson;?>,
         display: 'required_title',
         val: 'required_id' ,
-	});
-	$("#require_id").blur(function(){
+	});*/
+	/*$("#require_id").blur(function(){
 		var val=$(this).val();
 	 	$.post('<?php echo base_url('index.php/codeonline/check_require_name');?>',{name:val,time:new Date().getTime()},function(data)
 	 		 	{
@@ -170,7 +186,7 @@ $(function(){
 						$("#require_id").siblings('.help-inline').removeClass('icon-ok').text('需求编号不能自行输入！');
 					}
 		 		});
-		});
+		});*/
 	var elment=['#required_title','#required_no','#re_description'];
 	var msg=['标题信息填写错误!','需求编号填写错误!','需求内容不能为空！'];
 	validate_callback(elment,msg);

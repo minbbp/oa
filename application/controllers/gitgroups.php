@@ -69,9 +69,10 @@ class Gitgroups extends CI_Controller
 			$mdata['show_msg']=1;
 			$mdata['title']='添加用户组信息成功！';
 			$mdata['all_users']=$this->myusers->get_all_users();
+			$this->create_check_andsendmail($insertgroup_id);
 			$this->load->view('gitp/edit',$mdata);
 			//redirect('gitgroups/index');
-			$this->create_check_andsendmail($insertgroup_id);
+			
 		}
 		else
 		{
@@ -110,7 +111,7 @@ class Gitgroups extends CI_Controller
 	{
 		$this->load->library('pagination');
 		$config['base_url']=base_url('index.php/gitgroups/alllist');
-		$config['total_rows']=$this->groups->alllist_count();
+		$config['total_rows']=$this->groups->alllist_count($this->user_id);
 		$config['per_page']=PER_PAGE;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->groups->alllist($config['per_page'],$offset,$this->user_id);
@@ -171,6 +172,7 @@ class Gitgroups extends CI_Controller
 				$ldata['gle_level']=$this->session->userdata('DX_pid');
 				$ldata['gle_state']=0;//0  为未审核
 				$ldata['change_id']=$this->user_id;
+				$ldata['addtime']=time();
 				$this->gle->save($ldata);
 				$level_info=$this->session->userdata('level_info');
 				$usersubject="已通知您的主管对您的git组申请进行审批";

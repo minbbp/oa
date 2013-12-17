@@ -21,7 +21,7 @@ class Server_need extends CI_Controller
      public function index()
      {
              $data['title']="服务器申请";
-            $data['list'] = $this->co->get_all_list();
+            $data['list'] = $this->co->get_all_lists();
             $data['use_list'] = $this->sn->get_use();
             $this->load->view("server/server_apply",$data);
         }

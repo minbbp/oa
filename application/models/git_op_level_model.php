@@ -15,7 +15,7 @@ class Git_op_level_model extends CI_Model
 	/**
 	 * 数据保存
 	 */
-	public function save($data,$primarykey)
+	public function save($data,$primarykey=null)
 	{
 		if($primarykey)
 		{
@@ -39,7 +39,15 @@ class Git_op_level_model extends CI_Model
 	 */
 	public function alllist($offset,$num,$type_id=0,$user_id=0,$state=0)
 	{
-		$this->db->select('*');
+		$sql="select *,(select realname from users,gits where users.id=gits.add_user and gits.git_id=gits_level_op.git_id)realname from gits_level_op 
+				where  type_id=$type_id and state=$state ";
+		if(0!=$user_id)
+		{
+			$sql.=" and user_id=$user_id";
+		}
+		$sql.=" limit $offset,$num";
+		//echo $sql;
+		/* $this->db->select('*');
 		$this->db->from($this->_table);
 		$this->db->join('gits',"gits.git_id=$this->_table.git_id");
 		$this->db->join('users','users.id=gits.add_user');
@@ -50,12 +58,13 @@ class Git_op_level_model extends CI_Model
 		}
 		$this->db->where('state',$state);
 		$this->db->limit($num,$offset);
-		return $this->db->get()->result_array();
+		return $this->db->get()->result_array(); */
+		return $this->db->query($sql)->result_array();
 		
 	}
 	public function count_alllist($type_id=0,$user_id=0,$state=0)
 	{
-		$this->db->select('*');
+		/* $this->db->select('*');
 		$this->db->from($this->_table);
 		$this->db->join('gits',"gits.git_id=$this->_table.git_id");
 		$this->db->where('type_id',$type_id);
@@ -63,8 +72,14 @@ class Git_op_level_model extends CI_Model
 		{
 			$this->db->where('user_id',$user_id);
 		}
-		$this->db->where('state',$state);
-		return $this->db->count_all_results();
+		$this->db->where('state',$state); */
+		$sql="select *,(select realname from users,gits where users.id=gits.add_user and gits.git_id=gits_level_op.git_id)realname from gits_level_op
+		where  type_id=$type_id and state=$state ";
+		if(0!=$user_id)
+		{
+			$sql.=" and user_id=$user_id";
+		}
+		return $this->db->query($sql)->num_rows();
 	}
 	/**
 	 * 返回个个运维人员的操作数

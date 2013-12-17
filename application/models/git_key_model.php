@@ -7,7 +7,7 @@ class Git_key_model extends CI_Model
 	{
 		parent::__construct();
 	}
-	public function save_batch($data,$key)
+	public function save_batch($data,$key=null)
 	{
 		if($key)
 		{
@@ -18,7 +18,7 @@ class Git_key_model extends CI_Model
 			return $this->db->insert_batch($this->_table,$data);
 		}
 	}
-	public function save($data,$pk)
+	public function save($data,$pk=null)
 	{
 		if($pk)
 		{

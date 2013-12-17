@@ -77,5 +77,16 @@ class Codeonline_require_model extends CI_Model
 			return $rs;
 		}
 	}
+	/**
+	 *  由月份和关键字搜索到的需求列表
+	 *  @param $months,$keywords
+	 *  @return array
+	 */
+	public function get_by_keywords($offset,$num,$keywords='',$months=0)
+	{
+		$sql="select *,(select realname from users where users.id=$this->_table.re_add_user)realname from $this->_table
+		where re_status=1 and required_title LIKE '%$keywords%' and bg_time >= $months order by $this->primary_key desc limit $offset,$num";
+		return $this->db->query($sql)->result_array();
+	}
 	
 }

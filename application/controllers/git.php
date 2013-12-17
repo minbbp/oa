@@ -57,7 +57,7 @@ class Git extends CI_Controller
 	    	foreach($gitpubs as $sdata)
 	    	{
 	    		 // 写文件，保存文件内容
-	    		$time=date('Y-m-d').'_'.rand(0, 10);//文件命名
+	    		$time=date('Y-m-d-h-i-s').'_'.rand(0, 10);//文件命名
 	    		//过滤字符串
 	    		$git_pub=$this->_filter_line($sdata);
 	    		$tmp['gitpub']=$this->session->userdata('DX_username')."".$time.".pub";
@@ -142,7 +142,8 @@ class Git extends CI_Controller
 			$leveldata['state']=0;
 			$leveldata['type_id']=0;
 			$leveldata['btime']=time();
-			if($level_op_id=$this->gol->save($leveldata))
+			$level_op_id=$this->gol->save($leveldata);
+			if($level_op_id)
 			{// 发送邮件通知主管
 				$maildata['name']=$level_info['realname'];
 				$maildata['msg']="请审批您的下属{$this->session->userdata('DX_realname')}的git认证申请！";
@@ -158,6 +159,7 @@ class Git extends CI_Controller
 						$creator_data['gcre_state']=0;
 						$creator_data['git_id']=$insert_id;
 						$creator_data['change_id']=$this->user_id;
+						$creator_data['addtime']=time();
 						foreach ($gits_array as $group_id)
 						{
 							$creator_data['group_id']=$group_id;
@@ -169,12 +171,11 @@ class Git extends CI_Controller
 							}
 						}
 			//通过联合查询，给用户组用户发送邮件
-						if(FALSE==$this->sendmail_togroupcreator($gits['add_datagroups']))
-							{
-									echo "不能发送邮件通知git组创建者！";
-									log_message('error','->不同通知git组的创建者 git.php 168 line.');
-									exit;
-							}
+						echo "系统已经发送邮件通知相关审批人员!";
+						$this->sendmail_togroupcreator($gits['add_datagroups']);
+						//echo "不能发送邮件通知git组创建者！";
+						//log_message('error','->不同通知git组的创建者 git.php 168 line.');
+						//exit;
 				}
 			  echo "系统已经发送邮件通知相关人员进行审批！";
 			}
@@ -194,6 +195,7 @@ class Git extends CI_Controller
 	 */
 	public function sendmail_togroupcreator($group_id)
 	{
+		//log_message('error','调用到这里了'.$group_id);
 		$emails=$this->group->get_email_by_group_id($group_id);
 		$level_info=$this->session->userdata('levelinfo');
 		$tmp=array();
@@ -204,13 +206,16 @@ class Git extends CI_Controller
 				array_push($tmp, $email['email']);
 			}
 		}
-		// 去除主管的邮件信息
-		
-		$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
-		$data['name']='git组拥有者';
-		$data['msg']=$this->utf8->clean_string("{$subject},请您审批！");
-		$msg=$this->load->view('mail/mail_common',$data,TRUE);
-		return sendcloud($tmp,$subject,$msg);
+		// 去除主管的邮件信息,如果用户不为空发送邮件通知
+		//log_message('error',json_encode($tmp));
+		if(!empty($tmp))
+		{
+			$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
+			$data['name']='git组管理员';
+			$data['msg']="{$subject},请您审批！";
+			$msg=$this->load->view('mail/mail_common',$data,TRUE);
+			 sendcloud($tmp,$subject,$msg);
+		}
 	}
 	/**
 	 * 过滤回车换行符
@@ -232,7 +237,7 @@ class Git extends CI_Controller
 		$userinfo=$this->users->get_user_by_id($this->user_id);
 		$config['base_url'] = base_url('index.php/git/mygit/');
 		$config['total_rows'] = $this->git->mygit_count($this->user_id);
-		$config['per_page'] = 9;
+		$config['per_page'] = PER_PAGE;
 		$offset=intval($this->uri->segment(3));
 		$rs=$this->git->show_mygit($this->user_id,$config['per_page'],$offset);
 		$this->pagination->initialize($config);
