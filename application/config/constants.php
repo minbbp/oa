@@ -41,8 +41,8 @@ define('ADRD_EMAIL_ONE','wb-zhibinliu@sohu-inc.com');//git账号部分处理人�
 define('ADRD_EMAIL_TWO','wb-zhibinliu@sohu-inc.com');
 define('ADRD_EMAIL_OTHER','wb-zhibinliu@souhu-inc.com');
 define('ADRD_OP_TWO','wb-wennanma@sohu-inc.com');//服务器模块运维人员
-define('SYS_EMAIL','postmaster@adrdop-sendmore.sendcloud.org');//发件mail
-define('SYS_EMAILNAME','postmaster@adrdop');//发件人
+define('SYS_EMAIL','MessageCenter@sohu-inc.com');//发件mail
+define('SYS_EMAILNAME','MessageCenter@sohu-inc.com');//发件人
 //配置几个模块的文件夹显示目录
 define('CODE_ONLINE','codeonline');
 // 分页常量显示

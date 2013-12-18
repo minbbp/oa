@@ -18,6 +18,10 @@
 					我的git认证
 				</h3>
 			</div>
+			<?php 
+				if(empty($all_gits)): "<h4>您暂无git认证</h4>";
+				else:
+			?>
 			<table class="table table-bordered table-hover">
 			<thead><tr><th>#</th><th>机器标识</th> <th>受控目录</th><th>所属git组</th><th>账号状态</th><th>申请时间</th><th>申请操作</th></tr></thead>
 			<tbody>
@@ -61,6 +65,7 @@
 			<?php endforeach;?>
 			</tbody>
 			</table>
+			<?php endif;?>
 			<?php echo $page?>
 </div>
 <script type="text/javascript">

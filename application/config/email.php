@@ -6,10 +6,11 @@
 | Configuration of outgoing mail server.
 | */
 $config['protocol']='smtp';
-$config['smtp_host']='internal.smtpcloud.sohu.com';
+//$config['smtp_host']='internal.smtpcloud.sohu.com';
+$config['smtp_host']='transport.mail.sohu-inc.com';
 $config['smtp_port']='25';
-$config['smtp_user']='postmaster@adrdop-sendmore.sendcloud.org';
-$config['smtp_pass']='d2oG5mXj';
+//$config['smtp_user']='transport.mail.sohu-inc.com';
+//$config['smtp_pass']='d2oG5mXj';
 /* $config['smtp_host']='ssl://smtp.gmail.com';
 $config['smtp_port']='465';
 $config['smtp_user']='lbinzxue@gmail.com';

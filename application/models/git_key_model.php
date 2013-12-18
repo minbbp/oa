@@ -15,7 +15,9 @@ class Git_key_model extends CI_Model
 		}
 		else
 		{
-			return $this->db->insert_batch($this->_table,$data);
+			$rs= $this->db->insert_batch($this->_table,$data);
+			//log_message('error',$this->db->last_query());
+			return $rs;
 		}
 	}
 	public function save($data,$pk=null)

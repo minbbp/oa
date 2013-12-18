@@ -160,7 +160,22 @@
                $(this).parents('.control-group').removeClass('success').addClass('error');
            }
         })
-        
+                 $('.ipchecks').blur(function(){
+             if($(this).val() !=''){
+             var bool;
+           bool = checkIP($(this).val());
+                if(bool){
+                     $(this).next().text("");
+                     $(this).parents('.control-group').removeClass('error').addClass('success');
+                }else{
+                    $(this).next().text("ip地址填写错误");
+                    $(this).parents('.control-group').removeClass('success').addClass('error');
+                }
+            }else{
+                     $(this).next().text("");
+                     $(this).parents('.control-group').removeClass('error').addClass('success');
+            }
+            })
         $('#textarea-desc').blur(function(){
            if($(this).val()==''){
                $('#descerror').text("必须输入作用描述");
@@ -173,24 +188,7 @@
         var elment=['#inputCpu','#inputMem','#inputDisk'];
 	var msg=['cpu信息填写错误!','内存填写错误!','硬盘填写错误！'];
 	validate_callback(elment,msg);
-	$('.ipchecks').blur(function(){
-        if($(this).val() !=''){
-   var bool;
-      bool = checkIP($(this).val());
-           if(bool){
-                $(this).next().text("");
-                $(this).parents('.control-group').removeClass('error').addClass('success');
-           }else{
-               $(this).next().text("ip地址填写错误");
-               $(this).parents('.control-group').removeClass('success').addClass('error');
-           }
-       }
-        else
-        {
-     	   $(this).next().text("");
-            $(this).parents('.control-group').removeClass('error');
-         }
-   });
+        
 	$("#submit").click(function(){
             $('form input').trigger('blur');
             $('form textarea').trigger('blur');

@@ -2,7 +2,7 @@
 <html>
   <head>
   <meta charset="utf-8">
-    <title>运维OA_login</title>
+    <title>git账号列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="<?=base_url()?>/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -16,18 +16,20 @@
 			<div class="page-header">
 				<h3>
 					git账号列表 
-					<form class="form-search pull-right" action='<?php echo base_url('index.php/git/git_search');?>' method='post'>
-  					<input type="text" placeholder="输入用户名进行查找..." id="username" name="username" class="input-medium search-query">
-  					<button type="submit" id='username_submit' class="btn">搜索</button>
-				    </form>
-					
+					<form class=" pull-right " style="margin-bottom:10px;" action='<?php echo base_url('index.php/git/git_search');?>' method='post'>
+  					<div class="input-append">
+  					<input type="text" placeholder="输入用户名进行查找..."  name="username" id="username" style="line-height: 25px;" class="input-medium">
+  					<button type="submit" id='username_submit' class="btn btn-primary">Go!</button>
+				    </div>
+		  </form>
 				</h3>
 			</div>
 			<div class="span7">
+			
 			<?php 
 			if($state===0)
 			{
-				echo "<h4>没有你搜索的用户名 $user</h4><br/>的认证信息";
+				echo "<h4>没有你搜索的用户名 {$user}的认证信息</h4><br/>";
 			}
 			else if($state===1)
 			{
@@ -44,6 +46,7 @@
 			</ul>
 			<?php endif;?>
 			</div>
+			<?php if(empty($all_gits)):echo"<div class='span7'><h4>没有相关账号信息！</h4></div>";else:?>
 			<table class="table table-bordered table-hover">
 			<thead><tr><th>#</th><th>用户</th><th>机器标识</th> <th>受控目录</th><th>所属git组</th><th>账号状态</th><th>申请时间</th><th>申请操作</th></tr></thead>
 			<tbody>
@@ -95,6 +98,7 @@
 			</tbody>
 			</table>
 			<?php echo $page?>
+			<?php endif;?>
 </div>
 <script type="text/javascript">
 $(function(){

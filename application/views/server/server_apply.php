@@ -19,28 +19,28 @@
 			</div>
 				<?php echo form_open("server_need/add_apply",array('class'=>'form-horizontal','id'=>'serverform'))?>
                                     <div class="control-group">
-                                      <label class="control-label" for="inputCpu">Cpu</label>
+                                      <label class="control-label" for="inputCpu">Cpu :</label>
                                       <div class="controls">
                                         <input type="text" name="cpu" id="inputCpu" placeholder="Cpu"  value="<?php echo set_value('cpu'); ?>"/><?php echo form_error('cpu'); ?>
                                         <span class="help-inline"></span>
                                       </div>
                                     </div>
                                     <div class="control-group">
-                                      <label class="control-label" for="inputMem">Mem</label>
+                                      <label class="control-label" for="inputMem">Mem :</label>
                                       <div class="controls">
                                           <input type="text" name="mem" id="inputMem"  placeholder="内存"  value="<?php echo set_value('mem'); ?>"/> G<?php echo form_error('mem'); ?>
                                           <span class="help-inline"></span>
                                       </div>
                                     </div>
                                     <div class="control-group">
-                                      <label class="control-label" for="inputDisk">Disk</label>
+                                      <label class="control-label" for="inputDisk">Disk :</label>
                                       <div class="controls">
                                         <input type="text" name="disk" id="inputDisk" placeholder="硬盘"  value="<?php echo set_value('disk'); ?>"/> G<?php echo form_error('disk'); ?>
                                         <span class="help-inline"></span>
                                       </div>
                                     </div>
                                     <div class="control-group">
-                                      <label class="control-label" >Internet</label>
+                                      <label class="control-label" >Internet :</label>
                                       <div class="controls">
                                              <label class="radio inline ">
                                                 <input type="radio"  name="internet" id="inlineRadio1" value="1"> 需要
@@ -51,7 +51,7 @@
                                       </div>
                                     </div>
                                     <div class="control-group" id="sisp" style="display: none">
-                                      <label class="control-label" >Isp</label>
+                                      <label class="control-label" >Isp :</label>
                                       <div class="controls">
                                              <label class="radio inline ">
                                                 <input type="radio"  name="isp" id="inlineRadio3" value="电信"> 电信
@@ -62,7 +62,7 @@
                                       </div>
                                     </div>
                                         <div class="control-group">
-                                      <label class="control-label" >用途</label>
+                                      <label class="control-label" >用途 :</label>
                                            <div class="controls">
                                            <?php foreach($use_list as $k => $value){ ?>
                                              <label class="radio inline ">
@@ -74,7 +74,7 @@
                                         
                                        <div id ="serv" style="display: none">
                                          <div class="row" >
-                                        <label>&nbsp;&nbsp;&nbsp;&nbsp;申请服务：</label>
+                                        <label>&nbsp;&nbsp;&nbsp;&nbsp;申请服务 ：</label>
                                         <div class="span3">
                                         <select multiple="multiple" id="test_a"  name="server_update" size="8">
                                          <?php foreach($list as $value){ ?>
@@ -93,16 +93,16 @@
                                         </div>
      
                                         <div class="control-group">
-                                        <label class="control-label" for="textarea-desc">服务器作用描述</label>
+                                        <label class="control-label" for="textarea-desc">服务器作用描述 :</label>
                                         <div class="controls">
-                                            <textarea rows="5" class="span4" name="desc" id="textarea-desc" value="<?php echo set_value('desc'); ?>"></textarea><?php echo form_error('desc'); ?>   
+                                            <textarea rows="10" class="span5" name="desc" id="textarea-desc" value="<?php echo set_value('desc'); ?>"></textarea><?php echo form_error('desc'); ?>   
                                             <span id="descerror"></span>
                                         </div>
                                         </div>
                                      <div class="control-group">
-                                      <label class="control-label" for="inputNum">申请台数</label>
+                                      <label class="control-label" for="inputNum">申请台数 :</label>
                                       <div class="controls">
-                                        <input type="text" name="num" id="inputNum" placeholder="几台"  value="<?php echo set_value('num'); ?>"/><?php echo form_error('num'); ?>
+                                        <input type="text" name="num" id="inputNum" placeholder="几台"  value="<?php echo set_value('num'); ?>"/><?php echo form_error('num'); ?>台
                                         <span class="help-inline"></span>
                                       </div>
                                     </div>
@@ -158,6 +158,7 @@
         $('form input').trigger('blur');
         $('form textarea').trigger('blur');
         $('#test_b option').attr("selected",'selected');
+        if($('.error').length != 0){return false;}
         //使用ajax提交表单
         var href=$('form').attr('action');
          $.post(href,$('form').serialize(),function(json_data){

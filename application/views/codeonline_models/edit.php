@@ -134,7 +134,7 @@
 <div class="control-group  clearfix">
     <label class="control-label" for=re_status></label>
     <div class="controls pull-right">
-       <input type="button" class="btn btn-warning" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
+       <input type="button" class="btn btn-danger" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
        <input type="submit" class="btn btn-success span2" id="submit" value="提交"> 
     </div>
  </div>

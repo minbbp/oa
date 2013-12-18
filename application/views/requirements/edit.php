@@ -75,9 +75,9 @@
 </div> 
 <div class="control-group">
     <label class="control-label" for=re_status></label>
-    <div class="controls">
-       <input type="button" class="btn" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
-       <input type="submit" class="btn btn-primary span2" id="submit" value="提交"> 
+    <div class="controls ">
+       <input type="button" class="btn btn-danger" onclick="return history.back();" value="&lt;&lt;返回"> &nbsp;&nbsp;&nbsp;
+       <input type="submit" class="btn btn-success span2" id="submit" value="提交"> 
     </div>
  </div>
 <?php echo form_close();?>

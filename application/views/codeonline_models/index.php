@@ -16,6 +16,7 @@
  <div class="page-header">
 				<h3>
 					<?php echo $title?>
+					<?php echo anchor('codeonline_models/edit','新增服务','class="btn btn-primary pull-right"');?>
 				</h3>
 </div>
 <table class="table table-bordered">
@@ -41,7 +42,6 @@
  </tbody>
 </table>
 <?php echo $page;?>
-<p> <?php echo anchor('codeonline_models/edit','新增模块','class="btn"');?></p>
 </div>
 <script type="text/javascript">
 $(function(){

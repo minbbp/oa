@@ -30,6 +30,7 @@
 					<?php echo $title?>
 				</h3>
 </div>
+<?php if(empty($groups)):echo "<h4>暂无用户组！</h4>";else:?>
 <table class='table table-bordered table-hover'>
 <thead><tr><th>#</th><th>组名</th><th> 创建者</th> <th>账号状态</th> <th>用户组成员</th></tr></thead>
 <?php foreach ($groups as $group):?>
@@ -47,7 +48,7 @@
 </tr>
 <?php endforeach;?>
 </table>
-<?php echo $page?>
+<?php echo $page;endif;?>
 <div class="alert alert-info">
 				 <button type="button" class="close" data-dismiss="alert">×</button>
 				 <h4>状态说明</h4>

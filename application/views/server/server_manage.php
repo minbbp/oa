@@ -10,6 +10,8 @@
     <script src="<?=base_url()?>/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=base_url()?>/bootstrap/layer/layer.min.js"></script>
     <!-- bootstrap end -->
+
+
   </head>
   <body>
  <div class="span8 offset1">

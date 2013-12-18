@@ -21,6 +21,7 @@
 					<?php echo $title?>
 				</h3>
 </div>
+<?php if(empty($gops)):echo"<h4>暂无您的审批信息！</h4>";else:?>
 <table class='table table-bordered table-hover'>
 <thead><tr><th>#</th><th>组名</th><th> 申请者</th> <th>审批状态</th> <th>相关操作</th></tr></thead>
 <?php foreach ($gops as $gop):?>
@@ -46,7 +47,7 @@
 </tr>
 <?php endforeach;?>
 </table>
-<?php echo $page?>
+<?php echo $page;endif;?>
 </div>
 <div class="opshow hidden">
 <p class="text-error">运维人员需要如何如何的进行操作</p>

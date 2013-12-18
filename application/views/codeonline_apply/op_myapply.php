@@ -18,6 +18,7 @@
 					<?php echo $title; ?>
 				</h3>
 			</div>
+			<?php if(empty($apply_rs)):echo "<h4>没有您的审批信息！</h4>";else:?>
 			<table class="table table-bordered table-hover">
 			<thead>
 			<tr><th>#</th><th>申请人</th><th> 模块</th><th>版本</th><th>操作</th></tr>
@@ -44,7 +45,7 @@
 			</tbody>
 			<tfoot></tfoot>
 			</table>
-			<?php echo $page;?>
+			<?php echo $page;endif;?>
 </div>
 <!-- javascript  -->
 <script type="text/javascript">

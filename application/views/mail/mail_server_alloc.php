@@ -73,7 +73,7 @@ text-align: left;
 border-left: 1px solid #DDDDDD;
 }
 </style>
-<p>您的申请已被运维人员批复,具体信息如下:</p>
+<p>您在<?php echo $time; ?>的服务器申请已被运维人员批复,具体信息如下:</p>
         <table class="t">
 		<thead>
                         <tr>

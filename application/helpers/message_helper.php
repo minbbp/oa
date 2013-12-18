@@ -51,9 +51,9 @@ if(!function_exists('sendcloud_f'))
 			$_CI->email->message($message);
 			//file_put_contents(dirname(BASEPATH)."/email_path/20131127_1.eml", $_CI->email->_finalbody);
 			   $_CI->email->send();
-			 // $_CI->email->print_debugger();
+			   //$_CI->email->print_debugger();
 			
-			 file_put_contents(dirname(BASEPATH)."/email_path/20131127_3.eml", $_CI->email->_finalbody);
+			 //file_put_contents(dirname(BASEPATH)."/email_path/20131127_3.eml", $_CI->email->_finalbody);
 				return true;
 			 //file_put_contents(dirname(BASEPATH)."/email_path/20131127_3_debug.eml",$_CI->email->print_debugger()) ;
 			
@@ -168,41 +168,32 @@ if(!function_exists('_email_change'))
 function sendcloud($to,$subject,$msg,$cc=null)
 {
 	include BASEPATH."sendcloud/SendCloudLoader.php"; // 导入SendCloud依赖
-	//include '/path/to/sendcloud_php/SendCloudLoader.php';或者 导入SendCloud依赖
-	try {
-		// 设置脚本执行的最长时间，以免附件较大时，需要传输比较久的时间
-		// Fatal error: Maximum execution time of 30 seconds exceeded
-		// http://php.net/manual/en/function.set-time-limit.php
-		// set_time_limit(300);
-	
+	try 
+	{
 		$sendCloud = new SendCloud('postmaster@adrdop-sendmore.sendcloud.org','d2oG5mXj');
 		$sendCloud->setServer('internal.smtpcloud.sohu.com',25);
 		$message = new SendCloud\Message();
-		//$message->addRecipient($to); // 添加第一个收件人
 		if(is_array($to))
 		{
-			//$message->addRecipient($to[0]);
-			//unset($to[0]);
 			$message->addRecipients($to);
 		}
 		else
 		{
 			$message->addRecipient($to); // 添加第一个收件人
 		}
-		//->addRecipients(array('to2@sendcloud.com', 'to3@sendcloud.com')) // 添加批量接受地址
-		$message->setReplyTo('postmaster@adrdop-sendmore.sendcloud.org'); // 添加回复地址
+		$message->setReplyTo('MessageCenter@sohu-inc.com'); // 添加回复地址
 		if($cc)
 		{
 			$message->addCcs(_new_email_change($cc));
 		} // 添加cc地址
-		$message->setFromName('精准广告研发') // 添加发送者称呼
-		->setFromAddress('postmaster@adrdop-sendmore.sendcloud.org') // 添加发送者地址
+		$message->setFromName('MessageCenter@sohu-inc.com') // 添加发送者称呼
+		->setFromAddress('MessageCenter@sohu-inc.com') // 添加发送者地址
 		->setSubject($subject)  // 邮件主题
 		->setBody($msg); // 邮件正文html形式
-		//$message->setAltBody('SendCloud PHP SDK 测试正文，请参考');// 邮件正文纯文本形式，这个不是必须的。
-		return $sendCloud->send($message);
+		 return $sendCloud->send($message);
 		//print '<br>emailIdList:';
 		//print var_dump($sendCloud->getEmailIdList());// 取得emailId列表
+		//unset($sendCloud,$message);
 	} catch (Exception $e) {
 		//print "出现错误:";
 		//print $e->getMessage();

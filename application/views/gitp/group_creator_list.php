@@ -21,11 +21,12 @@
 					<?php echo $title?>
 				</h3>
 </div>
+<?php if(empty($groups)):echo"<h4>暂无您的审批信息！</h4>";else:?>
 <table class='table table-bordered table-hover'>
 <thead><tr><th>#</th><th>组名</th><th>申请者</th> <th>审核状态</th><th>相关操作</th></tr></thead>
 <?php foreach ($groups as $group):?>
 <tr>
-<td><?php echo $group['group_id']?></td>
+<td><?php echo $group['gcre_id']?></td>
 <td><?php echo $group['group_name']?></td>
 <td><?php echo $group['realname']?></td>
 <td>
@@ -55,7 +56,7 @@ else
 </tr>
 <?php endforeach;?>
 </table>
-<?php echo $page?>
+<?php echo $page;endif;?>
 </div>
 <div class="reject_view span5 hidden" style="margin-left:10px;">
 <form method="post" id='re_form'>

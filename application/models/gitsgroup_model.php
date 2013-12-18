@@ -111,7 +111,7 @@ class Gitsgroup_model extends CI_Model
 	 */
 	public function get_email_by_group_id($group_id)
 	{
-		$sql="select  distinct email from $this->table,users where $this->table.group_id in ({$group_id}) and users.id=$this->table.group_creator";
+		$sql="select  distinct email,users.realname,$this->table.group_name from $this->table,users where $this->table.group_id in ({$group_id}) and users.id=$this->table.group_creator";
 		return $this->db->query($sql)->result_array();
 	}
 	/**

@@ -25,7 +25,7 @@ class Server_approve extends CI_Controller
             $arr['uid'] = $this->user_id;
             $arr['rid'] = $this->role_id;
             $count = $this->sa->get_count($arr);
-            $page_size=6;//每页数量
+            $page_size=PER_PAGE;//每页数量
             //分页
             $configpage['base_url'] =site_url('server_approve/index');
             $configpage['total_rows'] = $count;//一共有多少条数据
@@ -144,7 +144,7 @@ class Server_approve extends CI_Controller
                 //$count = $this->s->get_count($where);
                 $count = $this->s->get_count();
             }
-            $page_size=10;//每页数量
+            $page_size=PER_PAGE;//每页数量
             $configpage['total_rows'] = $count;//一共有多少条数据
             $configpage['per_page'] = $page_size; //每页显示条数
             $configpage['first_link'] = '首页';
@@ -210,7 +210,7 @@ class Server_approve extends CI_Controller
                 $name = $info['sn_realname'];//收件人的真实姓名
                 $to = $this->sn->get_email_by_uid($info['u_id']);
                 $arr = $this->sn->get_info_by_uid($result['sa_current_id']);
-                $m = "您的申请已被".$arr['realname']."驳回<br /><p>具体原因是：</p><p>".$mes."</p>";
+                $m = "您在".date('Y年m月d日',$info['sn_time'])."的服务器申请已被".$arr['realname']."驳回<br /><p>具体原因是：</p><p>".$mes."</p>";
                 $messages = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
                 $subject="您的申请被驳回";
                 sendcloud($to, $subject, $messages);
@@ -237,9 +237,10 @@ class Server_approve extends CI_Controller
                    unset($temp);
                 }
                 $temps['arr'] = $arr;
+                $temps['time'] = date('Y年m月d日',$info['sn_time']);
                 $m = $this->load->view('mail/mail_server_alloc',$temps,true);
                 $messages = $this->load->view('mail/mail_new_common',array('name'=>$name,'msg'=>$m),true);
-                $subject="您的申请已批准";
+                $subject="您的服务器申请已批准";
                 sendcloud($to, $subject, $messages);
         }
         /*

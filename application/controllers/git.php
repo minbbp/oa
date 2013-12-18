@@ -41,9 +41,9 @@ class Git extends CI_Controller
 	{
 		$is_group=$this->input->post('is_group');
 		//保存git授权申请，保存成功之后保存文件，把文件批量保key表中
-		if($is_group==1)//加入组
+		if(1==$is_group)//加入组
 		{
-			$data['add_datagroups']=implode(',',$this->input->post('add_datagroups'));
+			$data['add_datagroups']=@implode(',',$this->input->post('add_datagroups'));
 		}
 	    $data['add_user']=$this->user_id;
 	    $data['git_state']=0;
@@ -73,19 +73,15 @@ class Git extends CI_Controller
 				$savedata[]=$tmp;
 	    	}
 	    	// 使用批量保存文件，如果保存失败
-	    	if($this->key->save_batch($savedata))
-	    	{
-	    		//发送邮件
-	    		$this->apply_add_sendemail($insert_id);
-	    	}
-	    	else
+	    	if(false==$this->key->save_batch($savedata))
 	    	{
 	    		echo "保存ssh-key 失败！";
 	    		$msg=$this->session->userdata('DX_realname')."->ssh-key保存导数据库时出现错误！";
 	    		log_message('error',$msg);
 	    		exit;
 	    	}
-	    	
+	    	//保存审批信息，并发送邮件通知运维
+	    	$this->apply_add_sendemail($insert_id);
 	    }
 	    else
 	    {
@@ -104,6 +100,7 @@ class Git extends CI_Controller
 	private function  apply_add_sendemail($insert_id)
 	{
 		$pid=$this->session->userdata('DX_pid');
+		//如果为主管或者没有主管的用户直接发送用户运维直接进行审批
 		if($pid==0)
 		{	
 			//直接发送请求给op，但是目前只发送给刘士超进行处理。
@@ -145,16 +142,10 @@ class Git extends CI_Controller
 			$level_op_id=$this->gol->save($leveldata);
 			if($level_op_id)
 			{// 发送邮件通知主管
-				$maildata['name']=$level_info['realname'];
-				$maildata['msg']="请审批您的下属{$this->session->userdata('DX_realname')}的git认证申请！";
-				$msg=$this->load->view('mail/mail_common',$maildata,TRUE);
-				$subject="请审批{$this->session->userdata('DX_realname')}git认证申请 ";
-				//发送信息通知主管的时候，抄送邮件给申请者一份
-				sendcloud($level_info['email'],$subject,$msg,$this->session->userdata('DX_email'));
 				$gits=$this->git->get_one($insert_id);
 				if($gits['add_datagroups']!="")
 				{//通知相关用户组人员进行审批
-						$gits_array=explode(',', $gits['add_datagroups']);
+						$gits_array=@explode(',', $gits['add_datagroups']);
 						$creator_data['gle_id']=$level_op_id;
 						$creator_data['gcre_state']=0;
 						$creator_data['git_id']=$insert_id;
@@ -171,13 +162,35 @@ class Git extends CI_Controller
 							}
 						}
 			//通过联合查询，给用户组用户发送邮件
+						//$maildata['name']=$level_info['realname'];
+						//$maildata['msg']="请审批{$this->session->userdata('DX_realname')}的git认证申请！";
+						//$msg=$this->load->view('mail/mail_common',$maildata,TRUE);
+						$subject="请审批{$this->session->userdata('DX_realname')}git认证申请 ";
+						//发送信息通知主管的时候，抄送邮件给申请者一份
+						$git_groups_info=$this->sendmail_togroupcreator($gits['add_datagroups']);
+						$son_msg=$this->load->view('mail/new_mail_git',array('realname'=>$this->session->userdata('DX_realname'),'levelinfo'=>$level_info,'gitgroups'=>$git_groups_info),TRUE);
 						echo "系统已经发送邮件通知相关审批人员!";
-						$this->sendmail_togroupcreator($gits['add_datagroups']);
-						//echo "不能发送邮件通知git组创建者！";
-						//log_message('error','->不同通知git组的创建者 git.php 168 line.');
-						//exit;
+						$msg=$this->load->view('mail/mail_common',array('name'=>'各位负责人','msg'=>$son_msg),TRUE);
+						$cc=array();
+						foreach ($git_groups_info as $g)
+						{
+							array_push($cc, $g['email']);
+						}
+						array_push($cc,$this->session->userdata('DX_email'));
+						sendcloud($level_info['email'],$subject,$msg,$cc);
 				}
-			  echo "系统已经发送邮件通知相关人员进行审批！";
+				else
+				{
+					//发送邮件通知主管即可
+					
+					echo "系统已经发送邮件通知相关人员进行审批！";
+					$maildata['name']=$level_info['realname'];
+					$maildata['msg']="请审批{$this->session->userdata('DX_realname')}的git认证申请！";
+					$msg=$this->load->view('mail/mail_common',$maildata,TRUE);
+					$subject="请审批{$this->session->userdata('DX_realname')}git认证申请 ";
+					sendcloud($level_info['email'],$subject,$msg,$this->session->userdata('DX_email'));
+				}
+			  
 			}
 			else
 			{
@@ -188,6 +201,17 @@ class Git extends CI_Controller
 		}
 	}
 	/**
+	 * 以下方法为测试方法
+	 */
+	/* public function test_sendmail_tog()
+	{
+		//$this->sendmail_togroupcreator('1,2');
+		$git_groups_info=$this->sendmail_togroupcreator('1,2');
+		$level_info=$this->session->userdata('level_info');
+		 $son_msg=$this->load->view('mail/new_mail_git',array('realname'=>$this->session->userdata('DX_realname'),'levelinfo'=>$level_info,'gitgroups'=>$git_groups_info),TRUE);
+		$msg=$this->load->view('mail/mail_common',array('name'=>'各位负责人','msg'=>$son_msg));
+	} */
+	/**
 	 * 为git组创建者发送邮件的方法
 	 * 用户申请git认证时发送邮件通知git组的创建者
 	 * @param int $group_id
@@ -197,25 +221,27 @@ class Git extends CI_Controller
 	{
 		//log_message('error','调用到这里了'.$group_id);
 		$emails=$this->group->get_email_by_group_id($group_id);
-		$level_info=$this->session->userdata('levelinfo');
+		$level_info=$this->session->userdata('level_info');
 		$tmp=array();
 		foreach ($emails as $email)
 		{
 			if($email['email']!=$level_info['email'])
 			{
-				array_push($tmp, $email['email']);
+				array_push($tmp, $email);
 			}
 		}
+		return $tmp;
 		// 去除主管的邮件信息,如果用户不为空发送邮件通知
 		//log_message('error',json_encode($tmp));
-		if(!empty($tmp))
+		/* if(!empty($tmp))
 		{
 			$subject="{$this->session->userdata('DX_realname')}申请加入您的git组";
 			$data['name']='git组管理员';
 			$data['msg']="{$subject},请您审批！";
 			$msg=$this->load->view('mail/mail_common',$data,TRUE);
-			 sendcloud($tmp,$subject,$msg);
-		}
+			return sendcloud($tmp,$subject,$msg);
+			
+		} */
 	}
 	/**
 	 * 过滤回车换行符

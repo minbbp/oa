@@ -28,9 +28,11 @@
  <div class="page-header">
 				<h3>
 					<?php echo $title?>
-					<form class="form-search pull-right" action='<?php echo base_url('index.php/gitgroups/search')?>' method='post'>
-  					<input type="text" placeholder="输入git组名查找..." id="group_name" name="group_name" class="input-medium search-query">
-  					<button type="submit" id='group_submit' class="btn">搜索</button>
+					<form class=" pull-right" action='<?php echo base_url('index.php/gitgroups/search')?>' method='post'>
+  					<div class="input-append">
+  					<input type="text" placeholder="输入git组名查找..." id="group_name" name="group_name" class="input-medium ">
+  					<button type="submit" id='group_submit' class="btn btn-primary">搜索</button>
+				   	</div>
 				    </form>
 				</h3>
 </div>

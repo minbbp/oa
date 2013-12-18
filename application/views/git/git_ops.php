@@ -18,6 +18,7 @@
 					git 认证审批
 				</h3>
 			</div>
+			<?php if(empty($rs)):echo "<h4>暂无您的审批！</h4>";else:?>
 			<table class="table table-bordered">
 			<thead><tr><th>#</th><th>申请者</th><th>申请内容</th><th>申请时间</th><th>操作</th></tr></thead>
 			<?php foreach($rs as $g):?>
@@ -54,6 +55,7 @@
 			<?php endforeach;?>
 			</table>
 			<?php echo $page;?>
+			<?php endif;?>
 </div>
 <script type="text/javascript">
 	$(function(){

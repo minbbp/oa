@@ -57,7 +57,7 @@
                                     <div class="control-group inter">
                                       <label class="control-label" for="input_winternet">外网IP</label>
                                       <div class="controls">
-                                          <input type="text" name="winternet" id="input_winternet"  class="ipchecks"  placeholder="外网ip地址"  value="<?php echo $info['s_winternet']; ?>"/>
+                                          <input type="text" name="winternet" id="input_winternet" class="ipchecks"  placeholder="外网ip地址"  value="<?php echo $info['s_winternet']; ?>"/>
                                           <span class="help-inline"></span>
                                           <span class="help-inline"><a href="" class="interwai ia icon16 icon_add"  ></a></span>
                                       </div>                    
@@ -223,25 +223,7 @@
             return true;
             }
         }
-           $('.ipchecks').blur(function(){
-               if($(this).val() !=''){
-          var bool;
-             bool = checkIP($(this).val());
-                  if(bool){
-                       $(this).next().text("");
-                       $(this).parents('.control-group').removeClass('error').addClass('success');
-                  }else{
-                      $(this).next().text("ip地址填写错误");
-                      $(this).parents('.control-group').removeClass('success').addClass('error');
-                  }
-              }
-               else
-               {
-            	   $(this).next().text("");
-                   $(this).parents('.control-group').removeClass('error');
-                }
-          });
-          
+        
         $('form').delegate('.ipcheck','blur',function(){
             var bool;
            bool = checkIP($(this).val());
@@ -254,6 +236,22 @@
            }
         })
         
+         $('.ipchecks').blur(function(){
+             if($(this).val() !=''){
+             var bool;
+           bool = checkIP($(this).val());
+                if(bool){
+                     $(this).next().text("");
+                     $(this).parents('.control-group').removeClass('error').addClass('success');
+                }else{
+                    $(this).next().text("ip地址填写错误");
+                    $(this).parents('.control-group').removeClass('success').addClass('error');
+                }
+            }else{
+                     $(this).next().text("");
+                     $(this).parents('.control-group').removeClass('error').addClass('success');
+            }
+            })
         $('#textarea-desc').blur(function(){
            if($(this).val()==''){
                $('#descerror').text("必须输入作用描述");
