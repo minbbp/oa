@@ -62,7 +62,7 @@
     <label class="control-label" for="m_head">负责人:</label>
     <div class="controls">
       <select id="m_head" name="m_head">
-      <?php foreach($level_users as $level):?>
+      <?php foreach($all_users as $level):?>
       <option value="<?php echo $level['id'];?>" <?php if($level['id']==$m_rs['m_head']){echo "selected";}?>><?php echo $level['realname'];?></option>
       <?php endforeach;?>
       </select>
