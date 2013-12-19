@@ -9,6 +9,7 @@
 			 <tr><td>git标签</td><td><?php echo $apply_row['git_tag'];?></td><td>git地址：</td><td><small style=" font-size:8;"><?php echo $apply_row['git_url'];?></small></td></tr>
 			 <tr><td>涉及更新配置文件</td>
 			 <td colspan="3">
+			 <?php if(empty($config_rs)):echo "<p>无涉及配置文件更改</p>";else:?>
 			<table>
 			<caption>修改的配置文件</caption>
 			<tr><th>文件名</th><th>修改项</th><th>旧值</th><th>新值</th></tr>
@@ -16,6 +17,7 @@
 			 <tr><td><?php echo $cf['file_name']?></td><td><?php echo $cf['file_item']?></td><td><?php echo $cf['file_item_old_value']?></td><td> <?php echo $cf['file_item_new_value'];?></td></tr>
 			 <?php endforeach;?>
 			 </table>
+			 <?php endif;?>
 			 </td></tr>
 			 <tr><td>涉及更新服务器</td>
 			 <td colspan="3">

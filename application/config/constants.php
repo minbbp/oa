@@ -40,7 +40,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('ADRD_EMAIL_ONE','wb-zhibinliu@sohu-inc.com');//git账号部分处理人员
 define('ADRD_EMAIL_TWO','wb-zhibinliu@sohu-inc.com');
 define('ADRD_EMAIL_OTHER','wb-zhibinliu@souhu-inc.com');
-define('ADRD_OP_TWO','wb-wennanma@sohu-inc.com');//服务器模块运维人员
+define('ADRD_OP_TWO','deyilong@sohu-inc.com');//服务器模块运维人员
 define('SYS_EMAIL','MessageCenter@sohu-inc.com');//发件mail
 define('SYS_EMAILNAME','MessageCenter@sohu-inc.com');//发件人
 //配置几个模块的文件夹显示目录
@@ -48,6 +48,6 @@ define('CODE_ONLINE','codeonline');
 // 分页常量显示
 define('PER_PAGE',10);
 //紧急上线审批主管定义
-define('UN_UNGENT_LEVEL',1);
+define('UN_UNGENT_LEVEL',16);
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

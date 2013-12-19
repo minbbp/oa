@@ -147,8 +147,10 @@
        $('#textarea-desc').blur(function(){
            if($(this).val()==''){
                $('#descerror').text("必须输入作用描述");
+               $(this).parents('.control-group').removeClass('success').addClass('error');
            }else{
                $('#descerror').text('');
+               $(this).parents('.control-group').removeClass('error').addClass('success');
            }
        })
         var elment=['#inputCpu','#inputMem','#inputDisk','#inputNum'];
@@ -168,7 +170,6 @@
                         location.reload();
                     });
                     //$("form")[0].reset();
-                    
                 }else{
                     layer.alert(json_data.msg,8,'错误提示！');
                 }

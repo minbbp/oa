@@ -162,6 +162,16 @@ class Server_manage extends CI_Controller
              $data['list'] = $this->co->get_all_list();
              $this->load->view('server/server_add',$data);
         }
+        /*
+         * ajax检查ip地址唯一
+         */
+        public function server_check_ip($ip) {
+            $num = $this->s->server_check_ip($ip);
+            echo json_encode($num);
+        }
+        /*
+         * 服务器插入
+         */
         public function server_insert() {
             $data['s_cpu'] = $this->input->post('cpu');
             $data['s_mem'] = $this->input->post('mem');

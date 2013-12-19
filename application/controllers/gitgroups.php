@@ -179,12 +179,12 @@ class Gitgroups extends CI_Controller
 				$levelsubject="请尽快审批您的下属员工{$this->session->userdata('DX_realname')}的git组信息变更申请";
 				$userdata['name']=$this->session->userdata('DX_realname');
 				$userdata['msg']="已通知您的主管对您提交的git账号组变更信息进行审批！";
-				$leveldata['name']=$levelinfo['realname'];
+				$leveldata['name']=$level_info['realname'];
 				$leveldata['msg']="请尽快审批您的下属员工：{$this->session->userdata('DX_realname')}的git组申请";
 				$user_message=$this->load->view('mail/mail_common',$userdata,TRUE);
 				$level_message=$this->load->view('mail/mail_common',$leveldata,TRUE);
 				//sendcloud($this->session->userdata('DX_email'), $usersubject, $user_message);
-				sendcloud($levelinfo['email'], $levelsubject, $level_message,$this->session->userdata('DX_email'));
+				sendcloud($level_info['email'], $levelsubject, $level_message,$this->session->userdata('DX_email'));
 			}
 	}
 	/**

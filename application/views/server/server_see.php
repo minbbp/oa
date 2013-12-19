@@ -226,10 +226,23 @@
         
         $('form').delegate('.ipcheck','blur',function(){
             var bool;
-           bool = checkIP($(this).val());
+            bool = checkIP($(this).val());
+            var newip = $(this).val();
+            var obj = $(this);
+            var oldip = "<?php echo $info['s_internet']; ?>";
+            href = "<?php echo site_url('server_manage/server_check_ip');?>"+'/'+$(this).val();
            if(bool){
-                $(this).next().text("");
-                $(this).parents('.control-group').removeClass('error').addClass('success');
+           $.get(href,function(data){
+              if(data == 0){
+                obj.next().text("");
+                obj.parents('.control-group').removeClass('error').addClass('success');
+              }else{
+                  if(newip != oldip){
+                  obj.next().text("ip地址冲突");
+                  obj.parents('.control-group').removeClass('success').addClass('error');
+                  }
+              }
+           },'json')
            }else{
                $(this).next().text("ip地址填写错误");
                $(this).parents('.control-group').removeClass('success').addClass('error');

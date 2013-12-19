@@ -7,8 +7,8 @@
 class Auth extends CI_Controller
 {
 	// 用户注册表单验证限制
-	var $min_username = 4;
-	var $max_username = 20;
+	var $min_username = 2;
+	var $max_username = 32;
 	var $min_password = 4;
 	var $max_password = 20;
 

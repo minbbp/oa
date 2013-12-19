@@ -74,13 +74,13 @@ $email = array(
 	<select name="pid">
 	<option value="0">无</option>
 	<?php foreach ($users as $user):?>
-	<option value="<?php echo $user->id;?>" <?php if($user->id=$userinfo['pid']){echo 'selected';}?>><?php echo $user->realname;?></option>
+	<option value="<?php echo $user->id;?>" <?php if($user->id==$userinfo['pid']){echo 'selected';}?>><?php echo $user->realname;?></option>
 	<?php endforeach;?>
 	</select>
 	</dd>	
 	
 	<dt></dt>
-	<dd><a href="javascript:history.back(-1)"  class="btn ">不理返回</a>&nbsp;&nbsp;<?php echo form_submit('register','提交修改',"class='btn btn-primary'");?></dd>
+	<dd><a href="javascript:history.back(-1)"  class="btn btn-danger">不理返回</a>&nbsp;&nbsp;<?php echo form_submit('register','提交修改',"class='btn btn-success'");?></dd>
 </dl>
 
 <?php echo form_close()?>

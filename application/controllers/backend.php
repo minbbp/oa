@@ -118,7 +118,7 @@ class Backend extends CI_Controller
 	function m_saveuser($id)
 	{
 		$val = $this->form_validation;
-		$val->set_rules('username', 'Username', 'trim|required|xss_clean|min_length[6]|max_length[18]|callback_username_check|alpha_dash');
+		$val->set_rules('username', 'Username', 'trim|required|xss_clean|min_length[2]|max_length[32]|callback_username_check|alpha_dash');
 		$val->set_rules('realname', 'Realname', 'trim|required|xss_clean|min_length[2]|max_length[5]');
 		$val->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email|callback_email_check');
 		// Run form validation and register user if it's pass the validation

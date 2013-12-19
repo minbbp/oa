@@ -31,8 +31,8 @@
 			<td><?php echo $val['sn_realname']; ?></td>
 			<td><?php echo $val['sn_use']; ?></td>
 			<td><?php echo date('Y-m-d H:i',$val['sn_time']); ?></td>
-                        <td><!--<?php if($val['sa_status'] == 0){ echo "未审核";}else if($val['sa_status'] == 1){ echo "已通过"; }else{ echo "已退回";} ; ?>-->
-                            <?php ;echo $val['nums'] ? "<div sn_id=".$val['sn_id']."  class='movesee' >"."已分配".$val['nums']."台"."</div>":"没分配"; ?>
+                        <td>
+                            <?php ;echo $val['nums'] ? "<div sn_id=".$val['sn_id']."  class='movesee' >"."已分配".$val['nums']."台"."</div>":"未处理"; ?>
                         </td>
                         <td><?php echo anchor('server_approve/server_agree/'.$val['sa_id'], '同意', "class='agree'") ?> | 
                             <?php echo anchor('server_approve/server_disagree/'.$val['sa_id'], '退回', "class='disagree'") ?> | 

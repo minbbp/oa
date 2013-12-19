@@ -178,4 +178,10 @@ class Server_manage_model extends CI_Model
         	$sql="select s_internet from server where s_id in ({$str})";
         	return $this->db->query($sql)->result_array();
         }
+        /**
+         * ajax检查服务器ip唯一
+        */
+        public function server_check_ip($ip) {
+        	return $this->db->where('s_internet',$ip)->count_all_results('server');
+        }
 }

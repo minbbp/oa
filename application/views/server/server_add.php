@@ -151,16 +151,26 @@
         
         $('.ipcheck').blur(function(){
             var bool;
+            var href;
+            var obj = $(this);
+            href = "<?php echo site_url('server_manage/server_check_ip');?>"+'/'+$(this).val();
            bool = checkIP($(this).val());
            if(bool){
-                $(this).next().text("");
-                $(this).parents('.control-group').removeClass('error').addClass('success');
+               $.get(href,function(data){
+              if(data == 0){
+                obj.next().text("");
+                obj.parents('.control-group').removeClass('error').addClass('success');
+              }else{
+                  obj.next().text("ip地址冲突");
+                  obj.parents('.control-group').removeClass('success').addClass('error');
+              }
+           },'json')
            }else{
                $(this).next().text("ip地址填写错误");
                $(this).parents('.control-group').removeClass('success').addClass('error');
            }
         })
-                 $('.ipchecks').blur(function(){
+           $('.ipchecks').blur(function(){
              if($(this).val() !=''){
              var bool;
            bool = checkIP($(this).val());

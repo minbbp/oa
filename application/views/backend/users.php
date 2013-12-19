@@ -55,20 +55,18 @@
 		$tmpl = array ( 'table_open'  => '<table   class="table table-bordered">' );
 		$this->table->set_template($tmpl);
 		echo form_open($this->uri->uri_string());
-		echo "<h3>用户管理</h3>";		
-		
-		echo '<hr/>';
+		echo "<div class='page-header'><h3>用户管理</h3></div>";
 		
 		echo $this->table->generate(); 
 		
 		
 		echo form_submit('ban', '禁用',"class='btn btn-danger'");
 		echo "&nbsp;&nbsp;";
-		echo form_submit('unban', '解禁',"class='btn btn-primary'");
+		echo form_submit('unban', '解禁',"class='btn btn-inverse '");
 		echo "&nbsp;&nbsp;";
-		echo form_submit('reset_pass', '重置密码',"class='btn btn-danger'");
+		echo form_submit('reset_pass', '重置密码',"class='btn btn-info'");
 		echo "&nbsp;&nbsp;";
-		echo anchor("auth/add_user",'用户添加',"class='btn btn-primary'");
+		echo anchor("auth/add_user",'用户添加',"class='btn btn-success'");
 		echo form_close();
 		
 		echo $pagination;

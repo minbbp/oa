@@ -56,7 +56,7 @@
 			 <!-- <tr><td></td><td></td><td></td><td></td></tr>
 			 <tr><td></td><td></td><td></td><td></td></tr> -->
 			 </table>
-			 <a href="javascript:history.back()" class="btn btn-warning span2 ">&lt;&lt;返回</a>
+			 <a href="javascript:history.back()" class="btn btn-danger span2 ">&lt;&lt;返回</a>
 			</div>
 			 
  </body>

@@ -11,7 +11,7 @@
     <!-- bootstrap end -->
   </head>
   <body>
- <div class="span6">
+ <div class="span6" style="margin-left:10px;">
 			<div class="page-header">
 				<h4>
 					git认证审批 _分配受控目录和机器标识
@@ -40,7 +40,7 @@
 			<label >
 			
 			<a href="javascript::void(0)" class="btn btn-danger" id="reset" >取消</a>&nbsp;&nbsp;&nbsp;
-			<input type="submit" id="submit" class="btn btn-primary " value="保存"/>
+			<input type="submit" id="submit" class="btn btn-success " value="保存"/>
 			 </label>
 			</form>
 </div>
