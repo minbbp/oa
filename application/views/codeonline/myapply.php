@@ -18,6 +18,7 @@
 					<?php echo $title; ?>
 				</h3>
 			</div>
+			<?php if(empty($codeonlines)): echo "<h4>您暂无上线申请！</h4>";else:?>
 			<table class="table table-bordered table-hover">
 			<thead><tr><th>#</th><th>模块</th> <th>升级版本</th><th>上线时间</th><th>申请状态</th><th>上线状态</th><th>操作</th></tr></thead>
 			<tbody>
@@ -46,7 +47,7 @@
 			<?php endforeach;?>
 			</tbody>
 			</table>
-			<?php echo $page?>
+			<?php echo $page;endif;?>
 </div>
 <script type="text/javascript">
 $(function(){

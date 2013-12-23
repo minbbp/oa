@@ -40,7 +40,7 @@ class Codeonline extends MY_Controller
 	{
 		$config['total_rows']=$this->cm->total_alllist($pid);
 		$config['per_page']=PER_PAGE;
-		$config['uri_segment'] =PER_PAGE;
+		$config['uri_segment'] =4;
 		$offset=intval($this->uri->segment(4));
 		$config['base_url']=base_url('index.php/codeonline/child/'.$pid.'/');
 		$re_rs=$this->cm->alllist($offset,PER_PAGE,$pid);

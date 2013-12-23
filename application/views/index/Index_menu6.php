@@ -80,6 +80,9 @@
         <ul class="nav nav-list">
 			<li class="active"><?php echo anchor("/server_need/index/","服务器申请","target=index_center");?></li>
  			<li><?php echo anchor("/server_approve/index/","服务器审批" ,'target=index_center')?></li>
+ 			<?php if($userinfo['email']==ADRD_OP_TWO):?>
+ 			<li><?php echo anchor("/server_manage/index/","服务器管理" ,'target=index_center')?></li>
+ 			<?php endif;?>
 	</ul>
       </div>
     </div>
