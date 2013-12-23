@@ -18,7 +18,7 @@
           <?php  } ?>
           <dt>服务器用途：</dt>
           <dd><?php echo $use_list[$info['s_use']]; ?></dd><br />
-          <?php if($info['s_use']> 2){ ?>
+          <?php if($info['s_use']> 2 && $info['s_type']!=''){ ?>
           <dt>已有服务：</dt>
           <dd><?php $arr = explode(',', $info['s_type']);
                     $array = array();

@@ -33,7 +33,7 @@
  	 <span class="help-inline"></span>
  	</div>
  </div>
- <input type="hidden" name="is_ungent" value="<?php echo $is_ungent;?>"> 
+ <input type="hidden" name="is_ungent" id="is_ungent" value="<?php echo $is_ungent;?>"> 
  <div class="control-group ">
     <label class="control-label" for="git_url">源码git地址:</label>
     <div class="controls">
@@ -52,7 +52,7 @@
     <label class="control-label" for="online_time"> 上线时间:</label>
     <div class="controls">
  		<div class="input-append date datetimepicker" id="online_time" data-date="<?php echo date("Y-m-d");?>" data-date-format="yyyy-mm-dd">
-    	<input class="span2" size="16" name="online_time" type="text" readonly="readonly" value="<?php echo date("Y-m-d",time());?>">
+    	<input class="span2" size="16" name="online_time" type="text" readonly="readonly" value="点击选择">
     	<span class="add-on"><i class="icon-th"></i></span>
 		</div>  
 		</div>
@@ -112,15 +112,25 @@
 <?php echo form_close();?>
 </div>
 <script type="text/javascript">
+var $val=$("#is_ungent").val();
+if($val==0)
+{
+	var myarray=[0,1,3,5,6];
+}
+else
+{
+	var myarray=[];
+}
 $('.datetimepicker').datetimepicker({
     language:  'zh-CN',
     weekStart: 1,
-    todayBtn:  1,
+    todayBtn:  false,
 	autoclose: 1,
-	todayHighlight: 1,
+	todayHighlight: 0,
 	startView: 2,
 	minView: 2,
-	forceParse: 0
+	forceParse: 0,
+	daysOfWeekDisabled:myarray,
 });
 
  function validate(element,msg)

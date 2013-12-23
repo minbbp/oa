@@ -91,11 +91,14 @@
                                         <br />
                                         <br />
                                         </div>
-     
+                                        <div class="control-group">
+                                            <label class="control-label" for="pdesc"></label>
+                                            <div class="controls" id="pdesc"><p>需填写：请求量、数据处理量、数据来源等详细描述<p></div>
+                                        </div>
                                         <div class="control-group">
                                         <label class="control-label" for="textarea-desc">服务器作用描述 :</label>
                                         <div class="controls">
-                                            <textarea rows="10" class="span5" name="desc" id="textarea-desc" value="<?php echo set_value('desc'); ?>"></textarea><?php echo form_error('desc'); ?>   
+                                            <textarea rows="10" class="span5" name="desc"  id="textarea-desc" value="<?php echo set_value('desc'); ?>"></textarea><?php echo form_error('desc'); ?>   
                                             <span id="descerror"></span>
                                         </div>
                                         </div>

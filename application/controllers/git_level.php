@@ -135,7 +135,7 @@ class Git_level extends CI_Controller
 	 */
 	public function showinfo($gits_opid)
 	{
-		$this->load->model('Gitsgroup_model',group,TRUE);
+		$this->load->model('Gitsgroup_model','group',TRUE);
 		$gops=$this->gol->find_one($gits_opid);
 		$gits=$this->git->get_one($gops['git_id']);
 		if($gops['newgroups_id']!="")

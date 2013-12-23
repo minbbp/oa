@@ -19,7 +19,7 @@
 				</h3>
 			</div>
 			<?php 
-				if(empty($all_gits)): "<h4>您暂无git认证</h4>";
+				if(empty($all_gits)): echo"<h4>您暂无git认证</h4>";
 				else:
 			?>
 			<table class="table table-bordered table-hover">

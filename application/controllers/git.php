@@ -321,7 +321,15 @@ class Git extends CI_Controller
 		$data['apply_type']=2;//增加git组审批
 		$data['state']=0;//审批状态为未审批
 		$data['btime']=time();//提交审批时间
-		if($data['newgroups_id']==""){echo "用户组信息不能为空！";exit;}else{$data['newgroups_id']=implode(',', $data['newgroups_id']);}
+		if($data['newgroups_id']=="")
+		{
+			echo "用户组信息不能为空！";
+			exit;
+		}
+		else
+		{
+			$data['newgroups_id']=implode(',', $data['newgroups_id']);
+		}
 		//保存审批信息
 		if($this->session->userdata('DX_pid')==0)//直接保存审批信息让op进行审批
 		{
@@ -352,7 +360,7 @@ class Git extends CI_Controller
 				 foreach ($groups as $group)
 				 {
 				 	//如果组的创建者为主管或者为用户自己本人
-				 	if($group['gcre_creator']!=$pid || $group['gcre_creator']=$this->user_id)
+				 	if($group['gcre_creator']!=$pid || $group['gcre_creator']!=$this->user_id)
 				 	{
 				 		$tmp['gcre_creator']=$group['group_creator'];
 				 		$tmp['group_id']=$group['group_id'];
@@ -368,7 +376,7 @@ class Git extends CI_Controller
 				 {
 				 	array_push($emails,$levelinfo['email']);
 				 	array_unique($emails);
-				 	$emails=implode(',', $emails);
+				 	//$emails=implode(',', $emails);
 				 	$this->help_savekey_sendmail($emails,2);
 				 }
 				 else
@@ -405,7 +413,12 @@ class Git extends CI_Controller
 			$data['filename']=$filename;
 			$data['apply_type']=1;//新增机器的类型
 			$this->help_savekey_apply($data);
-		}else{echo '文件保存失败！';}
+		}
+		else
+		{
+			echo '文件保存失败！';
+			log_message('error','保存文件失败！');
+		}
 	}
 	//审批保存数据辅助方法
 	public function help_savekey_apply($data)
@@ -428,7 +441,8 @@ class Git extends CI_Controller
 		{//给主管保存审批信息
 			$levelifo=$this->session->userdata('level_info');
 			$data['type_id']=0;
-			$data['b_time']=time();
+			$data['state']=0;
+			$data['btime']=time();
 			$data['user_id']=$this->session->userdata('DX_pid');
 			if($this->gol->save($data))
 			{
@@ -448,6 +462,7 @@ class Git extends CI_Controller
 	 */
 	public function help_savekey_sendmail($to,$type)
 	{
+		$data['name']='领导';
 		if($type==1)
 		{
 			$data['msg']="请尽快审批{$this->session->userdata('DX_realname')}git认证添加机器申请!";
@@ -456,18 +471,11 @@ class Git extends CI_Controller
 		else
 		{
 			$data['msg']="请尽快审批{$this->session->userdata('DX_realname')}git认证添加组申请!";
-			   $subject="git 认证 git组添加审批";
+			$subject="git 认证 git组添加审批";
 		}
 		$message=$this->load->view('mail/mail_common',$data,true);
-		if(sendcloud($to, $subject, $message))
-		{
-			echo 1;
-		}
-		else
-		{
-			echo $to;
-			echo '发送邮件失败！';
-		}
+		echo 1;
+		sendcloud($to,$subject, $message);
 	}
 	/**
 	 * git 认证管理
@@ -480,7 +488,7 @@ class Git extends CI_Controller
 		 $git_state=$this->uri->segment(3)==""?1:$this->uri->segment(3);
 		$config['base_url'] = base_url('index.php/git/alllist/'.$git_state.'/');
 		$config['total_rows'] = $this->git->count_alllist($git_state);
-		$config['per_page'] = 9;
+		$config['per_page'] = PER_PAGE;
 		$config['uri_segment'] =4;
 		$offset=intval($this->uri->segment(4));
 		$rs=$this->git->alllist($config['per_page'],$offset,$git_state);

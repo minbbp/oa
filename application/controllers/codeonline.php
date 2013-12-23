@@ -39,8 +39,12 @@ class Codeonline extends MY_Controller
 	public function child($pid)
 	{
 		$config['total_rows']=$this->cm->total_alllist($pid);
+		$config['per_page']=PER_PAGE;
+		$config['uri_segment'] =PER_PAGE;
 		$offset=intval($this->uri->segment(4));
+		$config['base_url']=base_url('index.php/codeonline/child/'.$pid.'/');
 		$re_rs=$this->cm->alllist($offset,PER_PAGE,$pid);
+		$this->pagination->initialize($config);
 		$page=$this->pagination->create_links();
 		$this->load->view('codeonline/child',array('re_rs'=>$re_rs,'page'=>$page,'title'=>'子模块'));
 	}

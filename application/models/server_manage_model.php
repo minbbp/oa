@@ -127,7 +127,7 @@ class Server_manage_model extends CI_Model
             return $this->db->insert_id();
         }
         /*
-         * 删除
+         * 删除服务器
          */
         public function server_delete($id){
             $where['s_id'] = $id;
@@ -170,7 +170,7 @@ class Server_manage_model extends CI_Model
             $result = current($res->result_array());
             return $result['s_internet'];
         }
-        /**
+		 /**
          * 代码上线部分使用的获取服务器列表的方法 minbbp add method 
          */
         public function get_server_by_str($str)
@@ -178,10 +178,10 @@ class Server_manage_model extends CI_Model
         	$sql="select s_internet from server where s_id in ({$str})";
         	return $this->db->query($sql)->result_array();
         }
-        /**
+        /*
          * ajax检查服务器ip唯一
-        */
+         */
         public function server_check_ip($ip) {
-        	return $this->db->where('s_internet',$ip)->count_all_results('server');
+            return $this->db->where('s_internet',$ip)->count_all_results('server');
         }
 }

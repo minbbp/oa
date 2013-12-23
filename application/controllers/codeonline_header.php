@@ -12,6 +12,7 @@ class Codeonline_header extends MY_Controller
 		$this->load->model('Codeonline_apply_model','cam',TRUE);
 		$this->load->model('Codeonline_apply_table_model','cat',TRUE);
 		$this->load->model('Users_model','user',TRUE);
+		$this->load->model('Codeonline_model','cm',TRUE);
 	}
 	/**
 	 * 我的测试确认信息,默认是未审批的数据
@@ -48,7 +49,17 @@ class Codeonline_header extends MY_Controller
 				unset($old_rs['a_id']);
 				//$users=$this->cat->get_head_by_apply_id($old_rs['apply_id']);
 				$old_rs['type_id']=3;
-				$old_rs['user_id']=UN_UNGENT_LEVEL;
+				//需要查询不同的模块进行修改
+				$model_rs=$this->cm->get_one($apply_rs['m_id']);
+				if($model_rs['pid']==19)
+				{
+					$old_rs['user_id']=UN_UNGENT_LEVEL_ZZ;
+				}
+				else
+				{
+					$old_rs['user_id']=UN_UNGENT_LEVEL;
+				}
+				
 			}
 			else
 			{
@@ -84,7 +95,7 @@ class Codeonline_header extends MY_Controller
 		$apply_table_rs=$this->cat->get_one($apply_rs['apply_id']);
 		$app_user=$this->user->get_useremail_by_id($apply_table_rs['apply_user']);
 		$message=$this->load->view('mail/mail_new_common',array('name'=>$apply_next_users['realname'],'msg'=>'请对"'.$app_user['realname'].'"的上线申请进行审批!'),TRUE);
-		sendcloud($apply_next_users['email'], '通知邮件', $message,$app_user['email']);
+		sendcloud($apply_next_users['email'], '上线通知邮件', $message,$app_user['email']);
 	}
 	/**
 	 * 驳回用户输入申请

@@ -180,8 +180,16 @@
         $(this).parent().parent().parent().remove();
                 return false;
         })
-        
-        var $dtmp="<?php echo '['.$info['s_type'].']' ?>";
+        <?php $arr = explode(',', $info['s_type']); 
+                $testtmp="[";
+                foreach ($arr as $t)
+                {
+                        $testtmp.="'".$t."',";
+                }
+                $testtmp=substr($testtmp, 0,-1);
+                $testtmp.="]";
+        ?>
+        var $dtmp=<?php echo $testtmp=="]"?'[]':$testtmp;?>;
 	$("#test_a option").each(function(i,n){
 		var dd=$(n);
 		if($.inArray(dd.val(),$dtmp)!= -1)

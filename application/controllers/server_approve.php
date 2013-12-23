@@ -17,7 +17,11 @@ class Server_approve extends CI_Controller
                 $this->load->model('codeonline_model','co',TRUE);
 		$this->dx_auth->check_uri_permissions();//检查用户权限
 		$this->user_id=$this->session->userdata('DX_user_id');
-                $this->role_id=$this->session->userdata("DX_role_id");//2为超级管理员 5是运维 6是主管
+                $this->role_id=$this->session->userdata("DX_role_id");//2为超级管理员 5是运维 6是主管DX_email
+                $this->email=$this->session->userdata("DX_email");
+                if($this->email==ADRD_OP_TWO){
+                    $this->role_id=5;
+                }
                 
 	}
         public function index(){
@@ -65,21 +69,21 @@ class Server_approve extends CI_Controller
         public function server_agree($sa_id) {
             //先去检查是否合法
             $uid = $this->user_id;
-            $role_id = $this->role_id;
-            if($role_id != 5){
+            $role_id = $this->role_id; 
+            if($role_id !=5 ){
             $bool = $this->sa->check($uid,$sa_id,$role_id);
-            if ($bool == 1) {
-                if($role_id == 6){
-                    //此为主管
-                $message = $this->sa->agree($sa_id);
+                    if ($bool == 1) {
+                        if($role_id == 6){
+                            //此为主管
+                        $message = $this->sa->agree($sa_id);
+                        }else{
+                            //此为运维
+                        $message = $this->sa->agree_op($sa_id);    
+                        }
                 }else{
-                    //此为运维
-                $message = $this->sa->agree_op($sa_id);    
+                    $message['status'] = 0;
+                    $message['msg'] = "非法请求";
                 }
-            }else{
-                $message['status'] = 0;
-                $message['msg'] = "非法请求";
-            }
             }else{
                 $message['status'] = 2;
                 $message['msg'] = site_url('server_approve/op_approve')."/".$sa_id;
@@ -169,6 +173,8 @@ class Server_approve extends CI_Controller
             $data['sa_id'] = $sa_id;
             $data['u_type'] = $type;
             $data['u_keyword'] = $keyword;
+//            echo "<pre />";
+//            print_r($data);exit;
             $this->load->view('server/server_op_approve',$data);
         }
         public function server_see($id) {

@@ -127,8 +127,11 @@ class Server_manage extends CI_Controller
             $data['s_internet'] = $this->input->post('internet');
             $data['s_winternet'] = $this->input->post('winternet');
             $data['s_isp'] = $this->input->post('isp');
+            /********/
             if($this->input->post('type')){
             $data['s_type'] = implode(',',$this->input->post('type'));
+            }else{
+             $data['s_type']='';   
             }
             $data['s_desc'] = $this->input->post('desc');
             $data['s_use'] = $this->input->post('use');
@@ -159,7 +162,7 @@ class Server_manage extends CI_Controller
         public function server_add() {
              $data['title'] = "服务器添加";
              $data['use_list'] = $this->sn->get_use();
-             $data['list'] = $this->co->get_all_list();
+             $data['list'] = $this->co->get_all_lists();
              $this->load->view('server/server_add',$data);
         }
         /*

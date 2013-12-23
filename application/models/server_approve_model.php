@@ -21,8 +21,8 @@ class Server_approve_model extends CI_Model
             $data['sa_status'] = 0;
             $data['sa_current_id'] = $pid;
             $data['sa_cause']='';
-            if($pid == 0){
-                //pid=0为主管 直接交给运维审批Type=2
+            if($pid == 0 || $level_info['email'] == ADRD_OP_TWO){
+                //pid=0为主管 直接交给运维审批Type=2  deyilong@sohu-inc.com
                 $data['sa_type'] = 2;
                 $info['info'] = $this->sn->find_need($sn_id);
                 $to = ADRD_OP_TWO;
