@@ -76,7 +76,7 @@ class Codeonline_op extends MY_Controller
 		$msg=$this->load->view('mail/mail_codeonline_common',$data,TRUE);
 		$msg_email=$this->load->view('mail/mail_new_common',array('name'=>'everyone','msg'=>$msg),TRUE);
 		$subject="运维代码上线通知";
-		sendcloud('adrd@sohu-inc.com',$subject,$msg_email,array('aguan@sohu-inc.com'));
+		sendcloud('adrd@sohu-inc.com',$subject,$msg_email,array('aguan@sohu-inc.com','zhouzhou200833@sohu-inc.com'));
 	}
 	/**
 	 * 显示驳回视图
